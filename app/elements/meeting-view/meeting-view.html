@@ -17,10 +17,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       :host {
         display: block;
       }
+      
+      hr {
+          margin: 16px;
+      }
     </style>
     
     <meeting-input on-add-meeting="addMeeting" ></meeting-input>
-    <div style="height: 32px"></div>
+    <hr/>
     <meeting-list on-delete-meeting="deleteMeeting" meetings="{{meetings}}"></meeting-list>
     
   </template>
