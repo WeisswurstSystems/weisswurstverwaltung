@@ -13,14 +13,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="..\..\bower_components/paper-material/paper-material.html">
 <link rel="import" href="..\..\bower_components/paper-input/paper-input.html">
 <link rel="import" href="..\..\bower_components/paper-button/paper-button.html">
+<link rel="import" href="..\..\bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="..\..\bower_components/paper-date-picker/paper-date-picker.html">
 
 <dom-module id="meeting-input">
   <template>
-  <style include="shared-styles">
+  <style include="shared-styles"></style>
     <style>
-      :host {
-        display: block;
-      }
       
       paper-material {
           padding: 16px;
@@ -37,14 +36,23 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </style>
     
     <paper-material elevation="1" class="layout horizontal">
-        <paper-input class="flex" label="Name"></paper-input>
-        <paper-input class="flex" label="Datum"></paper-input>
+        <paper-input class="flex" label="Name" id="nameInput"></paper-input>
+        <paper-input class="flex" value="{{_formatDate(date)}}" label="Datum" readonly on-tap="_openDatePicker"></paper-input>
+		
         <span class="flex"></span>
         <div class="layout vertical">
             <span class="flex"></span>
-            <paper-button>HINZUFÜGEN</paper-button>
+            <paper-button on-tap="_add">HINZUFÜGEN</paper-button>
         </div>
     </paper-material>
+		
+	<paper-dialog modal id="dateDialog" class="paper-date-picker-dialog">
+		<paper-date-picker date="{{pickedDate}}"></paper-date-picker>
+		<div class="buttons">
+	        <paper-button dialog-dismiss>Cancel</paper-button>
+	        <paper-button dialog-confirm on-tap="_updateDate">OK</paper-button>
+      </div>
+	</paper-dialog>
     
   </template>
   <script>
@@ -53,9 +61,36 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     Polymer({
       is: 'meeting-input',
-
+	 
+	  
       properties: {
-      }
+	    date: {
+			type: Object,
+			value: function() {
+				return new Date();
+			  },
+			notify: true
+		},
+		pickedDate: Object,
+      },
+	  
+	  _add: function() {
+	  	 if (this.$.nameInput.value) {
+		 	this.fire('add-meeting', {name: this.$.nameInput.value, date: this.date});
+			this.$.nameInput.value = null;
+		 }
+	  },
+	  
+	  _formatDate: function(date) {
+	  	return date.toLocaleDateString();
+	  },
+	  _updateDate: function() {
+	  	this.date = this.pickedDate;
+	  },
+	  _openDatePicker: function() {
+	  	this.pickedDate = this.date;
+	  	this.$.dateDialog.toggle();
+	  }
     });
   })();
   </script>
