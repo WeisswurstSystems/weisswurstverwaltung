@@ -31,13 +31,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     
            
           <paper-material elevation="1">
-        <template is="dom-repeat" items="{{meetings}}" as="meeting">
+        <template is="dom-repeat" items="{{meetings}}" as="meeting" sort="_compareMeeting">
       
             <paper-icon-item>
                 <paper-checkbox item-icon></paper-checkbox>
                 <span class="flex">{{meeting.name}}</span>
-                <span>{{_formatDate(meeting.date)}}</span>
-                
+                <span>{{_formatDate(meeting.date)}}</span
             </paper-icon-item>
            
         </template>
@@ -62,7 +61,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       
       _formatDate: function(millis) {
           return new Date(millis).toLocaleDateString();
-      }
+      },
+	  
+	  _compareMeeting: function(a,b) {
+	  	return b.date - a.date;
+	  }
     });
   })();
   </script>
