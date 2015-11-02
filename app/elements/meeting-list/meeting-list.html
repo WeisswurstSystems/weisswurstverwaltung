@@ -13,60 +13,78 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="..\..\bower_components/paper-item/paper-icon-item.html">
 <link rel="import" href="..\..\bower_components/paper-button/paper-button.html">
 <link rel="import" href="..\..\bower_components/paper-checkbox/paper-checkbox.html">
+<link rel="import" href="..\..\bower_components/iron-list/iron-list.html">
 
 <dom-module id="meeting-list">
-  <template>
-    <style include="shared-styles">
-    <style>
-      :host {
-        display: block;
-      }
-      
-      .button {
-          margin: 16px
-      }
-      
-    
-    </style>
-    
-           
-          <paper-material elevation="1">
-        <template is="dom-repeat" items="{{meetings}}" as="meeting" sort="_compareMeeting">
-      
-            <paper-icon-item>
-                <paper-checkbox item-icon></paper-checkbox>
-                <span class="flex">{{meeting.name}}</span>
-                <span>{{_formatDate(meeting.date)}}</span
-            </paper-icon-item>
-           
-        </template>
-         </paper-material>
-         
-          <paper-button class="button">
-                <iron-icon icon="delete"></iron-icon>
-                LÖSCHEN
-            </paper-button>
-         
-  </template>
-  <script>
-  (function() {
-    'use strict';
+    <template>
+        <style include="shared-styles"></style>
+        <style>
+            :host {
+                display: block;
+            }
 
-    Polymer({
-      is: 'meeting-list',
+            .button {
+                margin: 8px
+            }
 
-      properties: {
-        meetings: Array
-      },
-      
-      _formatDate: function(millis) {
-          return new Date(millis).toLocaleDateString();
-      },
-	  
-	  _compareMeeting: function(a,b) {
-	  	return b.date - a.date;
-	  }
-    });
-  })();
-  </script>
+            paper-material {
+                margin-bottom: 8px;
+            }
+        </style>
+        <!-- <paper-button on-tap="_deleteSelected" class="button">
+            <iron-icon icon="delete"></iron-icon>
+            LÖSCHEN
+        </paper-button>-->
+
+        <div class="button"></div>
+
+        <iron-list items="[[meetings]]" selection-enabled multi-selection selected-items="{{selectedMeetings}}">
+            <template>
+                <div>
+                <paper-material elevation="1">
+                    <paper-item>
+                        <paper-checkbox checked="{{selected}}" ></paper-checkbox>
+                        <span class="flex">{{item.name}}</span>
+                        <span>{{_formatDate(item.date)}}</span>
+                    </paper-item>
+                </paper-material>
+                </div>
+            </template>
+        </iron-list>
+    </template>
+    <script>
+        (function () {
+            'use strict';
+
+            Polymer({
+                is: 'meeting-list',
+
+                properties: {
+                    meetings: Array,
+                    selectedMeetings: Object
+                },
+
+                _formatDate: function (millis) {
+                    return new Date(millis).toLocaleDateString();
+                },
+
+                _compareMeeting: function (a, b) {
+                    return b.date - a.date;
+                },
+
+                _isEmtpy: function (objectarray) {
+                    return objectarray.length === 0;
+                },
+
+                _deleteSelected: function () {
+                    var array = this.selectedMeetings.slice();
+                    var self = this;
+                    array.forEach(function (m) {
+                        console.log(m);
+                        self.fire('delete-meeting', m);
+                    });
+                }
+            });
+        })();
+    </script>
 </dom-module>

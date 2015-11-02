@@ -71,12 +71,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 			  },
 			notify: true
 		},
-		pickedDate: Object,
+		pickedDate: Object
       },
 	  
 	  _add: function() {
 	  	 if (this.$.nameInput.value) {
-		 	this.fire('add-meeting', {name: this.$.nameInput.value, date: this.date});
+		 	this.fire('add-meeting', {name: this.$.nameInput.value, date: this.date.getTime()});
 			this.$.nameInput.value = null;
 		 }
 	  },

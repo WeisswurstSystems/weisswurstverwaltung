@@ -17,14 +17,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       :host {
         display: block;
       }
-      
-      div {
-          margin: 16px;
-      }
     </style>
     
     <meeting-input on-add-meeting="addMeeting" ></meeting-input>
-    <div></div>
     <meeting-list on-delete-meeting="deleteMeeting" meetings="{{meetings}}"></meeting-list>
     
   </template>
@@ -44,7 +39,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
       
       deleteMeeting: function(e) {
-          console.log('delete todo' + e);
+          this.arrayDelete('meetings', e.detail);
       }
     });
   })();
