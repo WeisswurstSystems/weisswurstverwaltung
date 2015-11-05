@@ -11,6 +11,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="..\..\bower_components/polymer/polymer.html">
 
 <link rel="import" href="..\..\bower_components/paper-item/paper-icon-item.html">
+<link rel="import" href="..\..\bower_components/paper-item/paper-icon-item.html">
 <link rel="import" href="..\..\bower_components/paper-button/paper-button.html">
 <link rel="import" href="..\..\bower_components/paper-checkbox/paper-checkbox.html">
 <link rel="import" href="..\..\bower_components/iron-list/iron-list.html">
@@ -41,7 +42,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <div>
                 <paper-material elevation="1">
                     <paper-item on-tap="_navigate">
-                        <paper-checkbox on-tap="_toggleSelection"></paper-checkbox>
+                        <paper-checkbox on-tap="_toggleSelection" item-icon ></paper-checkbox>
                         <span class="flex">{{meeting.name}}</span>
                         <span>{{_formatDate(meeting.date)}}</span>
                     </paper-item>
