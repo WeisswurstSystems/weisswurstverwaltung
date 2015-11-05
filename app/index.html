@@ -84,8 +84,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               <meeting-view meetings="{{meetings}}"></meeting-view>
             </section>
 
-            <section data-route="orders">
-              fdsa
+            <section data-route="order-info">
+               <meeting-detail-data id="{{params.id}}" meeting="{{meeting}}"></meeting-detail-data>
+                <span>{{meeting.name}}</span>
             </section>
 
           </iron-pages>
