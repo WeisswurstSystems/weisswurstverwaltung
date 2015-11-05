@@ -86,7 +86,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             </section>
 
             <section data-route="order-info">
-                <span>{{params.id}}</span>
+               <meeting-detail-data id="{{params.id}}" meeting="{{meeting}}"></meeting-detail-data>
+                <span>{{meeting.name}}</span>
             </section>
 
           </iron-pages>
