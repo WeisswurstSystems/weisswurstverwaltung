@@ -9,8 +9,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 -->
 
 <link rel="import" href="..\..\bower_components/polymer/polymer.html">
+<link rel="import" href="..\..\bower_components/firebase-element/firebase-collection.html">
 
 <dom-module id="meeting-data">
+    <template>
+    <firebase-collection
+            location="https://wwm-itm.firebaseio.com/meetings"
+            data="{{meetings}}"></firebase-collection>
+    </template>
   <script>
   (function() {
     'use strict';
@@ -20,12 +26,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       properties: {
         meetings: {
-          value: function() {
-            return [
-              {date: new Date().getTime(), name: 'Frühstück'},
-              {date: new Date().getTime(), name: 'asdf'}
-            ];
-          },
           notify: true
         }
       }

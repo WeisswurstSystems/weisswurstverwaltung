@@ -18,7 +18,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     // Middleware
     function scrollToTop(ctx, next) {
-      app.scrollPageToTop();
+     // app.scrollPageToTop();
       next();
     }
 
@@ -27,8 +27,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       app.route = 'home';
     });
 
-    page('/orders', scrollToTop, function() {
-      app.route = 'orders';
+    page('/orders/:id', scrollToTop, function(data) {
+      app.route = 'order-info';
+        app.params = data.params;
     });
 
     page('*', function() {
