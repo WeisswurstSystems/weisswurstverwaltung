@@ -1,0 +1,101 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+<link rel="import" href="..\..\bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="..\..\bower_components/paper-item/paper-item.html">
+<link rel="import" href="..\..\bower_components/paper-item/paper-icon-item.html">
+
+<link rel="import" href="..\..\bower_components/neon-animation/neon-shared-element-animatable-behavior.html">
+<link rel="import" href="..\..\bower_components/neon-animation/animations/hero-animation.html">
+<link rel="import" href="..\..\bower_components/neon-animation/animations/fade-in-animation.html">
+<link rel="import" href="..\..\bower_components/neon-animation/animations/transform-animation.html">
+
+<dom-module id="meeting-detail-page">
+    <style include="shared-styles"></style>
+    <style>
+
+        #content{
+            margin-top: 8px;
+        }
+    </style>
+    <template>
+
+
+        <meeting-detail-data id="{{id}}" meeting="{{meeting}}"></meeting-detail-data>
+
+        <paper-material id="hero" elevation="1">
+            <paper-item>
+                <paper-icon-button icon="arrow-back" item-icon></paper-icon-button>
+                <span class="flex">{{meeting.name}}</span>
+                <span>{{_formatDate(meeting.date)}}</span>
+            </paper-item>
+        </paper-material>
+
+        <paper-material id="content" elevation="1">
+            <paper-item on-tap="_navigate">
+                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+            </paper-item>
+        </paper-material>
+    </template>
+    <script>
+        (function () {
+            'use strict';
+
+            Polymer({
+                is: 'meeting-detail-page',
+
+                behaviors: [Polymer.NeonSharedElementAnimatableBehavior],
+
+
+                properties: {
+                    id: String,
+
+                    animationConfig: {
+                        type: Object,
+                        value: function () {
+                            return {
+                                'entry': [{
+                                    name: 'hero-animation',
+                                    id: 'hero',
+                                    toPage: this
+                                },{
+                                    name: 'fade-in-animation',
+                                    node: this.$.content,
+                                    timing: {
+                                        delay: 100
+                                    }
+                                }],
+                                'exit': {
+                                    name: 'transform-animation',
+                                    transformFrom: 'none',
+                                    transformTo: 'translate(0px,-100vh)',
+                                    node: this,
+                                    timing: {
+                                        duration: 600
+                                    }
+                                }
+                            };
+                        }
+                    },
+
+                    sharedElements: {
+                        type: Object,
+                        value: function () {
+                            return {
+                                'hero': this.$.hero
+                            };
+                        }
+                    }
+                }
+            });
+        })();
+    </script>
+</dom-module>
