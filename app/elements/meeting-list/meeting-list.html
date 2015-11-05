@@ -15,6 +15,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="..\..\bower_components/paper-checkbox/paper-checkbox.html">
 <link rel="import" href="..\..\bower_components/iron-list/iron-list.html">
 
+
 <dom-module id="meeting-list">
     <template>
         <style include="shared-styles"></style>
@@ -29,35 +30,33 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
             paper-material {
                 margin-bottom: 8px;
-                margin-left: 8px;
-                margin-right: 8px;
             }
 
-            iron-list {
-                margin-left: -8px;
-                margin-right: -8px;
-            }
         </style>
-        <!-- <paper-button on-tap="_deleteSelected" class="button">
-            <iron-icon icon="delete"></iron-icon>
-            LÖSCHEN
-        </paper-button>-->
 
         <div class="button"></div>
 
-        <iron-list items="[[meetings]]" selection-enabled multi-selection selected-items="{{selectedMeetings}}">
-            <template>
-                <div>
+
+        <template is="dom-repeat" items="{{meetings}}" as="meeting" sort="_compareMeeting">
+            <div>
                 <paper-material elevation="1">
-                    <paper-item>
-                        <paper-checkbox checked="{{selected}}" ></paper-checkbox>
-                        <span class="flex">{{item.name}}</span>
-                        <span>{{_formatDate(item.date)}}</span>
+                    <paper-item on-tap="_navigate">
+                        <paper-checkbox on-tap="_toggleSelection"></paper-checkbox>
+                        <span class="flex">{{meeting.name}}</span>
+                        <span>{{_formatDate(meeting.date)}}</span>
                     </paper-item>
                 </paper-material>
-                </div>
-            </template>
-        </iron-list>
+            </div>
+        </template>
+
+        <array-selector id="selector" items="{{meetings}}" selected="{{selectedMeetings}}" toggle
+                        multi></array-selector>
+
+        <paper-button on-tap="_deleteSelected" >
+            <iron-icon icon="delete"></iron-icon>
+            LÖSCHEN
+        </paper-button>
+
     </template>
     <script>
         (function () {
@@ -67,21 +66,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 is: 'meeting-list',
 
                 properties: {
-                    meetings: Array,
-                    selectedMeetings: Object
+                    meetings: Array
                 },
 
-                _formatDate: function (millis) {
-                    return new Date(millis).toLocaleDateString();
-                },
 
                 _compareMeeting: function (a, b) {
                     return b.date - a.date;
                 },
 
-                _isEmtpy: function (objectarray) {
-                    return objectarray.length === 0;
-                },
 
                 _deleteSelected: function () {
                     var array = this.selectedMeetings.slice();
@@ -90,6 +82,22 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         console.log(m);
                         self.fire('delete-meeting', m);
                     });
+                },
+                _navigate: function (e) {
+                    page.show('/orders/' + e.model.meeting.__firebaseKey__);
+                },
+
+                _formatDate: function (millis) {
+                    return new Date(millis).toLocaleDateString();
+                },
+
+                _toggleSelection: function (e) {
+                    this.$.selector.select(e.model.meeting);
+                    e.stopPropagation();
+                },
+
+                _isSelected: function (item) {
+                    return this.$.selector.isSelected(item);
                 }
             });
         })();
