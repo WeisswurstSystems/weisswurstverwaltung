@@ -78,25 +78,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         <!-- Main Content -->
         <div class="content">
-          <iron-pages attr-for-selected="data-route" selected="{{route}}">
+          <neon-animated-pages attr-for-selected="data-route" selected="{{route}}">
 
-            <section data-route="home">
-              <meeting-data meetings="{{meetings}}"></meeting-data>
-              <meeting-view meetings="{{meetings}}"></meeting-view>
-            </section>
+              <meetings-page data-route="home"></meetings-page>
+              <meeting-detail-page data-route="order-info" id="{{params.id}}"></meeting-detail-page>
+
 
             <section data-route="order-info">
-               <meeting-detail-data id="{{params.id}}" meeting="{{meeting}}"></meeting-detail-data>
-                <paper-material elevation="1">
-                    <paper-item on-tap="_navigate">
-                        <paper-checkbox on-tap="_toggleSelection"></paper-checkbox>
-                        <span class="flex">{{meeting.name}}</span>
-                        <span>{{_formatDate(meeting.date)}}</span>
-                    </paper-item>
-                </paper-material>
+
             </section>
 
-          </iron-pages>
+          </neon-animated-pages>
         </div>
       </paper-header-panel>
 
