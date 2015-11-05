@@ -15,7 +15,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <meta charset="utf-8">
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="generator" content="Polymer Starter Kit"/>
+  <meta name="generator" content="Polymer Starter Kit" />
   <title>WWM</title>
   <!-- Place favicon.ico in the `app/` directory -->
 
@@ -60,96 +60,64 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 </head>
 
 <body unresolved class="fullbleed layout vertical">
-<span id="browser-sync-binding"></span>
-<template is="dom-bind" id="app">
+  <span id="browser-sync-binding"></span>
+  <template is="dom-bind" id="app">
+  
+      <!-- Main Area -->
+      <paper-header-panel id="headerPanelMain">
 
-  <!-- Main Area -->
-  <paper-header-panel id="headerPanelMain">
+        <!-- Main Toolbar -->
+        <paper-toolbar class="medium-tall">
+          <paper-icon-button id="paperToggle" icon="favorite"></paper-icon-button>
+          <div class="bottom title">Weißwursterfassung-mandantenfähig</div>
+          S
+          <span class="flex"></span>
+          <paper-icon-button icon="search"></paper-icon-button>
+          <paper-icon-button icon="refresh"></paper-icon-button>
+        </paper-toolbar>
 
-    <!-- Main Toolbar -->
-    <paper-toolbar>
-      <paper-icon-button class="bottom" id="paperToggle" icon="favorite"></paper-icon-button>
-      <div class="title bottom">Weißwursterfassung-mandantenfähig</div>
-      <span class="flex bottom"></span>
-      <paper-icon-button class="bottom" icon="search"></paper-icon-button>
-      <paper-icon-button class="bottom" icon="refresh"></paper-icon-button>
-    </paper-toolbar>
+        <!-- Main Content -->
+        <div class="content">
+          <neon-animated-pages attr-for-selected="data-route" selected="{{route}}">
 
-    <!-- Main Content -->
-    <div class="content">
-      <iron-pages attr-for-selected="data-route" selected="{{route}}">
+              <meetings-page data-route="home"></meetings-page>
+              <meeting-detail-page data-route="order-info" id="{{params.id}}"></meeting-detail-page>
 
-        <section data-route="home">
-          <meeting-data meetings="{{meetings}}"></meeting-data>
-          <meeting-view meetings="{{meetings}}"></meeting-view>
-        </section>
 
-        <section data-route="order-info">
-          <meeting-detail-data id="{{params.id}}" meeting="{{meeting}}"></meeting-detail-data>
-          <paper-material elevation="3">
-            <paper-item>
-              <paper-checkbox on-tap="_toggleSelection"></paper-checkbox>
-              <span class="flex">{{meeting.name}}</span>
-              <span>{{_formatDate(meeting.date)}}</span>
-              <span>{{meeting.orders}}</span>
-            </paper-item>
-          </paper-material>
-          <paper-textarea>Orders</paper-textarea>
-          <hr/>
-          <template is="dom-repeat" items="{{meeting.orders}}" as="order">
-            <div>
-              <paper-material elevation="1">
-                <paper-item >
-                  <span class="flex">{{order.name}}</span>
-                  <span class="flex">Weisswurst: {{order.weisswurst}}</span>
-                  <span class="flexable-space">Brezn: {{order.brezen}}</span>
-                </paper-item>
-              </paper-material>
-            </div>
-          </template>
-          <paper-fab></paper-fab>
-        </section>
+            <section data-route="order-info">
 
-      </iron-pages>
-    </div>
-  </paper-header-panel>
+            </section>
 
-  <paper-toast id="toast">
-    <span class="toast-hide-button" role="button" tabindex="0" onclick="app.$.toast.hide()">Ok</span>
-  </paper-toast>
+          </neon-animated-pages>
+        </div>
+      </paper-header-panel>
 
-  <!-- Uncomment next block to enable Service Worker support (1/2) -->
-  <!--
-  <paper-toast id="caching-complete"
-               duration="6000"
-               text="Caching complete! This app will work offline.">
-  </paper-toast>
+    <paper-toast id="toast">
+      <span class="toast-hide-button" role="button" tabindex="0" onclick="app.$.toast.hide()">Ok</span>
+    </paper-toast>
 
-  <platinum-sw-register auto-register
-                        clients-claim
-                        skip-waiting
-                        on-service-worker-installed="displayInstalledToast">
-    <platinum-sw-cache default-cache-strategy="fastest"
-                       cache-config-file="cache-config.json">
-    </platinum-sw-cache>
-  </platinum-sw-register>
-  -->
+    <!-- Uncomment next block to enable Service Worker support (1/2) -->
+    <!--
+    <paper-toast id="caching-complete"
+                 duration="6000"
+                 text="Caching complete! This app will work offline.">
+    </paper-toast>
 
-</template>
+    <platinum-sw-register auto-register
+                          clients-claim
+                          skip-waiting
+                          on-service-worker-installed="displayInstalledToast">
+      <platinum-sw-cache default-cache-strategy="fastest"
+                         cache-config-file="cache-config.json">
+      </platinum-sw-cache>
+    </platinum-sw-register>
+    -->
 
-<!-- build:js scripts/app.js -->
-<script src="scripts/app.js">
-  (function () {
-    'use strict';
+  </template>
 
-    Polymer({
-      _formatDate: function (millis) {
-        return new Date(millis).toLocaleDateString();
-      }
-    });
-  })();
-</script>
-<!-- endbuild-->
+  <!-- build:js scripts/app.js -->
+  <script src="scripts/app.js"></script>
+  <!-- endbuild-->
 </body>
 
 </html>
