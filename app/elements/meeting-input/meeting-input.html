@@ -49,7 +49,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       </div>
     </paper-material>
 
-    <paper-toast id="toast_create_success" text="Meeting saved."></paper-toast>
+    <paper-toast id="toastCreateSuccess" text="Meeting saved."></paper-toast>
 
     <paper-dialog modal id="dateDialog" class="paper-date-picker-dialog">
       <paper-date-picker date="{{pickedDate}}"></paper-date-picker>
@@ -91,7 +91,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 {name: 'Maxi', weisswurst: 5, brezen: 0}
               ]
             });
-            this.$.toast_create_success.show();
+            this.$.toastCreateSuccess.show();
             this.$.nameInput.value = null;
           }
         },
