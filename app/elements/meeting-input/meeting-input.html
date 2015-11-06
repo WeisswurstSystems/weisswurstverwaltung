@@ -15,90 +15,98 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="..\..\bower_components/paper-button/paper-button.html">
 <link rel="import" href="..\..\bower_components/paper-dialog/paper-dialog.html">
 <link rel="import" href="..\..\bower_components/paper-date-picker/paper-date-picker.html">
+<link rel="import" href="..\..\bower_components/paper-toast/paper-toast.html">
 
 <dom-module id="meeting-input">
   <template>
-  <style include="shared-styles"></style>
+    <style include="shared-styles"></style>
     <style>
-      
+
       paper-material {
-          padding: 16px;
+        padding: 16px;
       }
-      
+
       paper-input {
-          margin: 0px 16px;
-          max-width: 200px;
+        margin: 0px 16px;
+        max-width: 200px;
       }
-      
+
       paper-button {
-          color: var(--accent-color);
+        color: var(--accent-color);
       }
     </style>
-    
+
     <paper-material elevation="1" class="layout horizontal">
-        <paper-input class="flex" label="Name" id="nameInput"></paper-input>
-        <paper-input class="flex" value="{{_formatDate(date)}}" label="Datum" readonly on-tap="_openDatePicker"></paper-input>
-		
+      <paper-input class="flex" label="Name" id="nameInput"></paper-input>
+      <paper-input class="flex" value="{{_formatDate(date)}}" label="Datum" readonly
+                   on-tap="_openDatePicker"></paper-input>
+
+      <span class="flex"></span>
+
+      <div class="layout vertical">
         <span class="flex"></span>
-        <div class="layout vertical">
-            <span class="flex"></span>
-            <paper-button on-tap="_add">HINZUFÜGEN</paper-button>
-        </div>
-    </paper-material>
-		
-	<paper-dialog modal id="dateDialog" class="paper-date-picker-dialog">
-		<paper-date-picker date="{{pickedDate}}"></paper-date-picker>
-		<div class="buttons">
-	        <paper-button dialog-dismiss>Cancel</paper-button>
-	        <paper-button dialog-confirm on-tap="_updateDate">OK</paper-button>
+        <paper-button on-tap="_add">HINZUFÜGEN</paper-button>
       </div>
-	</paper-dialog>
-    
+    </paper-material>
+
+    <paper-toast id="toast_create_success" text="Meeting saved."></paper-toast>
+
+    <paper-dialog modal id="dateDialog" class="paper-date-picker-dialog">
+      <paper-date-picker date="{{pickedDate}}"></paper-date-picker>
+      <div class="buttons">
+        <paper-button dialog-dismiss>Cancel</paper-button>
+        <paper-button dialog-confirm on-tap="_updateDate">OK</paper-button>
+      </div>
+    </paper-dialog>
+
   </template>
   <script>
-  (function() {
-    'use strict';
+    (function () {
+      'use strict';
 
-    Polymer({
-      is: 'meeting-input',
-	 
-	  
-      properties: {
-	    date: {
-			type: Object,
-			value: function() {
-				return new Date();
-			  },
-			notify: true
-		},
-		pickedDate: Object
-      },
-	  
-	  _add: function() {
-	  	 if (this.$.nameInput.value) {
-		 	this.fire('add-meeting', {
-                name: this.$.nameInput.value,
-                date: this.date.getTime(),
-                orders: [
-                    {amount: 1},
-                    {amount: 2}
-                ]
+      Polymer({
+        is: 'meeting-input',
+
+
+        properties: {
+          date: {
+            type: Object,
+            value: function () {
+              return new Date();
+            },
+            notify: true
+          },
+          pickedDate: Object
+        },
+
+        _add: function () {
+          if (this.$.nameInput.value) {
+            this.fire('add-meeting', {
+              name: this.$.nameInput.value,
+              date: this.date.getTime(),
+              orders: [
+                {name: 'Peter', weisswurst: 3, brezen: 5},
+                {name: 'Fabian', weisswurst: 1, brezen: 1},
+                {name: 'Arne', weisswurst: -1, brezen: 2},
+                {name: 'Maxi', weisswurst: 5, brezen: 0}
+              ]
             });
-			this.$.nameInput.value = null;
-		 }
-	  },
-	  
-	  _formatDate: function(date) {
-	  	return date.toLocaleDateString();
-	  },
-	  _updateDate: function() {
-	  	this.date = this.pickedDate;
-	  },
-	  _openDatePicker: function() {
-	  	this.pickedDate = this.date;
-	  	this.$.dateDialog.toggle();
-	  }
-    });
-  })();
+            this.$.toast_create_success.show();
+            this.$.nameInput.value = null;
+          }
+        },
+
+        _formatDate: function (date) {
+          return date.toLocaleDateString();
+        },
+        _updateDate: function () {
+          this.date = this.pickedDate;
+        },
+        _openDatePicker: function () {
+          this.pickedDate = this.date;
+          this.$.dateDialog.toggle();
+        }
+      });
+    })();
   </script>
 </dom-module>
