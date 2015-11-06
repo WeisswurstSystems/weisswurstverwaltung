@@ -16,86 +16,125 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="..\..\bower_components/neon-animation/neon-shared-element-animatable-behavior.html">
 <link rel="import" href="..\..\bower_components/neon-animation/animations/hero-animation.html">
 <link rel="import" href="..\..\bower_components/neon-animation/animations/fade-in-animation.html">
+<link rel="import" href="..\..\bower_components/neon-animation/animations/slide-down-animation.html">
 <link rel="import" href="..\..\bower_components/neon-animation/animations/transform-animation.html">
 
 <dom-module id="meeting-detail-page">
-    <style include="shared-styles"></style>
-    <style>
+  <style include="shared-styles"></style>
+  <style>
 
-        #content{
-            margin-top: 8px;
-        }
-    </style>
-    <template>
+    #content {
+      margin-top: 8px;
+      padding: 8px;
+    }
+
+    paper-material{
+      padding: 8px;
+    }
+
+    paper-input{
+      margin: 8px;
+    }
+
+    .list-item {
+      margin: 0px 150px auto;
+    }
+  </style>
+  <template>
 
 
-        <meeting-detail-data id="{{id}}" meeting="{{meeting}}"></meeting-detail-data>
+    <meeting-detail-data id="{{id}}" meeting="{{meeting}}"></meeting-detail-data>
 
-        <paper-material id="hero" elevation="1">
-            <paper-item>
-                <paper-icon-button icon="arrow-back" item-icon></paper-icon-button>
-                <span class="flex">{{meeting.name}}</span>
-                <span>{{_formatDate(meeting.date)}}</span>
-            </paper-item>
+    <paper-material id="hero" elevation="1">
+      <paper-item>
+        <paper-icon-button on-tap="_navigateBack" icon="arrow-back" item-icon></paper-icon-button>
+        <span class="flex">{{meeting.name}}</span>
+        <span>{{_formatDate(meeting.date)}}</span>
+      </paper-item>
+    </paper-material>
+
+    <div id="content" elevation="0">
+      <paper-item class="list-item layout horizontal">
+        <span class="flex"></span>
+        <paper-material class="layout horizontal flex">
+          <span class="flex">Weisswürste</span>
+          <span class="flex">Brezen</span>
         </paper-material>
+      </paper-item>
+      <template is="dom-repeat" items="{{meeting.orders}}" as="order">
+        <paper-item class="list-item">
+          <span class="flex">{{order.name}}</span>
+          <paper-material class="layout horizontal flex">
+            <paper-input class="flex" no-label-float type="number" value="{{order.weisswurst}}"></paper-input>
+            <paper-input class="flex" no-label-float type="number" value="{{order.brezen}}"></paper-input>
+          </paper-material>
+        </paper-item>
+      </template>
+      <paper-fab icon="add"></paper-fab>
+    </div>
+  </template>
+  <script>
+    (function () {
+      'use strict';
 
-        <paper-material id="content" elevation="1">
-            <paper-item on-tap="_navigate">
-                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
-            </paper-item>
-        </paper-material>
-    </template>
-    <script>
-        (function () {
-            'use strict';
+      Polymer({
+        is: 'meeting-detail-page',
 
-            Polymer({
-                is: 'meeting-detail-page',
+        behaviors: [Polymer.NeonSharedElementAnimatableBehavior],
 
-                behaviors: [Polymer.NeonSharedElementAnimatableBehavior],
+        _formatDate: function (millis) {
+          return new Date(millis).toLocaleDateString();
+        },
 
+        _navigateBack: function () {
+          page.show('/');
+        },
 
-                properties: {
-                    id: String,
+        properties: {
+          id: String,
 
-                    animationConfig: {
-                        type: Object,
-                        value: function () {
-                            return {
-                                'entry': [{
-                                    name: 'hero-animation',
-                                    id: 'hero',
-                                    toPage: this
-                                },{
-                                    name: 'fade-in-animation',
-                                    node: this.$.content,
-                                    timing: {
-                                        delay: 100
-                                    }
-                                }],
-                                'exit': {
-                                    name: 'transform-animation',
-                                    transformFrom: 'none',
-                                    transformTo: 'translate(0px,-100vh)',
-                                    node: this,
-                                    timing: {
-                                        duration: 600
-                                    }
-                                }
-                            };
-                        }
-                    },
-
-                    sharedElements: {
-                        type: Object,
-                        value: function () {
-                            return {
-                                'hero': this.$.hero
-                            };
-                        }
-                    }
+          animationConfig: {
+            type: Object,
+            value: function () {
+              return {
+                'entry': [{
+                  name: 'hero-animation',
+                  id: 'hero',
+                  toPage: this
+                }, {
+                  name: 'fade-in-animation',
+                  node: this.$.content,
+                  timing: {
+                    delay: 200,
+                    duration: 500
+                  }
+                }, {
+                  name: 'slide-down-animation',
+                  node: this.$.content,
+                  timing: {
+                    duration: 500
+                  }
+                }],
+                'exit': {
+                  name: 'transform-animation',
+                  transformFrom: 'none',
+                  transformTo: 'translate(0px,-100vh)',
+                  node: this
                 }
-            });
-        })();
-    </script>
+              };
+            }
+          },
+
+          sharedElements: {
+            type: Object,
+            value: function () {
+              return {
+                'hero': this.$.hero
+              };
+            }
+          }
+        }
+      });
+    })();
+  </script>
 </dom-module>
