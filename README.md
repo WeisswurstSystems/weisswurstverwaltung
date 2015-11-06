@@ -10,3 +10,7 @@ Ordering Weisswürste in style.
 4. Execute `npm install -g gulp bower && npm install && bower install`
 5. The exectuion may take a while. The ouput should look [like this](https://github.com/peter-mueller/weisswurstverwaltung/issues/1#issuecomment-153071900)
 6. When finished run `gulp serve` and let the weisswurst flow through you.
+
+# Versionen
+1.0 - Ansbacher
+http://www.metzgerei-scherer.de/frames/main/lexikon/wurst.shtml
