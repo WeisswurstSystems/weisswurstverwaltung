@@ -62,7 +62,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     multi></array-selector>
 
 
-    <paper-fab id="deleteFab" icon="delete" on-tap="_deleteSelected" style="visibility: hidden"></paper-fab>
+    <paper-fab id="deleteFab" icon="delete" on-tap="_deleteSelected"></paper-fab>
   </template>
   <script>
     (function () {
@@ -72,28 +72,30 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         is: 'meeting-list',
 
         properties: {
-          meetings: Array
+          meetings: Array,
+		  
+		  animationConfig: {
+          type: Object,
+          value: function () {
+            return {
+              'show': [{
+                name: 'scale-up-animation',
+                node: this.$.deleteFab
+              }],
+              'hide': [{
+                name: 'scale-down-animation',
+                node: this.$.deleteFab
+              }]
+            };
+          }
+        }
         },
 
         behaviors: [
           Polymer.NeonAnimationRunnerBehavior
         ],
 
-        animationConfig: {
-          type: Object,
-          value: function () {
-            return {
-              'entry': [{
-                name: 'scale-up-animation',
-                node: this.$.deleteFab
-              }],
-              'exit': [{
-                name: 'scale-down-animation',
-                node: this.$.deleteFab
-              }]
-            };
-          }
-        },
+        
 
 
         _compareMeeting: function (a, b) {
@@ -105,11 +107,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           var array = this.selectedMeetings.slice();
           var self = this;
           array.forEach(function (m) {
-            console.log(m);
             self.fire('delete-meeting', m);
           });
-          this.$.deleteFab.style.visibility = 'hidden';
-          this.playAnimation('exit');
+          this.playAnimation('hide');
+		  
         },
         _navigate: function (e) {
           this.fire('select-meeting', {meeting: e.model.meeting, target: e.target.parentNode});
@@ -123,11 +124,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           this.$.selector.select(e.model.meeting);
           e.stopPropagation();
           if (this.selectedMeetings.length === 0) {
-            this.$.deleteFab.style.visibility = 'hidden';
-            this.playAnimation('exit');
+            this.playAnimation('hide');
           } else {
-            this.$.deleteFab.style.visibility = 'visible';
-            this.playAnimation('entry');
+            this.playAnimation('show');
           }
         },
 
