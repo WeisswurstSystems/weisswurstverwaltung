@@ -12,7 +12,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="..\..\bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="..\..\bower_components/paper-item/paper-item.html">
 <link rel="import" href="..\..\bower_components/paper-item/paper-icon-item.html">
-<link rel="import" href="..\..\bower_components/paper-fab/paper-fab.html">
 
 <link rel="import" href="..\..\bower_components/neon-animation/neon-shared-element-animatable-behavior.html">
 <link rel="import" href="..\..\bower_components/neon-animation/animations/hero-animation.html">
@@ -30,27 +29,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 
         .fieldheader{
-            margin: 0px 8px;
-            width: 100px;
+            margin: 0px 16px;
+            width: 75px;
             text-align: center;
         }
 
         .fieldUser {
-            margin: 0px 8px;
-            width: 100px;
+            margin: 0px 16px;
+            width: 75px;
         }
 
         .field {
-            margin: 0px 8px;
-            width: 100px;
+            margin: 0px 16px;
+            width: 75px;
             text-align: right;
-        }
-
-        paper-fab {
-            margin: 32px;
-            position: fixed;
-            bottom: 0;
-            right: 0;
         }
     </style>
     <template>
@@ -70,10 +62,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
                 <paper-item>
                     <span class="fieldUser"></span>
-                    <paper-material class="layout horizontal">
+                    <div class="layout horizontal">
                     <span class="fieldheader">Weiswurst</span>
                     <span class="fieldheader">Brezn</span>
-                    </paper-material>
+                    </div>
 
                 </paper-item>
 
@@ -88,13 +80,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                                          value="{{order.brezen}}"></paper-input>
 
                     </paper-material>
-
                     </paper-item>
                 </template>
-
-
-
-        </div><paper-fab icon="add"></paper-fab>
+        </div>
     </template>
     <script>
         (function () {
