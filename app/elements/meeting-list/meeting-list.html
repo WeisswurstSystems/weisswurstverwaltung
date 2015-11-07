@@ -40,6 +40,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         position: fixed;
         bottom: 32px;
         right: 32px;
+        display: none;
       }
 
     </style>
@@ -73,30 +74,43 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         properties: {
           meetings: Array,
-		  
-		  animationConfig: {
-          type: Object,
-          value: function () {
-            return {
-              'show': [{
-                name: 'scale-up-animation',
-                node: this.$.deleteFab
-              }],
-              'hide': [{
-                name: 'scale-down-animation',
-                node: this.$.deleteFab
-              }]
-            };
+
+          animationConfig: {
+            type: Object,
+            value: function () {
+              return {
+                'show': [{
+                  name: 'scale-up-animation',
+                  node: this.$.deleteFab
+                }],
+                'hide': [{
+                  name: 'scale-down-animation',
+                  node: this.$.deleteFab
+                }]
+              };
+            },
+
+            _animWasHide: {
+              type: Boolean,
+              value: false
+            }
           }
-        }
         },
 
         behaviors: [
           Polymer.NeonAnimationRunnerBehavior
         ],
 
-        
+        listeners: {
+          'neon-animation-finish': '_onAnimationFinish'
+        },
 
+        _onAnimationFinish: function () {
+          if (this._animWasHide) {
+            this.$.deleteFab.style.display = 'none';
+            this._animWasHide = false;
+          }
+        },
 
         _compareMeeting: function (a, b) {
           return b.date - a.date;
@@ -109,8 +123,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           array.forEach(function (m) {
             self.fire('delete-meeting', m);
           });
+          this._animWasHide = true;
           this.playAnimation('hide');
-		  
+
         },
         _navigate: function (e) {
           this.fire('select-meeting', {meeting: e.model.meeting, target: e.target.parentNode});
@@ -121,11 +136,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         },
 
         _toggleSelection: function (e) {
+          var previousNumber = this.selectedMeetings.length;
           this.$.selector.select(e.model.meeting);
           e.stopPropagation();
           if (this.selectedMeetings.length === 0) {
+            this._animWasHide = true;
             this.playAnimation('hide');
-          } else {
+          } else if (this.selectedMeetings.length === 1 && previousNumber === 0) {
+            this.$.deleteFab.style.display = 'inline';
             this.playAnimation('show');
           }
         },
