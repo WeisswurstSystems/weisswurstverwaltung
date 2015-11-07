@@ -12,95 +12,130 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <link rel="import" href="..\..\bower_components/paper-item/paper-icon-item.html">
 <link rel="import" href="..\..\bower_components/paper-item/paper-icon-item.html">
-<link rel="import" href="..\..\bower_components/paper-button/paper-button.html">
 <link rel="import" href="..\..\bower_components/paper-checkbox/paper-checkbox.html">
 <link rel="import" href="..\..\bower_components/iron-list/iron-list.html">
+<link rel="import" href="..\..\bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="..\..\bower_components/neon-animation/neon-animation-runner-behavior.html">
+<link rel="import" href="..\..\bower_components/neon-animation/animations/scale-up-animation.html">
+<link rel="import" href="..\..\bower_components/neon-animation/animations/scale-down-animation.html">
 
 
 <dom-module id="meeting-list">
-    <template>
-        <style include="shared-styles"></style>
-        <style>
-            :host {
-                display: block;
-            }
+  <template>
+    <style include="shared-styles"></style>
+    <style>
+      :host {
+        display: block;
+      }
 
-            .button {
-                margin: 8px
-            }
+      .seperator {
+        margin: 8px
+      }
 
-            paper-material {
-                margin-bottom: 8px;
-            }
+      paper-material {
+        margin-bottom: 8px;
+      }
 
-        </style>
+      paper-fab {
+        position: fixed;
+        bottom: 64px;
+        right: 64px;
+        -webkit-transform: translateZ(0);
+      }
 
-        <div class="button"></div>
+    </style>
 
+    <div class="seperator"></div>
 
-        <template is="dom-repeat" items="{{meetings}}" as="meeting" sort="_compareMeeting">
-            <div>
-                <paper-material elevation="1">
-                    <paper-item on-tap="_navigate">
-                        <paper-checkbox on-tap="_toggleSelection" item-icon ></paper-checkbox>
-                        <span class="flex">{{meeting.name}}</span>
-                        <span>{{_formatDate(meeting.date)}}</span>
-                    </paper-item>
-                </paper-material>
-            </div>
-        </template>
-
-        <array-selector id="selector" items="{{meetings}}" selected="{{selectedMeetings}}" toggle
-                        multi></array-selector>
-
-        <paper-button on-tap="_deleteSelected" >
-            <iron-icon icon="delete"></iron-icon>
-            LÖSCHEN
-        </paper-button>
-
+    <template is="dom-repeat" items="{{meetings}}" as="meeting" sort="_compareMeeting">
+      <div>
+        <paper-material elevation="1">
+          <paper-item on-tap="_navigate">
+            <paper-checkbox on-tap="_toggleSelection" item-icon></paper-checkbox>
+            <span class="flex">{{meeting.name}}</span>
+            <span>{{_formatDate(meeting.date)}}</span>
+          </paper-item>
+        </paper-material>
+      </div>
     </template>
-    <script>
-        (function () {
-            'use strict';
 
-            Polymer({
-                is: 'meeting-list',
-
-                properties: {
-                    meetings: Array
-                },
+    <array-selector id="selector" items="{{meetings}}" selected="{{selectedMeetings}}" toggle
+                    multi></array-selector>
 
 
-                _compareMeeting: function (a, b) {
-                    return b.date - a.date;
-                },
+    <paper-fab id="deleteFab" icon="delete" on-tap="_deleteSelected" style="visibility: hidden"></paper-fab>
+  </template>
+  <script>
+    (function () {
+      'use strict';
+
+      Polymer({
+        is: 'meeting-list',
+
+        properties: {
+          meetings: Array
+        },
+
+        behaviors: [
+          Polymer.NeonAnimationRunnerBehavior
+        ],
+
+        animationConfig: {
+          type: Object,
+          value: function () {
+            return {
+              'entry': [{
+                name: 'scale-up-animation',
+                node: this.$.deleteFab
+              }],
+              'exit': [{
+                name: 'scale-down-animation',
+                node: this.$.deleteFab
+              }]
+            };
+          }
+        },
 
 
-                _deleteSelected: function () {
-                    var array = this.selectedMeetings.slice();
-                    var self = this;
-                    array.forEach(function (m) {
-                        console.log(m);
-                        self.fire('delete-meeting', m);
-                    });
-                },
-                _navigate: function (e) {
-                    this.fire('select-meeting',{meeting: e.model.meeting, target: e.target.parentNode});
-                },
+        _compareMeeting: function (a, b) {
+          return b.date - a.date;
+        },
 
-                _formatDate: function (millis) {
-                    return new Date(millis).toLocaleDateString();
-                },
 
-                _toggleSelection: function (e) {
-                    this.$.selector.select(e.model.meeting);
-                    e.stopPropagation();
-                },
+        _deleteSelected: function () {
+          var array = this.selectedMeetings.slice();
+          var self = this;
+          array.forEach(function (m) {
+            console.log(m);
+            self.fire('delete-meeting', m);
+          });
+          this.$.deleteFab.style.visibility = 'hidden';
+          this.playAnimation('exit');
+        },
+        _navigate: function (e) {
+          this.fire('select-meeting', {meeting: e.model.meeting, target: e.target.parentNode});
+        },
 
-                _isSelected: function (item) {
-                    return this.$.selector.isSelected(item);
-                }
-            });
-        })();
-    </script>
+        _formatDate: function (millis) {
+          return new Date(millis).toLocaleDateString();
+        },
+
+        _toggleSelection: function (e) {
+          this.$.selector.select(e.model.meeting);
+          e.stopPropagation();
+          if (this.selectedMeetings.length === 0) {
+            this.$.deleteFab.style.visibility = 'hidden';
+            this.playAnimation('exit');
+          } else {
+            this.$.deleteFab.style.visibility = 'visible';
+            this.playAnimation('entry');
+          }
+        },
+
+        _isSelected: function (item) {
+          return this.$.selector.isSelected(item);
+        }
+      });
+    })();
+  </script>
 </dom-module>
