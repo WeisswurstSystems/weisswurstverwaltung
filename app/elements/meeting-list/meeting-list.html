@@ -32,6 +32,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         margin: 8px
       }
 
+      .secondary{
+        color: var(--secondary-text-color);
+      }
+
       paper-material {
         margin-bottom: 8px;
       }
@@ -53,7 +57,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <paper-item on-tap="_navigate">
             <paper-checkbox on-tap="_toggleSelection" item-icon></paper-checkbox>
             <span class="flex">{{meeting.name}}</span>
-            <span>{{_formatDate(meeting.date)}}</span>
+            <span class="secondary">{{_formatDate(meeting.date)}}</span>
           </paper-item>
         </paper-material>
       </div>
@@ -132,7 +136,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         },
 
         _formatDate: function (millis) {
-          return new Date(millis).toLocaleDateString();
+          var date = new Date(millis);
+          var days = ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'];
+          var string = days[date.getDay()];
+          string = string + ', ';
+          string = string + date.toLocaleDateString();
+          return string;
         },
 
         _toggleSelection: function (e) {

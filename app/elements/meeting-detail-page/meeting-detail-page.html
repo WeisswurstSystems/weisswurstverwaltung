@@ -27,6 +27,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             margin-top: 8px;
         }
 
+        paper-item{
+          margin-left: -8px;
+        }
 
         .fieldheader{
             margin: 0px 16px;
@@ -44,6 +47,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             width: 75px;
             text-align: right;
         }
+
+        .secondary{
+          color: var(--secondary-text-color);
+        }
     </style>
     <template>
 
@@ -54,7 +61,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <paper-item>
                 <paper-icon-button on-tap="_navigateBack" icon="arrow-back" item-icon></paper-icon-button>
                 <span class="flex">{{meeting.name}}</span>
-                <span>{{_formatDate(meeting.date)}}</span>
+                <span class="secondary">{{_formatDate(meeting.date)}}</span>
             </paper-item>
         </paper-material>
 
@@ -94,7 +101,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 behaviors: [Polymer.NeonSharedElementAnimatableBehavior],
 
                 _formatDate: function (millis) {
-                    return new Date(millis).toLocaleDateString();
+                  var date = new Date(millis);
+                  var days = ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'];
+                  var string = days[date.getDay()];
+                  string = string + ', ';
+                  string = string + date.toLocaleDateString();
+                  return string;
                 },
 
                 _navigateBack: function () {
