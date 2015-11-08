@@ -126,7 +126,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           var self = this;
           array.forEach(function (m) {
             self.fire('delete-meeting', m);
+			self.$.selector.deselect(m);
           });
+		  
           this._animWasHide = true;
           this.playAnimation('hide');
 

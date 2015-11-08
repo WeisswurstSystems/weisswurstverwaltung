@@ -15,10 +15,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="..\..\bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="..\..\bower_components/iron-icons/social-icons.html">
 <link rel="import" href="..\..\bower_components/iron-icons/maps-icons.html">
+<link rel="import" href="..\..\bower_components/paper-fab/paper-fab.html">
 
 <link rel="import" href="..\..\bower_components/neon-animation/neon-shared-element-animatable-behavior.html">
 <link rel="import" href="..\..\bower_components/neon-animation/animations/hero-animation.html">
 <link rel="import" href="..\..\bower_components/neon-animation/animations/fade-in-animation.html">
+<link rel="import" href="..\..\bower_components/neon-animation/animations/scale-up-animation.html">
+<link rel="import" href="..\..\bower_components/neon-animation/animations/scale-down-animation.html">
 <link rel="import" href="..\..\bower_components/neon-animation/animations/slide-down-animation.html">
 <link rel="import" href="..\..\bower_components/neon-animation/animations/transform-animation.html">
 
@@ -50,58 +53,67 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       width: 75px;
       text-align: right;
     }
+	
+	paper-fab {
+		position: fixed;
+		bottom: 32px;
+        right: 32px;
+	}
 
     .secondary {
       color: var(--secondary-text-color);
     }
+	
+	.main {
+		height: 100%;
+	}
+	
+	.amount {
+		margin: 0px 16px;
+	}
   </style>
   <template>
 
 
     <meeting-detail-data id="{{id}}" meeting="{{meeting}}"></meeting-detail-data>
-
-    <paper-material id="hero" elevation="1">
-      <paper-item>
-        <paper-icon-button on-tap="_navigateBack" icon="arrow-back" item-icon></paper-icon-button>
-        <span class="flex">{{meeting.name}}</span>
-        <span class="flex">
+    <div id="main">
+      <paper-material id="hero" elevation="1">
+        <paper-item>
+          <paper-icon-button on-tap="_navigateBack" icon="arrow-back" item-icon></paper-icon-button>
+          <span class="flex">{{meeting.name}}</span>
           <!--TODO Ersetzen mit Weisswurst-Icon-->
-          <iron-icon icon="maps:local-pizza"></iron-icon>
-          <span>{{_ordersWeisswurst(meeting.orders)}}</span>
+	      <iron-icon icon="maps:local-pizza"></iron-icon>
+	      <span class="amount">{{_ordersWeisswurst(meeting.orders)}}</span>
           <!--TODO Ersetzen mit Brezen-Icon-->
           <iron-icon icon="social:cake"></iron-icon>
-          <span>{{_ordersBrezen(meeting.orders)}}</span>
-        </span>
-        <span class="secondary">{{_formatDate(meeting.date)}}</span>
-      </paper-item>
-    </paper-material>
+          <span class="amount">{{_ordersBrezen(meeting.orders)}}</span>
+          <span class="secondary">{{_formatDate(meeting.date)}}</span>
+          </paper-item>
+      </paper-material>
 
-    <div id="content" class="layout vertical center" elevation="0">
-
-      <paper-item>
-        <span class="fieldUser"></span>
-
-        <div class="layout horizontal">
-          <span class="fieldheader">Weiswurst</span>
-          <span class="fieldheader">Brezn</span>
-        </div>
-
-      </paper-item>
-
-      <template is="dom-repeat" items="{{meeting.orders}}" as="order">
-        <paper-item><span class="fieldUser">{{order.name}}</span>
-          <paper-material class="layout horizontal center">
-
-
-            <paper-input class="field" no-label-float type="number"
-                         value="{{order.weisswurst}}"></paper-input>
-            <paper-input class="field" no-label-float type="number"
-                         value="{{order.brezen}}"></paper-input>
-
-          </paper-material>
+      <div id="content" class="layout vertical center" elevation="0">
+        <paper-item>
+          <span class="fieldUser"></span>
+          <div class="layout horizontal">
+            <span class="fieldheader">Weiswurst</span>
+            <span class="fieldheader">Brezn</span>
+          </div>
         </paper-item>
-      </template>
-    </div>
+
+        <template is="dom-repeat" items="{{meeting.orders}}" as="order">
+          <paper-item><span class="fieldUser">{{order.name}}</span>
+            <paper-material class="layout horizontal center">
+              <paper-input class="field" no-label-float type="number"
+                         value="{{order.weisswurst}}"></paper-input>
+              <paper-input class="field" no-label-float type="number"
+                         value="{{order.brezen}}"></paper-input>
+            </paper-material>
+          </paper-item>
+        </template>
+	  </div>
+	</div>
+	
+	<paper-fab id="fab" icon="social:person-add" on-tap="_addPerson"></paper-fab>
   </template>
   <script>
     (function () {
@@ -120,8 +132,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           string = string + date.toLocaleDateString();
           return string;
         },
+		
+		_addPerson: function() {
+			if (!this.meeting.orders) {
+				this.meeting.orders = [];
+			}
+			var name = prompt('Please enter your name');
+			this.push('meeting.orders', {name: name, brezen: 0, weisswurst: 0});
+		},
 
         _ordersWeisswurst: function (orders) {
+		  if (!orders) {
+			return 0;
+		  }
           var counter = 0;
           orders.forEach(function (entry) {
             var num = parseInt(entry.weisswurst);
@@ -133,6 +156,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         },
 
         _ordersBrezen: function (orders) {
+		  if (!orders) {
+		    return 0;
+		  }
           var counter = 0;
           orders.forEach(function (entry) {
             var num = parseInt(entry.brezen);
@@ -149,7 +175,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         properties: {
           id: String,
-
+		  
           animationConfig: {
             type: Object,
             value: function () {
@@ -165,19 +191,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     delay: 200,
                     duration: 500
                   }
-                }, {
-                  name: 'slide-down-animation',
-                  node: this.$.content,
-                  timing: {
-                    duration: 500
-                  }
-                }],
-                'exit': {
+                }, 
+				  {name: 'slide-down-animation', node: this.$.content, timing: {duration: 500}}, 
+				  {name: 'scale-up-animation', node: this.$.fab}
+				],
+                'exit': [{
                   name: 'transform-animation',
                   transformFrom: 'none',
                   transformTo: 'translate(0px,-100vh)',
-                  node: this
-                }
+                  node: this.$.main
+                },
+				  {name: 'scale-down-animation', node: this.$.fab}
+				]
               };
             }
           },

@@ -83,13 +83,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           if (this.$.nameInput.value) {
             this.fire('add-meeting', {
               name: this.$.nameInput.value,
-              date: this.date.getTime(),
-              orders: [
-                {name: 'Peter', weisswurst: 3, brezen: 5},
-                {name: 'Fabian', weisswurst: 1, brezen: 1},
-                {name: 'Arne', weisswurst: -1, brezen: 2},
-                {name: 'Maxi', weisswurst: 5, brezen: 0}
-              ]
+              date: this.date.getTime()
             });
             this.$.toastCreateSuccess.show();
             this.$.nameInput.value = null;
