@@ -67,10 +67,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <span class="flex">
           <!--TODO Ersetzen mit Weisswurst-Icon-->
           <iron-icon icon="maps:local-pizza"></iron-icon>
-          <span>{{_ordersWeisswurst()}}</span>
+          <span>{{_ordersWeisswurst(meeting.orders)}}</span>
           <!--TODO Ersetzen mit Brezen-Icon-->
           <iron-icon icon="social:cake"></iron-icon>
-          <span>{{_ordersBrezen()}}</span>
+          <span>{{_ordersBrezen(meeting.orders)}}</span>
         </span>
         <span class="secondary">{{_formatDate(meeting.date)}}</span>
       </paper-item>
@@ -121,21 +121,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           return string;
         },
 
-        _ordersWeisswurst: function () {
+        _ordersWeisswurst: function (orders) {
           var counter = 0;
-          //TODO Ich hab keine Ahnung wie ich hier an das aktuelle meeting komme...
-          //this.meeting.orders.forEach(function (entry) {
-          //  counter += entry.weisswurst;
-          //});
+          orders.forEach(function (entry) {
+            counter += entry.weisswurst;
+          });
           return counter;
         },
 
-        _ordersBrezen: function () {
+        _ordersBrezen: function (orders) {
           var counter = 0;
-          //TODO Ich hab keine Ahnung wie ich hier an das aktuelle meeting komme...
-          //meeting.orders.forEach(function (entry) {
-          //  counter += entry.brezen;
-          //});
+          orders.forEach(function (entry) {
+            counter += entry.brezen;
+          });
           return counter;
         },
 
