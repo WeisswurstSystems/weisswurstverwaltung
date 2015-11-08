@@ -124,7 +124,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         _ordersWeisswurst: function (orders) {
           var counter = 0;
           orders.forEach(function (entry) {
-            counter += entry.weisswurst;
+            var num = parseInt(entry.weisswurst);
+            if(!isNaN(num)){
+              counter += num;
+            }
           });
           return counter;
         },
@@ -132,7 +135,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         _ordersBrezen: function (orders) {
           var counter = 0;
           orders.forEach(function (entry) {
-            counter += entry.brezen;
+            var num = parseInt(entry.brezen);
+            if(!isNaN(num)){
+              counter += num;
+            }
           });
           return counter;
         },
