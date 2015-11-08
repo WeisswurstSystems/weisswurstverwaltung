@@ -12,6 +12,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="..\..\bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="..\..\bower_components/paper-item/paper-item.html">
 <link rel="import" href="..\..\bower_components/paper-item/paper-icon-item.html">
+<link rel="import" href="..\..\bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="..\..\bower_components/iron-icons/social-icons.html">
+<link rel="import" href="..\..\bower_components/iron-icons/maps-icons.html">
 
 <link rel="import" href="..\..\bower_components/neon-animation/neon-shared-element-animatable-behavior.html">
 <link rel="import" href="..\..\bower_components/neon-animation/animations/hero-animation.html">
@@ -20,144 +23,171 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="..\..\bower_components/neon-animation/animations/transform-animation.html">
 
 <dom-module id="meeting-detail-page">
-    <style include="shared-styles"></style>
-    <style>
+  <style include="shared-styles"></style>
+  <style>
 
-        #content {
-            margin-top: 8px;
-        }
+    #content {
+      margin-top: 8px;
+    }
 
-        paper-item{
-          margin-left: -8px;
-        }
+    paper-item {
+      margin-left: -8px;
+    }
 
-        .fieldheader{
-            margin: 0px 16px;
-            width: 75px;
-            text-align: center;
-        }
+    .fieldheader {
+      margin: 0px 16px;
+      width: 75px;
+      text-align: center;
+    }
 
-        .fieldUser {
-            margin: 0px 16px;
-            width: 75px;
-        }
+    .fieldUser {
+      margin: 0px 16px;
+      width: 75px;
+    }
 
-        .field {
-            margin: 0px 16px;
-            width: 75px;
-            text-align: right;
-        }
+    .field {
+      margin: 0px 16px;
+      width: 75px;
+      text-align: right;
+    }
 
-        .secondary{
-          color: var(--secondary-text-color);
-        }
-    </style>
-    <template>
-
-
-        <meeting-detail-data id="{{id}}" meeting="{{meeting}}"></meeting-detail-data>
-
-        <paper-material id="hero" elevation="1">
-            <paper-item>
-                <paper-icon-button on-tap="_navigateBack" icon="arrow-back" item-icon></paper-icon-button>
-                <span class="flex">{{meeting.name}}</span>
-                <span class="secondary">{{_formatDate(meeting.date)}}</span>
-            </paper-item>
-        </paper-material>
-
-        <div id="content" elevation="0">
-
-                <paper-item>
-                    <span class="fieldUser"></span>
-                    <div class="layout horizontal">
-                    <span class="fieldheader">Weiswurst</span>
-                    <span class="fieldheader">Brezn</span>
-                    </div>
-
-                </paper-item>
-
-                <template is="dom-repeat" items="{{meeting.orders}}" as="order">
-                    <paper-item ><span class="fieldUser">{{order.name}}</span>
-                    <paper-material class="layout horizontal center">
+    .secondary {
+      color: var(--secondary-text-color);
+    }
+  </style>
+  <template>
 
 
-                            <paper-input class="field" no-label-float type="number"
-                                         value="{{order.weisswurst}}"></paper-input>
-                            <paper-input class="field" no-label-float type="number"
-                                         value="{{order.brezen}}"></paper-input>
+    <meeting-detail-data id="{{id}}" meeting="{{meeting}}"></meeting-detail-data>
 
-                    </paper-material>
-                    </paper-item>
-                </template>
+    <paper-material id="hero" elevation="1">
+      <paper-item>
+        <paper-icon-button on-tap="_navigateBack" icon="arrow-back" item-icon></paper-icon-button>
+        <span class="flex">{{meeting.name}}</span>
+        <span class="flex">
+          <!--TODO Ersetzen mit Weisswurst-Icon-->
+          <iron-icon icon="maps:local-pizza"></iron-icon>
+          <span>{{_ordersWeisswurst()}}</span>
+          <!--TODO Ersetzen mit Brezen-Icon-->
+          <iron-icon icon="social:cake"></iron-icon>
+          <span>{{_ordersBrezen()}}</span>
+        </span>
+        <span class="secondary">{{_formatDate(meeting.date)}}</span>
+      </paper-item>
+    </paper-material>
+
+    <div id="content" elevation="0">
+
+      <paper-item>
+        <span class="fieldUser"></span>
+
+        <div class="layout horizontal">
+          <span class="fieldheader">Weiswurst</span>
+          <span class="fieldheader">Brezn</span>
         </div>
-    </template>
-    <script>
-        (function () {
-            'use strict';
 
-            Polymer({
-                is: 'meeting-detail-page',
+      </paper-item>
 
-                behaviors: [Polymer.NeonSharedElementAnimatableBehavior],
+      <template is="dom-repeat" items="{{meeting.orders}}" as="order">
+        <paper-item><span class="fieldUser">{{order.name}}</span>
+          <paper-material class="layout horizontal center">
 
-                _formatDate: function (millis) {
-                  var date = new Date(millis);
-                  var days = ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'];
-                  var string = days[date.getDay()];
-                  string = string + ', ';
-                  string = string + date.toLocaleDateString();
-                  return string;
-                },
 
-                _navigateBack: function () {
-                    page.show('/');
-                },
+            <paper-input class="field" no-label-float type="number"
+                         value="{{order.weisswurst}}"></paper-input>
+            <paper-input class="field" no-label-float type="number"
+                         value="{{order.brezen}}"></paper-input>
 
-                properties: {
-                    id: String,
+          </paper-material>
+        </paper-item>
+      </template>
+    </div>
+  </template>
+  <script>
+    (function () {
+      'use strict';
 
-                    animationConfig: {
-                        type: Object,
-                        value: function () {
-                            return {
-                                'entry': [{
-                                    name: 'hero-animation',
-                                    id: 'hero',
-                                    toPage: this
-                                }, {
-                                    name: 'fade-in-animation',
-                                    node: this.$.content,
-                                    timing: {
-                                        delay: 200,
-                                        duration: 500
-                                    }
-                                }, {
-                                    name: 'slide-down-animation',
-                                    node: this.$.content,
-                                    timing: {
-                                        duration: 500
-                                    }
-                                }],
-                                'exit': {
-                                    name: 'transform-animation',
-                                    transformFrom: 'none',
-                                    transformTo: 'translate(0px,-100vh)',
-                                    node: this
-                                }
-                            };
-                        }
-                    },
+      Polymer({
+        is: 'meeting-detail-page',
 
-                    sharedElements: {
-                        type: Object,
-                        value: function () {
-                            return {
-                                'hero': this.$.hero
-                            };
-                        }
-                    }
+        behaviors: [Polymer.NeonSharedElementAnimatableBehavior],
+
+        _formatDate: function (millis) {
+          var date = new Date(millis);
+          var days = ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'];
+          var string = days[date.getDay()];
+          string = string + ', ';
+          string = string + date.toLocaleDateString();
+          return string;
+        },
+
+        _ordersWeisswurst: function () {
+          var counter = 0;
+          //TODO Ich hab keine Ahnung wie ich hier an das aktuelle meeting komme...
+          //meeting.orders.forEach(function (entry) {
+          //  counter += entry.weisswurst;
+          //});
+          return counter;
+        },
+
+        _ordersBrezen: function () {
+          var counter = 0;
+          //TODO Ich hab keine Ahnung wie ich hier an das aktuelle meeting komme...
+          //meeting.orders.forEach(function (entry) {
+          //  counter += entry.brezen;
+          //});
+          return counter;
+        },
+
+        _navigateBack: function () {
+          page.show('/');
+        },
+
+        properties: {
+          id: String,
+
+          animationConfig: {
+            type: Object,
+            value: function () {
+              return {
+                'entry': [{
+                  name: 'hero-animation',
+                  id: 'hero',
+                  toPage: this
+                }, {
+                  name: 'fade-in-animation',
+                  node: this.$.content,
+                  timing: {
+                    delay: 200,
+                    duration: 500
+                  }
+                }, {
+                  name: 'slide-down-animation',
+                  node: this.$.content,
+                  timing: {
+                    duration: 500
+                  }
+                }],
+                'exit': {
+                  name: 'transform-animation',
+                  transformFrom: 'none',
+                  transformTo: 'translate(0px,-100vh)',
+                  node: this
                 }
-            });
-        })();
-    </script>
+              };
+            }
+          },
+
+          sharedElements: {
+            type: Object,
+            value: function () {
+              return {
+                'hero': this.$.hero
+              };
+            }
+          }
+        }
+      });
+    })();
+  </script>
 </dom-module>
