@@ -1,0 +1,125 @@
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+
+<link rel="import" href="..\..\bower_components/paper-item/paper-icon-item.html">
+<link rel="import" href="..\..\bower_components/paper-material/paper-material.html">
+
+
+<dom-module id="meeting-item">
+  <template>
+    <style include="shared-styles"></style>
+    <style>
+
+      #content {
+        margin-top: 8px;
+      }
+
+      paper-item {
+        margin-left: -8px;
+      }
+
+      .fieldheader {
+        margin: 0px 16px;
+        width: 75px;
+        text-align: center;
+      }
+
+      .fieldUser {
+        margin: 0px 16px;
+        width: 75px;
+      }
+
+      .field {
+        margin: 0px 16px;
+        width: 75px;
+        text-align: right;
+      }
+
+      paper-fab {
+        position: fixed;
+        bottom: 32px;
+        right: 32px;
+      }
+
+      .secondary {
+        color: var(--secondary-text-color);
+      }
+
+      .main {
+        height: 100%;
+      }
+
+      .amount {
+        margin: 0px 16px;
+      }
+    </style>
+    <p>ding</p>
+    <paper-material elevation="1">
+      <paper-item>
+        <paper-icon-button hidden="{{backhidden}}" on-tap="_navigateBack" icon="arrow-back" item-icon></paper-icon-button>
+        <span class="flex">{{meeting.name}}</span>
+        <!--TODO Ersetzen mit Weisswurst-Icon-->
+        <iron-icon icon="maps:local-pizza"></iron-icon>
+        <span class="amount">{{_ordersWeisswurst(meeting.orders)}}</span>
+        <!--TODO Ersetzen mit Brezen-Icon-->
+        <iron-icon icon="social:cake"></iron-icon>
+        <span class="amount">{{_ordersBrezen(meeting.orders)}}</span>
+        <span class="secondary">{{_formatDate(meeting.date)}}</span>
+      </paper-item>
+    </paper-material>
+  </template>
+  <script>
+    (function () {
+      'use strict';
+
+      Polymer({
+        is: 'meeting-element',
+
+        properties: {
+          meeting: Object,
+          backhidden: Boolean
+        },
+
+        _formatDate: function (millis) {
+          var date = new Date(millis);
+          var days = ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'];
+          var string = days[date.getDay()];
+          string = string + ', ';
+          string = string + date.toLocaleDateString();
+          return string;
+        },
+
+        _ordersWeisswurst: function (orders) {
+          if (!orders) {
+            return 0;
+          }
+          var counter = 0;
+          orders.forEach(function (entry) {
+            var num = parseInt(entry.weisswurst);
+            if (!isNaN(num)) {
+              counter += num;
+            }
+          });
+          return counter;
+        },
+
+        _ordersBrezen: function (orders) {
+          if (!orders) {
+            return 0;
+          }
+          var counter = 0;
+          orders.forEach(function (entry) {
+            var num = parseInt(entry.brezen);
+            if (!isNaN(num)) {
+              counter += num;
+            }
+          });
+          return counter;
+        },
+
+        _navigateBack: function () {
+          page.show('/');
+        },
+      });
+    })();
+  </script>
+</dom-module>

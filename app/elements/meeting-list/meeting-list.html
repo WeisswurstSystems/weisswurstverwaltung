@@ -20,6 +20,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="..\..\bower_components/neon-animation/animations/scale-down-animation.html">
 
 
+<link rel="import" href="..\meeting-element/meeting-element.html">
+
+
 <dom-module id="meeting-list">
   <template>
     <style include="shared-styles"></style>
@@ -32,7 +35,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         margin: 8px
       }
 
-      .secondary{
+      .secondary {
         color: var(--secondary-text-color);
       }
 
@@ -53,21 +56,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <template is="dom-repeat" items="{{meetings}}" as="meeting" sort="_compareMeeting">
       <div>
-        <paper-material elevation="1">
-          <paper-item on-tap="_navigate">
-            <paper-checkbox on-tap="_toggleSelection" item-icon></paper-checkbox>
-            <span class="flex">{{meeting.name}}</span>
-            <span class="secondary">{{_formatDate(meeting.date)}}</span>
-          </paper-item>
-        </paper-material>
+        <meeting-element meeting="{{meeting}}" backhidden="true"></meeting-element>
       </div>
     </template>
-
-    <array-selector id="selector" items="{{meetings}}" selected="{{selectedMeetings}}" toggle
-                    multi></array-selector>
-
-
-    <paper-fab id="deleteFab" icon="delete" on-tap="_deleteSelected"></paper-fab>
   </template>
   <script>
     (function () {
@@ -77,36 +68,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         is: 'meeting-list',
 
         properties: {
-          meetings: Array,
-
-          animationConfig: {
-            type: Object,
-            value: function () {
-              return {
-                'show': [{
-                  name: 'scale-up-animation',
-                  node: this.$.deleteFab
-                }],
-                'hide': [{
-                  name: 'scale-down-animation',
-                  node: this.$.deleteFab
-                }]
-              };
-            },
-
-            _animWasHide: {
-              type: Boolean,
-              value: false
-            }
-          }
-        },
-
-        behaviors: [
-          Polymer.NeonAnimationRunnerBehavior
-        ],
-
-        listeners: {
-          'neon-animation-finish': '_onAnimationFinish'
+          meetings: Array
         },
 
         _onAnimationFinish: function () {
@@ -120,47 +82,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           return b.date - a.date;
         },
 
-
-        _deleteSelected: function () {
-          var array = this.selectedMeetings.slice();
-          var self = this;
-          array.forEach(function (m) {
-            self.fire('delete-meeting', m);
-			self.$.selector.deselect(m);
-          });
-		  
-          this._animWasHide = true;
-          this.playAnimation('hide');
-
-        },
         _navigate: function (e) {
           this.fire('select-meeting', {meeting: e.model.meeting, target: e.target.parentNode});
-        },
-
-        _formatDate: function (millis) {
-          var date = new Date(millis);
-          var days = ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'];
-          var string = days[date.getDay()];
-          string = string + ', ';
-          string = string + date.toLocaleDateString();
-          return string;
-        },
-
-        _toggleSelection: function (e) {
-          var previousNumber = this.selectedMeetings.length;
-          this.$.selector.select(e.model.meeting);
-          e.stopPropagation();
-          if (this.selectedMeetings.length === 0) {
-            this._animWasHide = true;
-            this.playAnimation('hide');
-          } else if (this.selectedMeetings.length === 1 && previousNumber === 0) {
-            this.$.deleteFab.style.display = 'inline';
-            this.playAnimation('show');
-          }
-        },
-
-        _isSelected: function (item) {
-          return this.$.selector.isSelected(item);
         }
       });
     })();
