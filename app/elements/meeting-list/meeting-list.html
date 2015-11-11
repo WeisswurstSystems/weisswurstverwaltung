@@ -19,10 +19,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="..\..\bower_components/neon-animation/animations/scale-up-animation.html">
 <link rel="import" href="..\..\bower_components/neon-animation/animations/scale-down-animation.html">
 
-
-<link rel="import" href="..\meeting-element/meeting-element.html">
-
-
 <dom-module id="meeting-list">
   <template>
     <style include="shared-styles"></style>
@@ -56,7 +52,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <template is="dom-repeat" items="{{meetings}}" as="meeting" sort="_compareMeeting">
       <div>
-        <meeting-element meeting="{{meeting}}" backhidden="true"></meeting-element>
+        <meeting-element on-tap="_navigate" meeting="{{meeting}}" backhidden="true"></meeting-element>
       </div>
     </template>
   </template>
