@@ -10,6 +10,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <link rel="import" href="..\..\bower_components/polymer/polymer.html">
 <link rel="import" href="..\..\bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="..\..\bower_components/paper-button/paper-button.html">
 <link rel="import" href="..\..\bower_components/paper-item/paper-item.html">
 <link rel="import" href="..\..\bower_components/paper-item/paper-icon-item.html">
 <link rel="import" href="..\..\bower_components/iron-icon/iron-icon.html">
@@ -25,16 +26,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="..\..\bower_components/neon-animation/animations/slide-down-animation.html">
 <link rel="import" href="..\..\bower_components/neon-animation/animations/transform-animation.html">
 
+<link rel="import" href="..\meeting-element/meeting-element.html">
+
 <dom-module id="meeting-detail-page">
   <style include="shared-styles"></style>
   <style>
 
     #content {
       margin-top: 8px;
-    }
-
-    paper-item {
-      margin-left: -8px;
     }
 
     .fieldheader {
@@ -59,37 +58,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       bottom: 32px;
       right: 32px;
     }
-
-    .secondary {
-      color: var(--secondary-text-color);
-    }
-
-    .main {
-      height: 100%;
-    }
-
-    .amount {
-      margin: 0px 16px;
-    }
   </style>
   <template>
 
 
     <meeting-detail-data id="{{id}}" meeting="{{meeting}}"></meeting-detail-data>
     <div id="main">
-      <paper-material id="hero" elevation="1">
-        <paper-item>
-          <paper-icon-button on-tap="_navigateBack" icon="arrow-back" item-icon></paper-icon-button>
-          <span class="flex">{{meeting.name}}</span>
-          <!--TODO Ersetzen mit Weisswurst-Icon-->
-          <iron-icon icon="maps:local-pizza"></iron-icon>
-          <span class="amount">{{_ordersWeisswurst(meeting.orders)}}</span>
-          <!--TODO Ersetzen mit Brezen-Icon-->
-          <iron-icon icon="social:cake"></iron-icon>
-          <span class="amount">{{_ordersBrezen(meeting.orders)}}</span>
-          <span class="secondary">{{_formatDate(meeting.date)}}</span>
-        </paper-item>
-      </paper-material>
+      <div class="layout horizontal">
+        <meeting-element class="flex" id="hero" meeting="{{meeting}}">
+            <paper-icon-button on-tap="_navigateBack" icon="arrow-back"></paper-icon-button>
+        </meeting-element>
+      </div>
 
       <div id="content" class="layout vertical center" elevation="0">
         <paper-item>
@@ -125,49 +104,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         behaviors: [Polymer.NeonSharedElementAnimatableBehavior],
 
-        _formatDate: function (millis) {
-          var date = new Date(millis);
-          var days = ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'];
-          var string = days[date.getDay()];
-          string = string + ', ';
-          string = string + date.toLocaleDateString();
-          return string;
-        },
-
         _addPerson: function () {
           if (!this.meeting.orders) {
             this.meeting.orders = [];
           }
           var name = window.prompt('Please enter your name');
           this.push('meeting.orders', {name: name, brezen: 0, weisswurst: 0});
-        },
-
-        _ordersWeisswurst: function (orders) {
-          if (!orders) {
-            return 0;
-          }
-          var counter = 0;
-          orders.forEach(function (entry) {
-            var num = parseInt(entry.weisswurst);
-            if (!isNaN(num)) {
-              counter += num;
-            }
-          });
-          return counter;
-        },
-
-        _ordersBrezen: function (orders) {
-          if (!orders) {
-            return 0;
-          }
-          var counter = 0;
-          orders.forEach(function (entry) {
-            var num = parseInt(entry.brezen);
-            if (!isNaN(num)) {
-              counter += num;
-            }
-          });
-          return counter;
         },
 
         _navigateBack: function () {
