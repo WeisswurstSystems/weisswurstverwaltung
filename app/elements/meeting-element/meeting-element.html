@@ -38,12 +38,6 @@
           <user-avatar username="{{order.name}}"></user-avatar>
         </template>
 
-        <!--TODO Ersetzen mit Weisswurst-Icon-->
-        <iron-icon icon="maps:local-pizza"></iron-icon>
-        <span class="amount">{{_ordersWeisswurst(meeting.orders)}}</span>
-        <!--TODO Ersetzen mit Brezen-Icon-->
-        <iron-icon icon="social:cake"></iron-icon>
-        <span class="amount">{{_ordersBrezen(meeting.orders)}}</span>
         <span class="secondary">{{_formatDate(meeting.date)}}</span>
       </paper-item>
     </paper-material>
@@ -68,33 +62,6 @@
           return string;
         },
 
-        _ordersWeisswurst: function (orders) {
-          if (!orders) {
-            return 0;
-          }
-          var counter = 0;
-          orders.forEach(function (entry) {
-            var num = parseInt(entry.weisswurst);
-            if (!isNaN(num)) {
-              counter += num;
-            }
-          });
-          return counter;
-        },
-
-        _ordersBrezen: function (orders) {
-          if (!orders) {
-            return 0;
-          }
-          var counter = 0;
-          orders.forEach(function (entry) {
-            var num = parseInt(entry.brezen);
-            if (!isNaN(num)) {
-              counter += num;
-            }
-          });
-          return counter;
-        }
       });
     })();
   </script>

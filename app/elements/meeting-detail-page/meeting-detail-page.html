@@ -71,6 +71,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       </div>
 
       <div id="content" class="layout vertical center" elevation="0">
+
+        <div class="layout horizontal center">
+          <statistic-badge amount="{{_ordersWeisswurst(meeting.orders)}}" title="Weisswurst"></statistic-badge>
+          <statistic-badge amount="{{_ordersBrezen(meeting.orders)}}" title="Brezen"></statistic-badge>
+          <statistic-badge amount="{{_price(meeting.orders)}}" title="Preis"></statistic-badge>
+        </div>
+
         <paper-item>
           <span class="fieldUser"></span>
 
@@ -110,6 +117,44 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           }
           var name = window.prompt('Please enter your name');
           this.push('meeting.orders', {name: name, brezen: 0, weisswurst: 0});
+        },
+
+        _ordersWeisswurst: function (orders) {
+          if (!orders) {
+            return 0;
+          }
+          var counter = 0;
+          orders.forEach(function (entry) {
+            var num = parseInt(entry.weisswurst);
+            if (!isNaN(num)) {
+              counter += num;
+            }
+          });
+          return counter;
+        },
+
+        _ordersBrezen: function (orders) {
+          if (!orders) {
+            return 0;
+          }
+          var counter = 0;
+          orders.forEach(function (entry) {
+            var num = parseInt(entry.brezen);
+            if (!isNaN(num)) {
+              counter += num;
+            }
+          });
+          return counter;
+        },
+
+        _price: function (orders) {
+          var ww=this._ordersWeisswurst(orders);
+          var brez=this._ordersBrezen(orders);
+          var priceWW=1.00;
+          var priceBrez=.60;
+          var result = (ww * priceWW + brez * priceBrez);
+          result=result+"€";
+          return result;
         },
 
         _navigateBack: function () {
