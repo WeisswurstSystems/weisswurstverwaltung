@@ -1,0 +1,73 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+
+<dom-module id="user-avatar">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+
+      .avatar {
+        display: inline-block;
+        height: 38px;
+        width: 38px;
+        border-radius: 50%;
+        background: var(--paper-pink-500);
+        color: white;
+        line-height: 38px;
+        font-size: 18px;
+        text-align: center;
+        cursor: default;
+      }
+
+      .unselectable {
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none
+      }
+    </style>
+    <div title="{{username}}" id="ava" class="avatar unselectable">{{_getFirstLetter(username)}}</div>
+  </template>
+  <script>
+    (function () {
+      'use strict';
+
+      Polymer({
+        is: 'user-avatar',
+
+        properties: {
+          username: {
+            type: String,
+            value: '-'
+          }
+        },
+
+        _getRandomColor: function (username){
+          var colors = ['#F44336', '#E91E63' , '#9C27B0', '#673AB7', '#3F51B5', '#2196F3', '#039BE5', '#0097A7', '#009688', '#43A047', '#689F38', '#EF6C00', '#FF5722'];
+          var c = username.charCodeAt(0);
+          var i = c%colors.length;
+          var color = colors[i];
+          return color;
+        },
+
+        _getFirstLetter: function (username) {
+          this.$.ava.style.backgroundColor=this._getRandomColor(username);
+          return username.toUpperCase().charAt(0);
+        },
+      });
+    })();
+  </script>
+</dom-module>

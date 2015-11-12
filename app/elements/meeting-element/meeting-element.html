@@ -19,6 +19,12 @@
         color: var(--secondary-text-color);
       }
 
+      user-avatar {
+        margin-bottom: 6px;
+        margin-top: 6px;
+        margin-right: 4px;
+      }
+
       .amount {
         margin: 0px 16px;
       }
@@ -27,6 +33,11 @@
       <paper-item>
           <content></content>
         <span class="flex">{{meeting.name}}</span>
+
+        <template is="dom-repeat" items="{{meeting.orders}}" as="order">
+          <user-avatar username="{{order.name}}"></user-avatar>
+        </template>
+
         <!--TODO Ersetzen mit Weisswurst-Icon-->
         <iron-icon icon="maps:local-pizza"></iron-icon>
         <span class="amount">{{_ordersWeisswurst(meeting.orders)}}</span>
