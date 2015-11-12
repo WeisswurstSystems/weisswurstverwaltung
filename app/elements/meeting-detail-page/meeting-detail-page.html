@@ -73,9 +73,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <div id="content" class="layout vertical center" elevation="0">
 
         <div class="layout horizontal center">
-          <statistic-badge amount="{{_ordersWeisswurst(meeting.orders)}}" title="Weisswurst"></statistic-badge>
-          <statistic-badge amount="{{_ordersBrezen(meeting.orders)}}" title="Brezen"></statistic-badge>
-          <statistic-badge amount="{{_price(meeting.orders)}}" title="Preis"></statistic-badge>
+          <statistic-badge amount="{{_ordersWeisswurst(meeting.orders)}}" title="Weisswurst" color="#455A64"></statistic-badge>
+          <statistic-badge amount="{{_ordersBrezen(meeting.orders)}}" title="Brezen" color="#455A64"></statistic-badge>
+          <statistic-badge amount="{{_price(meeting.orders)}}" title="Preis" color="#009688"></statistic-badge>
         </div>
 
         <paper-item>
@@ -151,9 +151,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           var ww=this._ordersWeisswurst(orders);
           var brez=this._ordersBrezen(orders);
           var priceWW=1.00;
-          var priceBrez=.60;
+          var priceBrez=0.60;
           var result = (ww * priceWW + brez * priceBrez);
-          result=result+"€";
+          result=Math.ceil(result)+'€';
           return result;
         },
 

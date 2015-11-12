@@ -15,6 +15,9 @@
         right: 32px;
       }
 
+      .avatars {
+          margin: 0 16px;;
+      }
       .secondary {
         color: var(--secondary-text-color);
       }
@@ -24,20 +27,18 @@
         margin-top: 6px;
         margin-right: 4px;
       }
-
-      .amount {
-        margin: 0px 16px;
-      }
     </style>
     <paper-material elevation="1">
       <paper-item>
           <content></content>
-        <span class="flex">{{meeting.name}}</span>
+        <span>{{meeting.name}}</span>
 
+          <span class="flex"></span>
+          <div class="avatars layout horizontal center">
         <template is="dom-repeat" items="{{meeting.orders}}" as="order">
           <user-avatar username="{{order.name}}"></user-avatar>
         </template>
-
+          </div>
         <span class="secondary">{{_formatDate(meeting.date)}}</span>
       </paper-item>
     </paper-material>
