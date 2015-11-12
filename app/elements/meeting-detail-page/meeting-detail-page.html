@@ -36,10 +36,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       margin-top: 8px;
     }
 
-    paper-item {
-      margin-left: -8px;
-    }
-
     .fieldheader {
       margin: 0px 16px;
       width: 75px;
@@ -62,10 +58,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       bottom: 32px;
       right: 32px;
     }
-
-    paper-icon-button {
-      vertical-align: middle;
-    }
   </style>
   <template>
 
@@ -73,8 +65,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <meeting-detail-data id="{{id}}" meeting="{{meeting}}"></meeting-detail-data>
     <div id="main">
       <div class="layout horizontal">
-        <paper-icon-button on-tap="_navigateBack" icon="arrow-back"></paper-icon-button>
-        <meeting-element class="flex" id="hero" meeting="{{meeting}}"></meeting-element>
+        <meeting-element class="flex" id="hero" meeting="{{meeting}}">
+            <paper-icon-button on-tap="_navigateBack" icon="arrow-back"></paper-icon-button>
+        </meeting-element>
       </div>
 
       <div id="content" class="layout vertical center" elevation="0">

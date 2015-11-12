@@ -9,14 +9,6 @@
     <style include="shared-styles"></style>
     <style>
 
-      paper-item {
-        margin-left: -8px;
-      }
-
-      paper-material {
-        margin-bottom: 16px;
-      }
-
       paper-fab {
         position: fixed;
         bottom: 32px;
@@ -33,6 +25,7 @@
     </style>
     <paper-material elevation="1">
       <paper-item>
+          <content></content>
         <span class="flex">{{meeting.name}}</span>
         <!--TODO Ersetzen mit Weisswurst-Icon-->
         <iron-icon icon="maps:local-pizza"></iron-icon>
