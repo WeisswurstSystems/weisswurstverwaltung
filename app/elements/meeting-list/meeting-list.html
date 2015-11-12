@@ -48,7 +48,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <template is="dom-repeat" items="{{meetings}}" as="meeting" sort="_compareMeeting">
       <div>
-        <meeting-element on-tap="_navigate" meeting="{{meeting}}" backhidden="true"></meeting-element>
+        <meeting-element on-tap="_navigate" meeting="{{meeting}}"></meeting-element>
       </div>
     </template>
   </template>
@@ -75,7 +75,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         },
 
         _navigate: function (e) {
-          this.fire('select-meeting', {meeting: e.model.meeting, target: e.target.parentNode});
+          this.fire('select-meeting', {meeting: e.model.meeting, target: e.target});
         }
       });
     })();

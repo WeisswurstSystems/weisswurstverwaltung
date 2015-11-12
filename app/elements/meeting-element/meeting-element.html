@@ -9,29 +9,8 @@
     <style include="shared-styles"></style>
     <style>
 
-      #content {
-        margin-top: 8px;
-      }
-
       paper-item {
         margin-left: -8px;
-      }
-
-      .fieldheader {
-        margin: 0px 16px;
-        width: 75px;
-        text-align: center;
-      }
-
-      .fieldUser {
-        margin: 0px 16px;
-        width: 75px;
-      }
-
-      .field {
-        margin: 0px 16px;
-        width: 75px;
-        text-align: right;
       }
 
       paper-material {
@@ -48,17 +27,12 @@
         color: var(--secondary-text-color);
       }
 
-      .main {
-        height: 100%;
-      }
-
       .amount {
         margin: 0px 16px;
       }
     </style>
     <paper-material elevation="1">
       <paper-item>
-        <paper-icon-button hidden="{{backhidden}}" on-tap="_navigateBack" icon="arrow-back" item-icon></paper-icon-button>
         <span class="flex">{{meeting.name}}</span>
         <!--TODO Ersetzen mit Weisswurst-Icon-->
         <iron-icon icon="maps:local-pizza"></iron-icon>
@@ -78,8 +52,7 @@
         is: 'meeting-element',
 
         properties: {
-          meeting: Object,
-          backhidden: Boolean
+          meeting: Object
         },
 
         _formatDate: function (millis) {
@@ -117,11 +90,7 @@
             }
           });
           return counter;
-        },
-
-        _navigateBack: function () {
-          page.show('/');
-        },
+        }
       });
     })();
   </script>

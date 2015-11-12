@@ -10,6 +10,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <link rel="import" href="..\..\bower_components/polymer/polymer.html">
 <link rel="import" href="..\..\bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="..\..\bower_components/paper-button/paper-button.html">
 <link rel="import" href="..\..\bower_components/paper-item/paper-item.html">
 <link rel="import" href="..\..\bower_components/paper-item/paper-icon-item.html">
 <link rel="import" href="..\..\bower_components/iron-icon/iron-icon.html">
@@ -62,16 +63,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       right: 32px;
     }
 
-    .secondary {
-      color: var(--secondary-text-color);
-    }
-
-    .main {
-      height: 100%;
-    }
-
-    .amount {
-      margin: 0px 16px;
+    paper-icon-button {
+      vertical-align: middle;
     }
   </style>
   <template>
@@ -79,7 +72,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <meeting-detail-data id="{{id}}" meeting="{{meeting}}"></meeting-detail-data>
     <div id="main">
-      <meeting-element id="hero" meeting="{{meeting}}" backhidden="false"></meeting-element>
+      <div class="layout horizontal">
+        <paper-icon-button on-tap="_navigateBack" icon="arrow-back"></paper-icon-button>
+        <meeting-element class="flex" id="hero" meeting="{{meeting}}"></meeting-element>
+      </div>
 
       <div id="content" class="layout vertical center" elevation="0">
         <paper-item>
@@ -121,6 +117,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           }
           var name = window.prompt('Please enter your name');
           this.push('meeting.orders', {name: name, brezen: 0, weisswurst: 0});
+        },
+
+        _navigateBack: function () {
+          page.show('/');
         },
 
         properties: {
