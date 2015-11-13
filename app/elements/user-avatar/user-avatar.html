@@ -10,6 +10,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <link rel="import" href="..\..\bower_components/polymer/polymer.html">
 
+<link rel="import" href="..\..\bower_components/paper-tooltip/paper-tooltip.html">
+
 <dom-module id="user-avatar">
   <template>
     <style>
@@ -39,7 +41,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         user-select: none
       }
     </style>
-    <div title="{{username}}" id="ava" class="avatar unselectable">{{_getFirstLetter(username)}}</div>
+    <div id="ava" class="avatar unselectable">
+      {{_getFirstLetter(username)}}
+      <paper-tooltip>{{username}}</paper-tooltip>
+    </div>
   </template>
   <script>
     (function () {
@@ -57,16 +62,23 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         _getRandomColor: function (username){
           var colors = ['#F44336', '#E91E63' , '#9C27B0', '#673AB7', '#3F51B5', '#2196F3', '#039BE5', '#0097A7', '#009688', '#43A047', '#689F38', '#EF6C00', '#FF5722'];
-          var c = username.charCodeAt(0);
-          var i = c%colors.length;
-          var color = colors[i];
-          return color;
+          var i = this._getIntRepOfString(username) % colors.length;
+          return colors[i];
         },
 
         _getFirstLetter: function (username) {
           this.$.ava.style.backgroundColor=this._getRandomColor(username);
           return username.toUpperCase().charAt(0);
         },
+
+        _getIntRepOfString: function (username) {
+          var val = 0;
+          username.split('').forEach( function(element, index, array){
+            val = element.charCodeAt(0);
+            console.log(element + "-" + val);
+          });
+          return val;
+        }
       });
     })();
   </script>
