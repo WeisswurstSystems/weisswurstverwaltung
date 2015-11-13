@@ -29,7 +29,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         line-height: 38px;
         font-size: 18px;
         text-align: center;
-        cursor: default;
       }
 
       .unselectable {
@@ -38,7 +37,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         -khtml-user-select: none;
         -moz-user-select: none;
         -ms-user-select: none;
-        user-select: none
+        user-select: none;
+        cursor: default;
       }
     </style>
     <div id="ava" class="avatar unselectable">
@@ -60,22 +60,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           }
         },
 
-        _getRandomColor: function (username){
-          var colors = ['#F44336', '#E91E63' , '#9C27B0', '#673AB7', '#3F51B5', '#2196F3', '#039BE5', '#0097A7', '#009688', '#43A047', '#689F38', '#EF6C00', '#FF5722'];
+        _getRandomColor: function (username) {
+          var colors = ['#F44336', '#E91E63', '#9C27B0', '#673AB7', '#3F51B5', '#2196F3', '#039BE5', '#0097A7', '#009688', '#43A047', '#689F38', '#EF6C00', '#FF5722'];
           var i = this._getIntRepOfString(username) % colors.length;
           return colors[i];
         },
 
         _getFirstLetter: function (username) {
-          this.$.ava.style.backgroundColor=this._getRandomColor(username);
+          this.$.ava.style.backgroundColor = this._getRandomColor(username);
           return username.toUpperCase().charAt(0);
         },
 
         _getIntRepOfString: function (username) {
           var val = 0;
-          username.split('').forEach( function(element, index, array){
+          username.split('').forEach(function (element) {
             val = element.charCodeAt(0);
-            console.log(element + "-" + val);
           });
           return val;
         }
