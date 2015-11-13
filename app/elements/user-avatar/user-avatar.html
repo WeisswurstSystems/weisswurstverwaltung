@@ -74,7 +74,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         _getIntRepOfString: function (username) {
           var val = 0;
           username.split('').forEach(function (element) {
-            val = element.charCodeAt(0);
+            val = val+element.charCodeAt(0);
           });
           return val;
         }

@@ -13,8 +13,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <dom-module id="statistic-badge">
   <template>
     <style>
+      .unselectable {
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        cursor: default;
+      }
     </style>
-        <svg width="128" height="128">
+        <svg class="unselectable" width="128" height="128">
             <circle r="48" cx="64" cy="64" stroke$="{{color}}" stroke-width="3" fill="none"></circle>
             <text text-anchor="middle" x="64" y="76" font-family="Roboto" font-weight="lighter" font-size="36" fill="#3f3f3f">{{amount}}</text>
             <rect height="26" width="96" rx="13" ry="13" x="16" y="88" fill$="{{color}}"></rect>
