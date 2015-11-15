@@ -42,7 +42,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
     </style>
     <div id="ava" class="avatar unselectable">
-      {{_getFirstLetter(username)}}
+      {{_setContent(username)}}
       <paper-tooltip>{{username}}</paper-tooltip>
     </div>
   </template>
@@ -60,15 +60,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           }
         },
 
+        _setContent: function (username) {
+          this.$.ava.style.backgroundColor = this._getRandomColor(username);
+          return username.toUpperCase().charAt(0);
+        },
+
         _getRandomColor: function (username) {
           var colors = ['#72568f', '#568f8f', '#648f56', '#56568f', '#8f5681', '#a63f3f', '#a6a63f'];
           var i = this._getIntRepOfString(username) % colors.length;
           return colors[i];
-        },
-
-        _getFirstLetter: function (username) {
-          this.$.ava.style.backgroundColor = this._getRandomColor(username);
-          return username.toUpperCase().charAt(0);
         },
 
         _getIntRepOfString: function (username) {
