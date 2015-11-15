@@ -36,23 +36,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       margin-top: 8px;
     }
 
-    .fieldheader {
-      margin: 0px 16px;
-      width: 75px;
-      text-align: center;
-    }
-
-    .fieldUser {
-      margin: 0px 16px;
-      width: 75px;
-    }
-
-    .field {
-      margin: 0px 16px;
-      width: 75px;
-      text-align: right;
-    }
-
     paper-fab {
       position: fixed;
       bottom: 32px;
@@ -66,36 +49,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <div id="main">
       <div class="layout horizontal">
         <meeting-element class="flex" id="hero" meeting="{{meeting}}">
-            <paper-icon-button on-tap="_navigateBack" icon="arrow-back"></paper-icon-button>
+          <paper-icon-button on-tap="_navigateBack" icon="arrow-back"></paper-icon-button>
         </meeting-element>
       </div>
 
       <div id="content" class="layout vertical center" elevation="0">
 
         <div class="layout horizontal center">
-          <statistic-badge amount="{{_ordersWeisswurst(meeting.orders)}}" title="Weisswurst" color="#455A64"></statistic-badge>
+          <statistic-badge amount="{{_ordersWeisswurst(meeting.orders)}}" title="Weisswurst"
+                           color="#455A64"></statistic-badge>
           <statistic-badge amount="{{_ordersBrezen(meeting.orders)}}" title="Brezen" color="#455A64"></statistic-badge>
           <statistic-badge amount="{{_price(meeting.orders)}}" title="Preis" color="#009688"></statistic-badge>
         </div>
 
-        <paper-item>
-          <span class="fieldUser"></span>
-
-          <div class="layout horizontal">
-            <span class="fieldheader">Weiswurst</span>
-            <span class="fieldheader">Brezn</span>
-          </div>
-        </paper-item>
-
         <template is="dom-repeat" items="{{meeting.orders}}" as="order">
-          <paper-item><span class="fieldUser">{{order.name}}</span>
-            <paper-material class="layout horizontal center">
-              <paper-input class="field" no-label-float type="number"
-                           value="{{order.weisswurst}}"></paper-input>
-              <paper-input class="field" no-label-float type="number"
-                           value="{{order.brezen}}"></paper-input>
-            </paper-material>
-          </paper-item>
+          <order-element order="{{order}}"></order-element>
         </template>
       </div>
     </div>
@@ -148,12 +116,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         },
 
         _price: function (orders) {
-          var ww=this._ordersWeisswurst(orders);
-          var brez=this._ordersBrezen(orders);
-          var priceWW=1.00;
-          var priceBrez=0.60;
+          var ww = this._ordersWeisswurst(orders);
+          var brez = this._ordersBrezen(orders);
+          var priceWW = 1.00;
+          var priceBrez = 0.60;
           var result = (ww * priceWW + brez * priceBrez);
-          result=Math.ceil(result)+'€';
+          result = Math.ceil(result) + '€';
           return result;
         },
 
