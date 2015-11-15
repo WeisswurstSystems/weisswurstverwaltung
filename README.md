@@ -14,3 +14,8 @@ Ordering Weisswürste in style.
 # Versionen
 1.0 - Ansbacher
 http://www.metzgerei-scherer.de/frames/main/lexikon/wurst.shtml
+
+# Credit
+
+* Wurst by [Freepik](http://www.flaticon.com/authors/freepik)
+* Pretzel by [Killian McIlroy](https://thenounproject.com/Killian.mcilroy/) from the Noun Project
