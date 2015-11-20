@@ -8,37 +8,43 @@
   <template>
     <style include="shared-styles"></style>
     <style>
+      :host {
+        display: block;
+      }
 
-      paper-fab {
-        position: fixed;
-        bottom: 32px;
-        right: 32px;
+      @media screen and (max-width: 480px) {
+        .avatars {
+          display: none;
+          visibility: hidden;
+        }
+        user-avatar {
+          display: none;
+          visibility: hidden;
+        }
       }
 
       .avatars {
-          margin: 0 16px;;
+        margin: 0 16px;
       }
+
       .secondary {
         color: var(--secondary-text-color);
       }
 
       user-avatar {
-        margin-bottom: 6px;
-        margin-top: 6px;
-        margin-right: 4px;
+        margin: 0px 2px;
       }
     </style>
     <paper-material elevation="1">
       <paper-item>
-          <content></content>
-        <span>{{meeting.name}}</span>
+        <content></content>
+        <span class="flex">{{meeting.name}}</span>
 
-          <span class="flex"></span>
-          <div class="avatars layout horizontal center">
-        <template is="dom-repeat" items="{{meeting.orders}}" as="order">
-          <user-avatar username="{{order.name}}"></user-avatar>
-        </template>
-          </div>
+        <div class="avatars layout horizontal center">
+          <template is="dom-repeat" items="{{meeting.orders}}" as="order">
+            <user-avatar username="{{order.name}}"></user-avatar>
+          </template>
+        </div>
         <span class="secondary">{{_formatDate(meeting.date)}}</span>
       </paper-item>
     </paper-material>

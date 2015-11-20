@@ -43,7 +43,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       meeting-element {
-        margin: 0px 8px;
+        margin: 12px 0px auto;
       }
 
     </style>
@@ -51,7 +51,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <div class="seperator"></div>
 
     <template is="dom-repeat" items="{{meetings}}" as="meeting" sort="_compareMeeting">
-
         <meeting-element on-tap="_navigate" meeting="{{meeting}}"></meeting-element>
     </template>
   </template>
