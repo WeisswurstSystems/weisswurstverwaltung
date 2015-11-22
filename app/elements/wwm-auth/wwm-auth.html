@@ -1,0 +1,173 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/firebase-element/firebase-auth.html">
+<link rel="import" href="../../bower_components/neon-animation/animations/scale-up-animation.html">
+<link rel="import" href="../../bower_components/neon-animation/animations/fade-out-animation.html">
+<link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../bower_components/iron-input/iron-input.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+
+<dom-module id="wwm-auth">
+  <template>
+    <style>
+      paper-tabs {
+        background: var(--default-primary-color);
+        color: var(--text-primary-color);
+        --paper-tabs-selection-bar-color: var(--accent-color);
+      }
+
+      paper-tabs paper-tab::shadow #ink {
+        color: var(--accent-color);
+      }
+
+      paper-button {
+        color: var(--accent-color);
+      }
+
+      .content {
+        margin-top: 0px;
+        padding: 0px;
+      }
+
+      iron-pages {
+        padding: 8px 32px;
+      }
+    </style>
+    <firebase-auth
+      id="authentication"
+      autologin="true"
+      user="{{user}}"
+      location="https://wwm-itm.firebaseio.com"
+      ref="{{refauth}}"
+      provider="password">
+    </firebase-auth>
+
+    <paper-dialog modal
+                  opened="{{!user}}"
+                  entry-animation="scale-up-animation"
+                  exit-animation="fade-out-animation">
+      <div class="content">
+        <paper-tabs selected="{{selected}}">
+          <paper-tab>Sign In</paper-tab>
+          <paper-tab>Registrieren</paper-tab>
+        </paper-tabs>
+
+        <iron-pages selected="{{selected}}">
+          <div class="layout">
+            <paper-input
+              id="loginMail"
+              label="Mail"
+              required
+              pattern="^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$"
+              onfocusout="validate()"
+              error-message="Keine gültige Mail"
+              ></paper-input>
+
+            <paper-input
+              id="loginPass"
+              label="Passwort"
+              required
+              auto-validate
+              error-message="Bitte Passwort eingeben"
+              type="password"></paper-input>
+            <div align="right">
+              <paper-button on-tap="signIn">Sign In</paper-button>
+            </div>
+          </div>
+          <div class="layout">
+            <paper-input
+              id="registerMail"
+              label="Mail"
+              required
+              pattern="^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$"
+              onfocusout="validate()"
+              error-message="Keine gültige Mail"
+              ></paper-input>
+
+            <paper-input
+              id="registerPass"
+              label="Passwort"
+              required
+              auto-validate
+              error-message="Bitte Passwort eingeben"
+              type="password"></paper-input>
+            <paper-input
+              id="registerPassAck"
+              label="Passwort bestätigen"
+              required
+              auto-validate
+              error-message="Passwörter stimmen nicht überein"
+              type="password"
+              ></paper-input>
+            <div align="right">
+              <paper-button on-tap="register">Registrieren</paper-button>
+            </div>
+          </div>
+        </iron-pages>
+      </div>
+    </paper-dialog>
+  </template>
+  <script>
+    (function () {
+      'use strict';
+
+      Polymer({
+        is: 'wwm-auth',
+
+        properties: {
+          user: {
+            notify: true
+          },
+
+          selected: {
+            type: Number,
+            value: 0
+          }
+        },
+
+        signIn: function () {
+          var mail = this.$.loginMail;
+          var pass = this.$.loginPass;
+          mail.validate();
+          pass.validate();
+          if(!mail.invalid && !pass.invalid){
+            var params = {email: mail.value, password: pass.value};
+            this.$.authentication.login(params);
+          }
+        },
+
+        register: function () {
+          var mail = this.$.registerMail;
+          var pass = this.$.registerPass;
+          var passAck = this.$.registerPassAck;
+          mail.validate();
+          pass.validate();
+          passAck.validate();
+          if(!mail.invalid && !pass.invalid && !passAck.invalid){
+            if(pass.value===passAck.value){
+              this.$.authentication.createUser(mail.value, pass.value);
+            } else {
+              passAck.invalid=true;
+            }
+          }
+        },
+
+        signOut: function () {
+          this.$.authenticate.logout();
+          this.user = null;
+        }
+      });
+    })();
+  </script>
+</dom-module>
