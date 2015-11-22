@@ -29,9 +29,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         line-height: 38px;
         font-size: 18px;
         text-align: center;
-      }
-
-      .unselectable {
         -webkit-touch-callout: none;
         -webkit-user-select: none;
         -khtml-user-select: none;
@@ -41,7 +38,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         cursor: default;
       }
     </style>
-    <div id="ava" class="avatar unselectable">
+    <div id="ava" class="avatar">
       {{_setContent(username)}}
       <paper-tooltip>{{username}}</paper-tooltip>
     </div>
