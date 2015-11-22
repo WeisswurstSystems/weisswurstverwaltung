@@ -17,11 +17,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../../bower_components/iron-input/iron-input.html">
 <link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/paper-spinner/paper-spinner.html">
 
 <dom-module id="wwm-auth">
   <template>
     <style>
       paper-tabs {
+        width: 400px;
         background: var(--default-primary-color);
         color: var(--text-primary-color);
         --paper-tabs-selection-bar-color: var(--accent-color);
@@ -44,13 +46,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         padding: 8px 32px;
       }
     </style>
+
+    <paper-button on-tap="signOut">Logout</paper-button>
+
     <firebase-auth
       id="authentication"
       autologin="true"
       user="{{user}}"
       location="https://wwm-itm.firebaseio.com"
       ref="{{refauth}}"
-      provider="password">
+      provider="password"
+      on-error="_errorHandler"
+      on-login="_loginHandler">
     </firebase-auth>
 
     <paper-dialog modal
@@ -82,7 +89,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               error-message="Bitte Passwort eingeben"
               type="password"></paper-input>
             <div align="right">
-              <paper-button on-tap="signIn">Sign In</paper-button>
+              <paper-button on-tap="signIn">
+                <paper-spinner active hidden id="loginProg"></paper-spinner>
+                <p id="loginBtn">Sign In</p>
+              </paper-button>
             </div>
           </div>
           <div class="layout">
@@ -137,6 +147,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         },
 
         signIn: function () {
+          this.$.loginProg.hidden=false;
+          this.$.loginBtn.hidden=true;
           var mail = this.$.loginMail;
           var pass = this.$.loginPass;
           mail.validate();
@@ -164,8 +176,34 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         },
 
         signOut: function () {
-          this.$.authenticate.logout();
+          this.$.authentication.logout();
           this.user = null;
+        },
+
+        _errorHandler: function(error) {
+          console.log(error);
+
+          this.$.loginProg.hidden=true;
+          this.$.loginBtn.hidden=false;
+
+          var codestring = error.detail.code.toString();
+          var message = error.detail.message;
+
+          if(error.detail.code.toString()==='INVALID_USER'){
+            this.$.loginMail.errorMessage=message;
+            this.$.loginMail.invalid=true;
+          } else if (codestring==='INVALID_PASSWORD') {
+            this.$.loginPass.errorMessage=message;
+            this.$.loginPass.invalid=true;
+          } else {
+            window.alert(message);
+          }
+        },
+
+        _loginHandler: function(login) {
+          this.$.loginProg.hidden=true;
+          this.$.loginBtn.hidden=false;
+          this.$.loginPass.value=' ';
         }
       });
     })();
