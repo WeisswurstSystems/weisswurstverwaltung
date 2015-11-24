@@ -47,6 +47,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
     </style>
 
+    <!-- TODO Dieser Button muss mitsamt Funktionalität in die Toolbar wandern -->
     <paper-button on-tap="signOut">Logout</paper-button>
 
     <firebase-auth
@@ -57,7 +58,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       ref="{{refauth}}"
       provider="password"
       on-error="_errorHandler"
-      on-login="_loginHandler">
+      on-login="_loginHandler"
+      on-user-created="_registerHandler">
     </firebase-auth>
 
     <paper-dialog modal
@@ -70,7 +72,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <paper-tab>Registrieren</paper-tab>
         </paper-tabs>
 
-        <iron-pages selected="{{selected}}">
+        <iron-pages id="tabselector" selected="{{selected}}">
           <div class="layout">
             <paper-input
               id="loginMail"
@@ -79,6 +81,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               pattern="^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$"
               onfocusout="validate()"
               error-message="Keine gültige Mail"
+              on-keydown="_shortcutActionLogin"
               ></paper-input>
 
             <paper-input
@@ -87,7 +90,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               required
               auto-validate
               error-message="Bitte Passwort eingeben"
-              type="password"></paper-input>
+              type="password"
+              on-keydown="_shortcutActionLogin"></paper-input>
             <div align="right">
               <paper-button on-tap="signIn">
                 <paper-spinner active hidden id="loginProg"></paper-spinner>
@@ -103,6 +107,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               pattern="^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$"
               onfocusout="validate()"
               error-message="Keine gültige Mail"
+              on-keydown="_shortcutActionRegister"
               ></paper-input>
 
             <paper-input
@@ -111,7 +116,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               required
               auto-validate
               error-message="Bitte Passwort eingeben"
-              type="password"></paper-input>
+              type="password"
+              on-keydown="_shortcutActionRegister"
+              ></paper-input>
             <paper-input
               id="registerPassAck"
               label="Passwort bestätigen"
@@ -119,14 +126,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               auto-validate
               error-message="Passwörter stimmen nicht überein"
               type="password"
+              on-keydown="_shortcutActionRegister"
               ></paper-input>
             <div align="right">
-              <paper-button on-tap="register">Registrieren</paper-button>
+              <paper-button on-tap="register">
+                <paper-spinner active hidden id="registerProg"></paper-spinner>
+                <p id="registerBtn">Sign In</p>
+              </paper-button>
             </div>
           </div>
         </iron-pages>
       </div>
     </paper-dialog>
+
+    <paper-toast id="authToast"></paper-toast>
   </template>
   <script>
     (function () {
@@ -147,31 +160,41 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         },
 
         signIn: function () {
-          this.$.loginProg.hidden=false;
-          this.$.loginBtn.hidden=true;
+          this.$.loginProg.hidden = false;
+          this.$.loginBtn.hidden = true;
           var mail = this.$.loginMail;
           var pass = this.$.loginPass;
           mail.validate();
           pass.validate();
-          if(!mail.invalid && !pass.invalid){
+          if (!mail.invalid && !pass.invalid) {
             var params = {email: mail.value, password: pass.value};
             this.$.authentication.login(params);
+          } else {
+            this.$.loginProg.hidden = true;
+            this.$.loginBtn.hidden = false;
           }
         },
 
         register: function () {
+          this.$.registerProg.hidden = false;
+          this.$.registerBtn.hidden = true;
           var mail = this.$.registerMail;
           var pass = this.$.registerPass;
           var passAck = this.$.registerPassAck;
           mail.validate();
           pass.validate();
           passAck.validate();
-          if(!mail.invalid && !pass.invalid && !passAck.invalid){
-            if(pass.value===passAck.value){
+          if (!mail.invalid && !pass.invalid && !passAck.invalid) {
+            if (pass.value === passAck.value) {
               this.$.authentication.createUser(mail.value, pass.value);
             } else {
-              passAck.invalid=true;
+              passAck.invalid = true;
+              this.$.registerProg.hidden = true;
+              this.$.registerBtn.hidden = false;
             }
+          } else {
+            this.$.registerProg.hidden = true;
+            this.$.registerBtn.hidden = false;
           }
         },
 
@@ -180,31 +203,87 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           this.user = null;
         },
 
-        _errorHandler: function(error) {
+        _errorHandler: function (error) {
           console.log(error);
 
-          this.$.loginProg.hidden=true;
-          this.$.loginBtn.hidden=false;
+          this.$.loginProg.hidden = true;
+          this.$.loginBtn.hidden = false;
+          this.$.registerProg.hidden = true;
+          this.$.registerBtn.hidden = false;
 
           var codestring = error.detail.code.toString();
           var message = error.detail.message;
 
-          if(error.detail.code.toString()==='INVALID_USER'){
-            this.$.loginMail.errorMessage=message;
-            this.$.loginMail.invalid=true;
-          } else if (codestring==='INVALID_PASSWORD') {
-            this.$.loginPass.errorMessage=message;
-            this.$.loginPass.invalid=true;
-          } else {
-            window.alert(message);
+          switch (codestring) {
+            // Login related Errors
+            case 'INVALID_USER':
+              this.$.loginMail.errorMessage = message;
+              this.$.loginMail.invalid = true;
+              break;
+            case 'INVALID_PASSWORD':
+              this.$.loginPass.errorMessage = message;
+              this.$.loginPass.invalid = true;
+              break;
+
+            // Registration related Errors
+            case 'EMAIL_TAKEN':
+              this.$.registerMail.errorMessage = message;
+              this.$.registerMail.invalid = true;
+              break;
+            case 'INVALID_EMAIL':
+              this.$.registerMail.errorMessage = message;
+              this.$.registerMail.invalid = true;
+              break;
+
+
+            // Default Handler
+            case 'NETWORK_ERROR':
+              this.$.authToast.text = message;
+              this.$.authToast.show();
+              break;
+
+            default :
+              window.alert(message);
+              break;
+
           }
         },
 
-        _loginHandler: function(login) {
-          this.$.loginProg.hidden=true;
-          this.$.loginBtn.hidden=false;
-          this.$.loginPass.value=' ';
+        _loginHandler: function (user) {
+          this.$.loginProg.hidden = true;
+          this.$.loginBtn.hidden = false;
+          this.$.loginPass.value = ' ';
+
+          var mail = user.detail.user.password.email;
+
+          this.$.authToast.text = 'Login erfolgreich. Willkommen ' + mail;
+          this.$.authToast.show();
+          console.log(user);
+        },
+
+        _registerHandler: function() {
+          this.$.registerProg.hidden = true;
+          this.$.registerBtn.hidden = false;
+          this.$.authToast.text = 'Erfolgreich Registriert';
+          this.$.authToast.show();
+          this.$.tabselector.selected=0;
+          this.$.loginMail.value = this.$.registerMail.value;
+          //TODO navigate to Login-View mit Nutzernamen bereits eingegeben.
+        },
+
+        _shortcutActionLogin: function(action) {
+          if (action.keyCode === 13) {
+            this.signIn();
+          }
+        },
+
+        _shortcutActionRegister: function(action) {
+          if (action.keyCode === 13) {
+            this.register();
+          }
         }
+
+        //TODO Passwort vergessen-Funktion und eintrag in Popup
       });
     })();
   </script>
