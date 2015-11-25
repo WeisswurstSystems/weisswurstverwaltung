@@ -12,7 +12,12 @@ Ordering Weisswürste in style.
 6. When finished run `gulp serve` and let the weisswurst flow through you.
 
 # Versionen
+
 1.0 - Ansbacher
+
+2.0 - Bierwurst
+
+3.0 - Chambelle
 http://www.metzgerei-scherer.de/frames/main/lexikon/wurst.shtml
 
 # Credit
