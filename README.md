@@ -18,6 +18,7 @@ Ordering Weisswürste in style.
 2.0 - Bierwurst
 
 3.0 - Chambelle
+
 http://www.metzgerei-scherer.de/frames/main/lexikon/wurst.shtml
 
 # Credit
