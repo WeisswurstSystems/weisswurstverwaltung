@@ -77,12 +77,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <!-- Main Content -->
         <div class="content">
 
-          <wwm-auth></wwm-auth>
+          <wwm-auth user="{{user}}"></wwm-auth>
 
           <neon-animated-pages attr-for-selected="data-route" selected="{{route}}">
 
               <meetings-page data-route="home"></meetings-page>
-              <meeting-detail-page data-route="order-info" id="{{params.id}}"></meeting-detail-page>
+              <meeting-detail-page user="{{user}}" data-route="order-info" id="{{params.id}}"></meeting-detail-page>
 
           </neon-animated-pages>
         </div>

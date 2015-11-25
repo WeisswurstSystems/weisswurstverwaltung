@@ -36,6 +36,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
     </style>
 
+    <wwm-auth user="{{user}}"></wwm-auth>
+
     <paper-material elevation="1" class="layout horizontal">
       <paper-input class="flex" label="Name" id="nameInput"></paper-input>
       <paper-input class="flex" value="{{_formatDate(date)}}" label="Datum" readonly
@@ -76,6 +78,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             },
             notify: true
           },
+          user: Object,
           pickedDate: Object
         },
 
@@ -83,7 +86,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           if (this.$.nameInput.value) {
             this.fire('add-meeting', {
               name: this.$.nameInput.value,
-              date: this.date.getTime()
+              date: this.date.getTime(),
+              creator: this.user.detail.user.uid
             });
             this.$.toastCreateSuccess.show();
             this.$.nameInput.value = null;

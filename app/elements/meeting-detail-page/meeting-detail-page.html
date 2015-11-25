@@ -44,7 +44,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   </style>
   <template>
 
-
     <meeting-detail-data id="{{id}}" meeting="{{meeting}}"></meeting-detail-data>
     <div id="main">
       <div class="layout horizontal">
@@ -63,11 +62,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </div>
 
         <template is="dom-repeat" items="{{meeting.orders}}" as="order">
-          <order-element order="{{order}}"></order-element>
+          <order-element user="{{user}}" order="{{order}}"></order-element>
         </template>
       </div>
     </div>
 
+    <!-- TODO Button muss beim laden so konfiguriert werden, dass ein nutzer sich nur eintragen kann, wenn er noch nicht im meeting ist. ansonsten soll der Button die Funktionalität erhalten, den Nutzer auszutragen. -->
     <paper-fab id="fab" icon="social:person-add" on-tap="_addPerson"></paper-fab>
   </template>
   <script>
@@ -83,8 +83,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           if (!this.meeting.orders) {
             this.meeting.orders = [];
           }
-          var name = window.prompt('Please enter your name');
-          this.push('meeting.orders', {name: name, brezen: 0, weisswurst: 0});
+          var name = this.user.detail.user.password.email;
+          var creator = this.user.detail.user.uid;
+          this.push('meeting.orders', {name: name, creator: creator, brezen: 0, weisswurst: 0});
+          this.$.fab.icon='social:person-outline';
         },
 
         _ordersWeisswurst: function (orders) {
@@ -131,7 +133,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         properties: {
           id: String,
-
+          user: Object,
           animationConfig: {
             type: Object,
             value: function () {

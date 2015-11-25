@@ -47,8 +47,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
     </style>
 
-    <!-- TODO Dieser Button muss mitsamt Funktionalität in die Toolbar wandern -->
-    <paper-button on-tap="signOut">Logout</paper-button>
+    <!-- TODO Dieser Button muss mitsamt Funktionalität in die Toolbar wandern
+    <paper-button on-tap="signOut">Logout</paper-button> -->
 
     <firebase-auth
       id="authentication"
@@ -258,7 +258,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
           this.$.authToast.text = 'Login erfolgreich. Willkommen ' + mail;
           this.$.authToast.show();
-          console.log(user);
+
+          this.user = user;
         },
 
         _registerHandler: function() {
