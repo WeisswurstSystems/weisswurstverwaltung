@@ -13,7 +13,7 @@ Ordering Weisswürste in style.
 
 # Versionen
 
-1.0 - Ansbacher
+1.0 - Ansbacher (current)
 
 2.0 - Bierwurst
 
