@@ -90,8 +90,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         _setContent: function (username, user) {
           this.$.ordcolor.style.backgroundColor = this._getRandomColor(username);
           var isOwner = this.order.creator === user.detail.user.uid;
-          this.$.weisswurstinput.readonly = !isOwner;
-          this.$.brezeninput.readonly = !isOwner;
+          this.$.weisswurstinput.enabled = !isOwner;
+          this.$.brezeninput.enabled = !isOwner;
           if (isOwner) {
             this.$.ordermaterial.elevation = 5;
           } else {
