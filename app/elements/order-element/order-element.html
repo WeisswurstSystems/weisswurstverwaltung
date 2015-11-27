@@ -15,6 +15,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <style>
       :host {
         display: block;
+
+        --paper-input-container-disabled: {
+          /* TODO Hier kann man jetzt das design im disabled-state anpassen. habe das richtige flag aber noch nicht gefunden */
+          /* background: green; */
+        };
       }
 
       .field {
@@ -39,6 +44,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         border-bottom-left-radius: 2px;
         border-top-left-radius: 2px;
       }
+
     </style>
 
     <paper-material id="ordermaterial" class="layout horizontal">
@@ -90,10 +96,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         _setContent: function (username, user) {
           this.$.ordcolor.style.backgroundColor = this._getRandomColor(username);
           var isOwner = this.order.creator === user.detail.user.uid;
-          this.$.weisswurstinput.enabled = !isOwner;
-          this.$.brezeninput.enabled = !isOwner;
+          this.$.weisswurstinput.disabled = !isOwner;
+          this.$.brezeninput.disabled = !isOwner;
           if (isOwner) {
-            this.$.ordermaterial.elevation = 5;
+            this.$.ordermaterial.elevation = 2;
           } else {
             this.$.ordermaterial.elevation = 1;
           }
