@@ -200,6 +200,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         signOut: function () {
           this.$.authentication.logout();
+          this.$.loginPass.invalid=false;
           this.user = null;
         },
 
@@ -252,7 +253,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         _loginHandler: function (user) {
           this.$.loginProg.hidden = true;
           this.$.loginBtn.hidden = false;
-          this.$.loginPass.value = ' ';
+          this.$.loginPass.value = '';
+          this.$.loginPass.invalid = false;
 
           var mail = user.detail.user.password.email;
 
@@ -269,6 +271,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           this.$.authToast.show();
           this.$.tabselector.selected=0;
           this.$.loginMail.value = this.$.registerMail.value;
+          this.$.loginMail.validate();
         },
 
         _shortcutActionLogin: function(action) {

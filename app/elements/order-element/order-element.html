@@ -29,7 +29,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       .fieldUser {
-        width: 85px;
+        width: 128px;
+        overflow:hidden;
+        text-overflow: ellipsis;
       }
 
       paper-material {
@@ -98,11 +100,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           var isOwner = this.order.creator === user.detail.user.uid;
           this.$.weisswurstinput.disabled = !isOwner;
           this.$.brezeninput.disabled = !isOwner;
-          if (isOwner) {
-            this.$.ordermaterial.elevation = 2;
-          } else {
-            this.$.ordermaterial.elevation = 1;
-          }
           return username.split('@')[0];
         },
 
