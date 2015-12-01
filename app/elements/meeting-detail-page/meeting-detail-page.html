@@ -68,7 +68,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </div>
 
     <!-- TODO Button muss beim laden so konfiguriert werden, dass ein nutzer sich nur eintragen kann, wenn er noch nicht im meeting ist. ansonsten soll der Button die Funktionalität erhalten, den Nutzer auszutragen. -->
-    <paper-fab id="fab" icon="social:person-add" on-tap="_addPerson"></paper-fab>
+    <paper-fab id="fab" icon="social:person-add" on-tap="_togglePerson"></paper-fab>
   </template>
   <script>
     (function () {
@@ -79,14 +79,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         behaviors: [Polymer.NeonSharedElementAnimatableBehavior],
 
-        _addPerson: function () {
+        _togglePerson: function () {
           if (!this.meeting.orders) {
             this.meeting.orders = [];
           }
-          var name = this.user.detail.user.password.email;
-          var creator = this.user.detail.user.uid;
-          this.push('meeting.orders', {name: name, creator: creator, brezen: 0, weisswurst: 0});
-          this.$.fab.icon='social:person-outline';
+          var index = this.meeting.orders.map(function(order) {return order.uid;}).indexOf(this.user.uid);
+          if (index === -1) {
+            this.push('meeting.orders', {name: this.user.password.email, uid: this.user.uid, brezen: 0, weisswurst: 0});
+          } else {
+            this.splice('meeting.orders', index, 1);
+          }
         },
 
         _ordersWeisswurst: function (orders) {

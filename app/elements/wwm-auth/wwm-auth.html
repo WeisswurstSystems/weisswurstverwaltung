@@ -150,6 +150,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         properties: {
           user: {
+            type: Object,
             notify: true
           },
 
@@ -258,10 +259,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
           var mail = user.detail.user.password.email;
 
-          this.$.authToast.text = 'Login erfolgreich. Willkommen ' + mail;
+          this.$.authToast.text = 'Login erfolgreich. Herzlich Willkommen ' + mail;
           this.$.authToast.show();
-
-          this.user = user;
         },
 
         _registerHandler: function() {
