@@ -77,7 +77,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         },
 
         _navigate: function (e) {
-          this.fire('select-meeting', {meeting: e.model.meeting, target: e.target});
+          this.fire('select-meeting', {meeting: e.model.meeting, target: e.currentTarget});
         }
       });
     })();
