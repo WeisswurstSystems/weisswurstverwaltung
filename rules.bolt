@@ -1,0 +1,15 @@
+/meetings/$meeting is Meeting
+/meetings/$meeting/orders/$order is Order
+
+type Meeting {
+  "name": String,
+  "date": Number,
+  "orders": Object
+}
+
+type Order {
+  "brezen": String,
+  "weisswurst": String,
+  "name": String,
+  "creator": String
+}
