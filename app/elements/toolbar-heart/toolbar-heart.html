@@ -40,8 +40,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       _randomize: function() {
         var color = '#'+Math.floor(Math.random()*16777215).toString(16);
         this.$.paperToggle.style.color = color;
-        clicks++;
-        if(clicks==100){
+        this.clicks++;
+        if(this.clicks===100){
           //TODO Fireworks http://creativejs.com/tutorials/creating-fireworks/
         }
       }
