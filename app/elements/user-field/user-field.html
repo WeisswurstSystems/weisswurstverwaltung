@@ -19,16 +19,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         display: block;
       }
 
-      paper-menu-button {
-        margin: auto;
-      }
-
       paper-button {
         text-transform: none;
-      }
-
-      iron-image {
-        padding: 1em;
+        min-width: 0;
       }
 
       .content {
@@ -46,19 +39,25 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         }
       }
 
+      .username {
+        padding-right: 6px;
+      }
+
     </style>
+
+    <wwm-auth id="auth" user="{{user}}"></wwm-auth>
 
     <paper-menu-button id="menu" horizontal-align="left" vertical-offset="56">
       <paper-button class="dropdown-trigger">
-        <iron-icon icon="account-circle"></iron-icon>
-        <span class="hide-on-mobile">{{user.password.email}}</span>
+        <div class="layout horizontal center">
+          <span class="hide-on-mobile username">{{user.password.email}}</span>
+          <iron-icon icon="account-circle"></iron-icon>
+        </div>
       </paper-button>
       <div class="dropdown-content content">
         <paper-button class="menu-button" on-tap="_logout">Logout</paper-button>
       </div>
     </paper-menu-button>
-
-    <wwm-auth id="auth" user="{{user}}"></wwm-auth>
 
   </template>
   <script>
@@ -75,7 +74,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           }
         },
 
-        _logout: function() {
+        _logout: function () {
           this.$.auth.signOut();
           this.$.menu.close();
         }
