@@ -42,7 +42,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       right: 32px;
     }
 
-    .secondary{
+    .secondary {
       color: var(--secondary-text-color);
     }
   </style>
@@ -65,9 +65,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <statistic-badge amount="{{_price(meeting.orders)}}" title="Preis" color="#009688"></statistic-badge>
         </div>
 
-        <template is="dom-repeat" items="{{meeting.orders}}" as="order">
-          <order-element user="{{user}}" order="{{order}}"></order-element>
-        </template>
+        <div class="layout horizontal wrap center-justified">
+
+          <template is="dom-repeat" items="{{meeting.orders}}" as="order">
+            <order-element user="{{user}}" order="{{order}}"></order-element>
+          </template>
+
+        </div>
 
         <h2 class="secondary" hidden="{{user}}">Um sich eintragen zu können, müssen Sie angemeldet sein.</h2>
 
@@ -90,7 +94,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           if (!this.meeting.orders) {
             this.meeting.orders = [];
           }
-          var index = this.meeting.orders.map(function(order) {return order.uid;}).indexOf(this.user.uid);
+          var index = this.meeting.orders.map(function (order) {
+            return order.uid;
+          }).indexOf(this.user.uid);
           if (index === -1) {
             this.push('meeting.orders', {name: this.user.password.email, uid: this.user.uid, brezen: 0, weisswurst: 0});
           } else {
