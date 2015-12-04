@@ -45,11 +45,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       <div class="layout vertical">
         <span class="flex"></span>
-        <paper-button on-tap="_add">HINZUFÜGEN</paper-button>
+        <paper-button disabled="{{!user}}" on-tap="_add">HINZUFÜGEN</paper-button>
+        <paper-tooltip hidden="{{user}}">Sie müssen angemeldet sein um ein Treffen erstellen zu können.</paper-tooltip>
       </div>
     </paper-material>
 
-    <paper-toast id="toastCreateSuccess" text="Meeting saved."></paper-toast>
+    <paper-toast id="toastCreateSuccess" text="Meeting gepeichert. An Guadn!"></paper-toast>
 
     <paper-dialog modal id="dateDialog" class="paper-date-picker-dialog">
       <paper-date-picker date="{{pickedDate}}"></paper-date-picker>
@@ -85,7 +86,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             this.fire('add-meeting', {
               name: this.$.nameInput.value,
               date: this.date.getTime(),
-              creator: this.user.detail.user.uid
+              uid: this.user.uid
             });
             this.$.toastCreateSuccess.show();
             this.$.nameInput.value = null;

@@ -21,7 +21,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <template>
     <meeting-data meetings="{{meetings}}"></meeting-data>
 
-    <meeting-input on-add-meeting="addMeeting"></meeting-input>
+    <meeting-input user="{{user}}" on-add-meeting="addMeeting"></meeting-input>
     <meeting-list on-delete-meeting="deleteMeeting" on-select-meeting="selectMeeting"
                   meetings="{{meetings}}"></meeting-list>
   </template>
@@ -50,6 +50,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         },
 
         properties: {
+          user: Object,
 
           animationConfig: {
             type: Object,
