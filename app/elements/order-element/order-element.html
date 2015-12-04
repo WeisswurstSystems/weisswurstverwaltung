@@ -97,7 +97,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         _setContent: function (username, user) {
           this.$.ordcolor.style.backgroundColor = this._getRandomColor(username);
-          var isOwner = this.order.uid === user.uid;
+          var isOwner;
+          if(!user){
+            isOwner = false;
+          } else {
+            isOwner = this.order.uid === user.uid;
+          }
           this.$.weisswurstinput.disabled = !isOwner;
           this.$.brezeninput.disabled = !isOwner;
           return username.split('@')[0];

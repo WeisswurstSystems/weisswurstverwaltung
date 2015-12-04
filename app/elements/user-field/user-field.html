@@ -51,11 +51,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <paper-button class="dropdown-trigger">
         <div class="layout horizontal center">
           <span class="hide-on-mobile username">{{user.password.email}}</span>
+          <span class="hide-on-mobile username" hidden="{{user}}">Login Now</span>
           <iron-icon icon="account-circle"></iron-icon>
         </div>
       </paper-button>
       <div class="dropdown-content content">
-        <paper-button class="menu-button" on-tap="_logout">Logout</paper-button>
+        <paper-button class="menu-button" on-tap="_logout" hidden="{{!user}}">Logout</paper-button>
+        <paper-button class="menu-button" on-tap="_login" hidden="{{user}}">Login</paper-button>
       </div>
     </paper-menu-button>
 
@@ -76,6 +78,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         _logout: function () {
           this.$.auth.signOut();
+          this.$.menu.close();
+        },
+
+        _login: function () {
+          this.$.auth.openLoginWindow();
           this.$.menu.close();
         }
 

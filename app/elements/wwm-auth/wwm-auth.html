@@ -62,10 +62,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       on-user-created="_registerHandler">
     </firebase-auth>
 
-    <paper-dialog modal
-                  opened="{{!user}}"
-                  entry-animation="scale-up-animation"
-                  exit-animation="fade-out-animation">
+    <paper-dialog
+      id="loginWindow"
+      modal
+      noCancelOnEscKey="true"
+      opened="{{!user}}"
+      entry-animation="scale-up-animation"
+      exit-animation="fade-out-animation">
       <div class="content">
         <paper-tabs selected="{{selected}}">
           <paper-tab>Sign In</paper-tab>
@@ -93,6 +96,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               type="password"
               on-keydown="_shortcutActionLogin"></paper-input>
             <div align="right">
+              <paper-button on-tap="_cancel">Cancel</paper-button>
               <paper-button on-tap="signIn">
                 <paper-spinner active hidden id="loginProg"></paper-spinner>
                 <p id="loginBtn">Sign In</p>
@@ -160,6 +164,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           }
         },
 
+        openLoginWindow: function () {
+          this.$.loginWindow.opened=true;
+        },
+
+        _cancel: function () {
+          this.$.loginWindow.opened=false;
+        },
+
         signIn: function () {
           this.$.loginProg.hidden = false;
           this.$.loginBtn.hidden = true;
@@ -201,7 +213,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         signOut: function () {
           this.$.authentication.logout();
-          this.$.loginPass.invalid=false;
+          this.$.loginPass.invalid = false;
           this.user = null;
         },
 
@@ -263,23 +275,23 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           this.$.authToast.show();
         },
 
-        _registerHandler: function() {
+        _registerHandler: function () {
           this.$.registerProg.hidden = true;
           this.$.registerBtn.hidden = false;
           this.$.authToast.text = 'Erfolgreich Registriert';
           this.$.authToast.show();
-          this.$.tabselector.selected=0;
+          this.$.tabselector.selected = 0;
           this.$.loginMail.value = this.$.registerMail.value;
           this.$.loginMail.validate();
         },
 
-        _shortcutActionLogin: function(action) {
+        _shortcutActionLogin: function (action) {
           if (action.keyCode === 13) {
             this.signIn();
           }
         },
 
-        _shortcutActionRegister: function(action) {
+        _shortcutActionRegister: function (action) {
           if (action.keyCode === 13) {
             this.register();
           }

@@ -41,6 +41,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       bottom: 32px;
       right: 32px;
     }
+
+    .secondary{
+      color: var(--secondary-text-color);
+    }
   </style>
   <template>
 
@@ -64,11 +68,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <template is="dom-repeat" items="{{meeting.orders}}" as="order">
           <order-element user="{{user}}" order="{{order}}"></order-element>
         </template>
+
+        <h2 class="secondary" hidden="{{user}}">Um sich eintragen zu können, müssen Sie angemeldet sein.</h2>
+
       </div>
     </div>
 
     <!-- TODO Button muss beim laden so konfiguriert werden, dass ein nutzer sich nur eintragen kann, wenn er noch nicht im meeting ist. ansonsten soll der Button die Funktionalität erhalten, den Nutzer auszutragen. -->
-    <paper-fab id="fab" icon="social:person-add" on-tap="_togglePerson"></paper-fab>
+    <paper-fab id="fab" icon="social:person-add" on-tap="_togglePerson" hidden="{{!user}}"></paper-fab>
   </template>
   <script>
     (function () {
