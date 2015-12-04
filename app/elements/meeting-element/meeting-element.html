@@ -17,6 +17,7 @@
           display: none;
           visibility: hidden;
         }
+
         user-avatar {
           display: none;
           visibility: hidden;
@@ -35,7 +36,7 @@
         margin: 0px 2px;
       }
     </style>
-    <paper-material elevation="1">
+    <paper-material id="meetingCard" elevation="1">
       <paper-item>
         <content></content>
         <span class="flex">{{meeting.name}}</span>
@@ -45,7 +46,7 @@
             <user-avatar username="{{order.name}}"></user-avatar>
           </template>
         </div>
-        <span class="secondary">{{_formatDate(meeting.date)}}</span>
+        <span class="secondary">{{_createContent(meeting.date)}}</span>
       </paper-item>
     </paper-material>
   </template>
@@ -58,6 +59,16 @@
 
         properties: {
           meeting: Object
+        },
+
+        _createContent: function (millis) {
+          var datestring = this._formatDate(millis);
+
+          if (millis < new Date().getTime()) {
+            this.$.meetingCard.elevation = 0;
+          }
+
+          return datestring;
         },
 
         _formatDate: function (millis) {
