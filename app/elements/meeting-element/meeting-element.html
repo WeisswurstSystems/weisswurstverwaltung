@@ -2,6 +2,7 @@
 
 <link rel="import" href="..\..\bower_components/paper-item/paper-icon-item.html">
 <link rel="import" href="..\..\bower_components/paper-material/paper-material.html">
+<link rel="import" href="..\..\bower_components/paper-ripple/paper-ripple.html">
 
 
 <dom-module id="meeting-element">
@@ -46,8 +47,9 @@
             <user-avatar username="{{order.name}}"></user-avatar>
           </template>
         </div>
-        <span class="secondary">{{_createContent(meeting.date)}}</span>
+        <span id="meetingDate" class="secondary">{{_createContent(meeting.date)}}</span>
       </paper-item>
+      <paper-ripple></paper-ripple>
     </paper-material>
   </template>
   <script>
@@ -65,7 +67,8 @@
           var datestring = this._formatDate(millis);
 
           if (millis < new Date().getTime()) {
-            this.$.meetingCard.elevation = 0;
+            this.$.meetingDate.style.color = '#ef9a9a';
+            this.$.meetingCard.style.background = '#f3f3f3';
           }
 
           return datestring;
