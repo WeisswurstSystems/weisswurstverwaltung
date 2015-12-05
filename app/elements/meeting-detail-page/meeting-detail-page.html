@@ -94,18 +94,32 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         behaviors: [Polymer.NeonSharedElementAnimatableBehavior],
 
-        _togglePerson: function () {
-          if (!this.meeting.orders) {
-            this.meeting.orders = [];
+        _setupFab: function () {
+          var index = this._getIndexOfUser();
+          var fab = this.$.fab;
+          if (index === -1) {
+            fab.icon = 'social:person-add';
+          } else {
+            fab.icon = 'social:person-outline';
           }
-          var index = this.meeting.orders.map(function (order) {
-            return order.uid;
-          }).indexOf(this.user.uid);
+        },
+
+        _togglePerson: function () {
+          var index = this._getIndexOfUser();
           if (index === -1) {
             this.push('meeting.orders', {name: this.user.password.email, uid: this.user.uid, brezen: 0, weisswurst: 0, paid: false});
           } else {
             this.splice('meeting.orders', index, 1);
           }
+        },
+
+        _getIndexOfUser: function() {
+          if (!this.meeting.orders) {
+            this.meeting.orders = [];
+          }
+          return this.meeting.orders.map(function (order) {
+            return order.uid;
+          }).indexOf(this.user.uid);
         },
 
         _ordersWeisswurst: function (orders) {
@@ -153,6 +167,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         properties: {
           id: String,
           user: Object,
+          meeting: {
+            type: Object,
+            observer: '_setupFab'
+          },
+
           animationConfig: {
             type: Object,
             value: function () {
