@@ -45,6 +45,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     .secondary {
       color: var(--secondary-text-color);
     }
+
+    h2 {
+      text-align: center;
+    }
   </style>
   <template>
 
@@ -68,7 +72,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <div class="layout horizontal wrap center-justified">
 
           <template is="dom-repeat" items="{{meeting.orders}}" as="order">
-            <order-element user="{{user}}" order="{{order}}"></order-element>
+            <order-element meeting="{{meeting}}" user="{{user}}" order="{{order}}"></order-element>
           </template>
 
         </div>
@@ -98,7 +102,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             return order.uid;
           }).indexOf(this.user.uid);
           if (index === -1) {
-            this.push('meeting.orders', {name: this.user.password.email, uid: this.user.uid, brezen: 0, weisswurst: 0});
+            this.push('meeting.orders', {name: this.user.password.email, uid: this.user.uid, brezen: 0, weisswurst: 0, paid: false});
           } else {
             this.splice('meeting.orders', index, 1);
           }

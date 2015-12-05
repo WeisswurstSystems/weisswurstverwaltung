@@ -68,10 +68,8 @@
 
           // Wenn das Meeting in der Vergangheit liegt, wird der Hintergrund ausgegraut und die Datumsfarbe auf rot gesetzt
           if (millis < new Date().getTime()) {
-            this.$.meetingDate.style.color = '#ef9a9a';
             this.$.meetingCard.style.background = '#f3f3f3';
           } else {
-            this.$.meetingDate.style.color = '';
             this.$.meetingCard.style.background = '';
           }
 
