@@ -13,11 +13,21 @@ Ordering Weisswürste in style.
 
 # Versionen
 
-1.0 - Ansbacher (current)
+1.0 - Ansbacher
 
-2.0 - Bierwurst
+* Inital Version
+
+2.0 - Bierwurst (current)
+
+* Users and Acces restrictions
+* Costs
 
 3.0 - Chambelle
+
+* Costs per User
+* Status of a Users order
+
+4.0 - Debreciner
 
 http://www.metzgerei-scherer.de/frames/main/lexikon/wurst.shtml
 
