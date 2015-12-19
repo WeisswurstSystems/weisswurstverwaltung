@@ -67,7 +67,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
             <paper-checkbox
               id="checkboxPaid"
-              disabled="{{!user}}"
+              disabled="true"
               checked="{{order.paid}}">{{_userTotal(order, user, meeting)}}
             </paper-checkbox>
             <paper-tooltip for="checkboxPaid">Bezahlstatus</paper-tooltip>
@@ -142,6 +142,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         _userTotal: function (order, user, meeting) {
           if (user) {
             this.$.checkboxPaid.disabled = !this._hasAccess(user, meeting);
+          } else {
+            this.$.checkboxPaid.disabled = true;
           }
           var total = order.brezen * 0.6 + order.weisswurst * 1;
           return total.toFixed(2) + '€';
