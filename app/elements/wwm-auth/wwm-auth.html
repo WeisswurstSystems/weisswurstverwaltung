@@ -22,8 +22,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <dom-module id="wwm-auth">
   <template>
     <style>
+
       paper-tabs {
-        width: 400px;
+        width: 450px;
         background: var(--default-primary-color);
         color: var(--text-primary-color);
         --paper-tabs-selection-bar-color: var(--accent-color);
@@ -33,8 +34,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         color: var(--accent-color);
       }
 
-      paper-button {
+      paper-button.default {
         color: var(--accent-color);
+      }
+
+      paper-button.redbtn {
+        color: red;
       }
 
       .content {
@@ -96,8 +101,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               type="password"
               on-keydown="_shortcutActionLogin"></paper-input>
             <div align="right">
-              <paper-button on-tap="_cancel">Cancel</paper-button>
-              <paper-button on-tap="signIn">
+              <paper-button class="redbtn" on-tap="_forgotPW" hidden id="forgotbtn">Passwort vergessen?</paper-button>
+              <paper-button class="default" on-tap="_cancel">Cancel</paper-button>
+              <paper-button class="default" on-tap="signIn">
                 <paper-spinner active hidden id="loginProg"></paper-spinner>
                 <p id="loginBtn">Sign In</p>
               </paper-button>
@@ -133,7 +139,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               on-keydown="_shortcutActionRegister"
               ></paper-input>
             <div align="right">
-              <paper-button on-tap="register">
+              <paper-button class="default" on-tap="register">
                 <paper-spinner active hidden id="registerProg"></paper-spinner>
                 <p id="registerBtn">Sign In</p>
               </paper-button>
@@ -165,11 +171,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         },
 
         openLoginWindow: function () {
-          this.$.loginWindow.opened=true;
+          this.$.loginWindow.opened = true;
         },
 
         _cancel: function () {
-          this.$.loginWindow.opened=false;
+          this.$.loginWindow.opened = false;
         },
 
         signIn: function () {
@@ -214,12 +220,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         signOut: function () {
           this.$.authentication.logout();
           this.$.loginPass.invalid = false;
+          this.$.forgotbtn.hidden = false;
           this.user = null;
         },
 
         _errorHandler: function (error) {
-          console.log(error);
-
           this.$.loginProg.hidden = true;
           this.$.loginBtn.hidden = false;
           this.$.registerProg.hidden = true;
@@ -237,6 +242,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             case 'INVALID_PASSWORD':
               this.$.loginPass.errorMessage = message;
               this.$.loginPass.invalid = true;
+              this.$.forgotbtn.hidden = false;
               break;
 
             // Registration related Errors
@@ -268,6 +274,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           this.$.loginBtn.hidden = false;
           this.$.loginPass.value = '';
           this.$.loginPass.invalid = false;
+          this.$.forgotbtn.hidden = false;
 
           var mail = user.detail.user.password.email;
 
@@ -295,9 +302,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           if (action.keyCode === 13) {
             this.register();
           }
-        }
+        },
 
-        //TODO Passwort vergessen-Funktion und eintrag in Popup
+        _forgotPW: function () {
+          this.$.authentication.sendPasswordResetEmail(this.$.loginMail.value);
+          this.$.loginPass.value = '';
+          this.$.loginPass.invalid = false;
+          this.$.forgotbtn.hidden = true;
+
+          this.$.authToast.text = 'Ein temporäres Passwort wurde Ihnen zugesendet.';
+          this.$.authToast.show();
+        }
       });
     })();
   </script>

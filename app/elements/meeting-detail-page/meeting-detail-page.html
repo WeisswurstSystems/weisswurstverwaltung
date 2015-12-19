@@ -107,19 +107,27 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         _togglePerson: function () {
           var index = this._getIndexOfUser();
           if (index === -1) {
-            this.push('meeting.orders', {name: this.user.password.email, uid: this.user.uid, brezen: 0, weisswurst: 0, paid: false});
+            this.push('meeting.orders', {
+              name: this.user.password.email,
+              uid: this.user.uid,
+              brezen: 0,
+              weisswurst: 0,
+              paid: false
+            });
           } else {
             this.splice('meeting.orders', index, 1);
           }
         },
 
-        _getIndexOfUser: function() {
-          if (!this.meeting.orders) {
-            this.meeting.orders = [];
+        _getIndexOfUser: function () {
+          if (this.user) {
+            if (!this.meeting.orders) {
+              this.meeting.orders = [];
+            }
+            return this.meeting.orders.map(function (order) {
+              return order.uid;
+            }).indexOf(this.user.uid);
           }
-          return this.meeting.orders.map(function (order) {
-            return order.uid;
-          }).indexOf(this.user.uid);
         },
 
         _ordersWeisswurst: function (orders) {
