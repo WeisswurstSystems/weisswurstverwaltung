@@ -33,5 +33,6 @@ http://www.metzgerei-scherer.de/frames/main/lexikon/wurst.shtml
 
 # Credit
 
-* Wurst by [Freepik](http://www.flaticon.com/authors/freepik)
+* Wurst-Icon made by [Freepik](http://www.freepik.com) from [Flaticon](http://www.flaticon.com) is licensed under [CC BY 3.0](http://creativecommons.org/licenses/by/3.0/)
+* Cutlery-Icon made by [Freepik](http://www.freepik.com) from [Flaticon](http://www.flaticon.com) is licensed under [CC BY 3.0](http://creativecommons.org/licenses/by/3.0/)
 * Pretzel by [Killian McIlroy](https://thenounproject.com/Killian.mcilroy/) from the Noun Project
