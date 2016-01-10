@@ -36,10 +36,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       margin-top: 8px;
     }
 
-    paper-fab {
+    .fablayout {
       position: fixed;
       bottom: 32px;
       right: 32px;
+    }
+
+    paper-fab {
+      margin-left: 8px;
     }
 
     .secondary {
@@ -82,8 +86,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       </div>
     </div>
 
-    <!-- TODO Button muss beim laden so konfiguriert werden, dass ein nutzer sich nur eintragen kann, wenn er noch nicht im meeting ist. ansonsten soll der Button die Funktionalität erhalten, den Nutzer auszutragen. -->
-    <paper-fab id="fab" icon="social:person-add" on-tap="_togglePerson" hidden="{{!user}}"></paper-fab>
+    <div class="layout horizontal fablayout">
+      <paper-fab id="fab" icon="social:person-add" on-tap="_togglePerson" hidden="{{!user}}"></paper-fab>
+      <paper-tooltip for="fab" position="top">Meeting beitreten/verlasssen</paper-tooltip>
+      <paper-fab id="extfab" icon="social:person-add" on-tap="_addExternalPerson" hidden="true"></paper-fab>
+      <paper-tooltip for="extfab" position="top">Gast hinzufügen</paper-tooltip>
+    </div>
   </template>
   <script>
     (function () {
@@ -97,10 +105,40 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         _setupFab: function () {
           var index = this._getIndexOfUser();
           var fab = this.$.fab;
+          var extfab = this.$.extfab;
+
+          //TODO Wenn Nutzerendpunkt besteht, sollte zusätzlich zu einem optionalen Nutzernamen eine admin-rolle gespeichert werden.
+          var uidFabi = '8af8ee91-f696-4a6a-99d7-0a43699e834a';
+          var uidPeter = '8a0f1c00-ac25-4feb-903c-664c10d2617e';
+
+          if (this.user.uid === uidFabi || this.user.uid === uidPeter) {
+            extfab.hidden = false;
+          } else if (this.meeting.uid === this.user.uid) {
+            fab.hidden = true;
+            extfab.hidden = false;
+          } else {
+            extfab.hidden = true;
+          }
+
           if (index === -1) {
             fab.icon = 'social:person-add';
           } else {
             fab.icon = 'social:person-outline';
+          }
+        },
+
+        _addExternalPerson: function () {
+          var extname = window.prompt('Gast-Nutzer hinzufügen. Name?');
+          if (extname !== null && extname !== '') {
+            this.push('meeting.orders', {
+              name: extname,
+              uid: 'external',
+              brezen: 0,
+              weisswurst: 0,
+              paid: false
+            });
+          } else {
+
           }
         },
 
@@ -197,7 +235,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                   }
                 },
                   {name: 'slide-down-animation', node: this.$.content, timing: {duration: 500}},
-                  {name: 'scale-up-animation', node: this.$.fab}
+                  {name: 'scale-up-animation', node: this.$.fab},
+                  {name: 'scale-up-animation', node: this.$.extfab}
                 ],
                 'exit': [{
                   name: 'transform-animation',

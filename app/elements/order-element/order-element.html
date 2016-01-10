@@ -28,7 +28,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       .field {
-        margin: 0px 16px;
+        margin-left: 16px;
         width: 75px;
         text-align: right;
       }
@@ -52,6 +52,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         border-top-left-radius: 2px;
       }
 
+      .secondary {
+        color: var(--secondary-text-color);
+      }
+
       .svgicon {
         fill: var(--secondary-text-color);
       }
@@ -63,16 +67,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <paper-item>
         <div class="layout vertical">
           <div class="layout horizontal">
-            <span class="fieldUser flex">{{_setContent(order.name, user)}}</span>
-
+            <span class="fieldUser flex">{{_setContent(order.name, user, meeting)}}</span>
+            <span id="fieldrole" class="secondary"></span>
+          </div>
+          <div class="layout horizontal center">
             <paper-checkbox
               id="checkboxPaid"
               disabled="true"
               checked="{{order.paid}}">{{_userTotal(order, user, meeting)}}
             </paper-checkbox>
             <paper-tooltip for="checkboxPaid">Bezahlstatus</paper-tooltip>
-          </div>
-          <div class="layout horizontal center">
             <paper-input id="weisswurstinput" max="20" min="0" class="field" no-label-float type="number"
                          value="{{order.weisswurst}}">
               <svg prefix suffix width="24px" height="24px" viewbox="0 0 340 340">
@@ -98,6 +102,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               </svg>
             </paper-input>
           </div>
+
+
         </div>
       </paper-item>
     </paper-material>
@@ -112,27 +118,56 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         properties: {
           order: Object,
           user: Object,
-          meeting: Object
+          meeting: Object,
+          uidFabi: {
+            type: String,
+            value: '8af8ee91-f696-4a6a-99d7-0a43699e834a'
+          },
+          uidPeter: {
+            type: String,
+            value: '8a0f1c00-ac25-4feb-903c-664c10d2617e'
+          }
         },
 
         _hasAccess: function (user, meeting) {
-          //TODO Wenn Nutzerendpunkt besteht, sollte zusätzlich zu einem optionalen Nutzernamen eine admin-rolle gespeichert werden.
-          var uidFabi = '8af8ee91-f696-4a6a-99d7-0a43699e834a';
-          var uidPeter = '8a0f1c00-ac25-4feb-903c-664c10d2617e';
-
           var uidMeeting = meeting.uid;
           var uidUser = user.uid;
-          var hasAccess = uidUser === uidMeeting || uidUser === uidFabi || uidUser === uidPeter;
+          var hasAccess = uidUser === uidMeeting || uidUser === this.uidFabi || uidUser === this.uidPeter;
           return hasAccess;
         },
 
-        _setContent: function (username, user) {
-          this.$.ordcolor.style.backgroundColor = this._getRandomColor(username);
+        _setRole: function (meeting) {
+          var role = this.$.fieldrole;
+
+          if (this.order.uid === meeting.uid) {
+            role.innerHTML = 'Ersteller';
+          } else if (this.order.uid === this.uidFabi || this.order.uid === this.uidPeter) {
+            role.innerHTML = 'WW-Verwalter';
+          } else if (this.order.uid === 'external') {
+            role.innerHTML = 'Gast';
+          } else {
+            role.innerHTML = '';
+          }
+        },
+
+        _setContent: function (username, user, meeting) {
+          this._setRole(meeting);
+
+          if (this.order.uid !== 'external') {
+            this.$.ordcolor.style.backgroundColor = this._getRandomColor(username);
+          } else {
+            this.$.ordcolor.style.backgroundColor = '#fff';
+          }
+
           var isOwner;
           if (!user) {
             isOwner = false;
           } else {
-            isOwner = this.order.uid === user.uid;
+            if (this.order.uid === 'external') {
+              isOwner = this._hasAccess(user, meeting);
+            } else {
+              isOwner = this.order.uid === user.uid;
+            }
           }
           this.$.weisswurstinput.disabled = !isOwner;
           this.$.brezeninput.disabled = !isOwner;

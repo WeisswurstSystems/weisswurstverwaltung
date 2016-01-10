@@ -86,7 +86,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             this.fire('add-meeting', {
               name: this.$.nameInput.value,
               date: this.date.getTime(),
-              uid: this.user.uid
+              uid: this.user.uid,
+              orders: [
+                {
+                  brezen: 0,
+                  weisswurst: 0,
+                  paid: false,
+                  name: this.user.password.email,
+                  uid: this.user.uid
+                }
+              ]
             });
             this.$.toastCreateSuccess.show();
             this.$.nameInput.value = null;
