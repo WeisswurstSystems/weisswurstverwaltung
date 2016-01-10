@@ -81,7 +81,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         </div>
 
-        <h2 class="secondary" hidden="{{user}}">Um sich eintragen zu können, müssen Sie angemeldet sein.</h2>
+        <h2 class="secondary" hidden="{{user}}">Sie müssen angemeldet sein um sich eintragen zu können.</h2>
 
       </div>
     </div>
@@ -111,13 +111,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           var uidFabi = '8af8ee91-f696-4a6a-99d7-0a43699e834a';
           var uidPeter = '8a0f1c00-ac25-4feb-903c-664c10d2617e';
 
-          if (this.user.uid === uidFabi || this.user.uid === uidPeter) {
-            extfab.hidden = false;
-          } else if (this.meeting.uid === this.user.uid) {
-            fab.hidden = true;
-            extfab.hidden = false;
-          } else {
-            extfab.hidden = true;
+          if(this.user) {
+            if (this.user.uid === uidFabi || this.user.uid === uidPeter) {
+              extfab.hidden = false;
+            } else if (this.meeting.uid === this.user.uid) {
+              fab.hidden = true;
+              extfab.hidden = false;
+            } else {
+              extfab.hidden = true;
+            }
           }
 
           if (index === -1) {
@@ -244,7 +246,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                   transformTo: 'translate(0px,-100vh)',
                   node: this.$.main
                 },
-                  {name: 'scale-down-animation', node: this.$.fab}
+                  {name: 'scale-down-animation', node: this.$.fab},
                   {name: 'scale-down-animation', node: this.$.extfab}
                 ]
               };
