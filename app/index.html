@@ -57,6 +57,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <!-- For shared styles, shared-styles.html import in elements.html -->
   <style is="custom-style" include="shared-styles"></style>
 
+  <style>
+    .content{
+      padding: 64px;
+    }
+  </style>
+
 </head>
 
 <body unresolved class="fullbleed layout vertical">
@@ -77,12 +83,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <!-- Main Content -->
         <div class="content">
 
-          <neon-animated-pages attr-for-selected="data-route" selected="{{route}}">
+              <meetings-page user="{{user}}"></meetings-page>
 
-              <meetings-page user="{{user}}" data-route="home"></meetings-page>
-              <meeting-detail-page user="{{user}}" data-route="order-info" id="{{params.id}}"></meeting-detail-page>
-
-          </neon-animated-pages>
         </div>
       </paper-header-panel>
 
@@ -90,8 +92,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <span class="toast-hide-button" role="button" tabindex="0" onclick="app.$.toast.hide()">Ok</span>
     </paper-toast>
 
-    <!-- Uncomment next block to enable Service Worker support (1/2) -->
-    <!--
     <paper-toast id="caching-complete"
                  duration="6000"
                  text="Caching complete! This app will work offline.">
@@ -105,7 +105,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                          cache-config-file="cache-config.json">
       </platinum-sw-cache>
     </platinum-sw-register>
-    -->
 
   </template>
 

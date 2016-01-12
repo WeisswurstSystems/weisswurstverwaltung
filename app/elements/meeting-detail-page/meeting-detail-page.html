@@ -55,21 +55,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     }
   </style>
   <template>
-
-    <meeting-detail-data id="{{id}}" meeting="{{meeting}}"></meeting-detail-data>
     <div id="main">
-      <div class="layout horizontal">
-        <meeting-element class="flex" id="hero" meeting="{{meeting}}">
-          <paper-icon-button on-tap="_navigateBack" icon="arrow-back"></paper-icon-button>
-        </meeting-element>
-      </div>
 
       <div id="content" class="layout vertical center" elevation="0">
 
         <div class="layout horizontal center">
           <statistic-badge amount="{{_ordersWeisswurst(meeting.orders)}}" title="Weisswurst"
                            color="#455A64"></statistic-badge>
-          <statistic-badge amount="{{_ordersBrezen(meeting.orders)}}" title="Brezen" color="#455A64"></statistic-badge>
+          <statistic-badge amount="{{_ordersBrezen(meeting.orders)}}" title="Brezen"
+                           color="#455A64"></statistic-badge>
           <statistic-badge amount="{{_price(meeting.orders)}}" title="Preis" color="#009688"></statistic-badge>
         </div>
 
@@ -100,8 +94,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       Polymer({
         is: 'meeting-detail-page',
 
-        behaviors: [Polymer.NeonSharedElementAnimatableBehavior],
-
         _setupFab: function () {
           var index = this._getIndexOfUser();
           var fab = this.$.fab;
@@ -111,7 +103,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           var uidFabi = '8af8ee91-f696-4a6a-99d7-0a43699e834a';
           var uidPeter = '8a0f1c00-ac25-4feb-903c-664c10d2617e';
 
-          if(this.user) {
+          if (this.user) {
             if (this.user.uid === uidFabi || this.user.uid === uidPeter) {
               extfab.hidden = false;
             } else if (this.meeting.uid === this.user.uid) {
@@ -214,53 +206,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         properties: {
           id: String,
-          user: Object,
-          meeting: {
+          user: {
             type: Object,
             observer: '_setupFab'
           },
-
-          animationConfig: {
-            type: Object,
-            value: function () {
-              return {
-                'entry': [{
-                  name: 'hero-animation',
-                  id: 'hero',
-                  toPage: this
-                }, {
-                  name: 'fade-in-animation',
-                  node: this.$.content,
-                  timing: {
-                    delay: 200,
-                    duration: 500
-                  }
-                },
-                  {name: 'slide-down-animation', node: this.$.content, timing: {duration: 500}},
-                  {name: 'scale-up-animation', node: this.$.fab},
-                  {name: 'scale-up-animation', node: this.$.extfab}
-                ],
-                'exit': [{
-                  name: 'transform-animation',
-                  transformFrom: 'none',
-                  transformTo: 'translate(0px,-100vh)',
-                  node: this.$.main
-                },
-                  {name: 'scale-down-animation', node: this.$.fab},
-                  {name: 'scale-down-animation', node: this.$.extfab}
-                ]
-              };
-            }
-          },
-
-          sharedElements: {
-            type: Object,
-            value: function () {
-              return {
-                'hero': this.$.hero
-              };
-            }
-          }
+          meeting: Object
         }
       });
     })();

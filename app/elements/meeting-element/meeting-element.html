@@ -13,6 +13,10 @@
         display: block;
       }
 
+      paper-item {
+        padding: 8px 32px;
+      }
+
       @media screen and (max-width: 720px) {
         .avatars {
           display: none;
@@ -37,9 +41,7 @@
         margin: 0px 2px;
       }
     </style>
-    <paper-material id="meetingCard" elevation="1">
       <paper-item>
-        <content></content>
         <span class="flex">{{meeting.name}}</span>
 
         <div class="avatars layout horizontal center">
@@ -49,8 +51,6 @@
         </div>
         <span id="meetingDate" class="secondary">{{_createContent(meeting.date)}}</span>
       </paper-item>
-      <paper-ripple></paper-ripple>
-    </paper-material>
   </template>
   <script>
     (function () {
@@ -65,13 +65,6 @@
 
         _createContent: function (millis) {
           var datestring = this._formatDate(millis);
-
-          // Wenn das Meeting in der Vergangheit liegt, wird der Hintergrund ausgegraut und die Datumsfarbe auf rot gesetzt
-          if (millis < new Date().getTime()) {
-            this.$.meetingCard.style.background = '#f3f3f3';
-          } else {
-            this.$.meetingCard.style.background = '';
-          }
 
           return datestring;
         },

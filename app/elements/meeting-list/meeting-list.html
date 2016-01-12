@@ -27,6 +27,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         display: block;
       }
 
+      .collapsedcontent{
+        padding: 16px 0px;
+      }
+
       .seperator {
         margin: 8px
       }
@@ -49,10 +53,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </style>
 
     <div class="seperator"></div>
-
-    <template is="dom-repeat" items="{{meetings}}" as="meeting" sort="_compareMeeting">
-        <meeting-element on-tap="_navigate" meeting="{{meeting}}"></meeting-element>
-    </template>
+    <inbox-list>
+      <template is="dom-repeat" items="{{meetings}}" as="meeting" sort="_compareMeeting">
+        <inbox-list-item>
+          <meeting-element on-tap="_navigate" meeting="{{meeting}}"></meeting-element>
+          <div collapse class="collapsedcontent">
+            <meeting-detail-page user="{{user}}" meeting="{{meeting}}"></meeting-detail-page>
+          </div>
+        </inbox-list-item>
+      </template>
+    </inbox-list>
   </template>
   <script>
     (function () {
@@ -62,7 +72,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         is: 'meeting-list',
 
         properties: {
-          meetings: Array
+          meetings: Array,
+          user: Object
         },
 
         _onAnimationFinish: function () {
