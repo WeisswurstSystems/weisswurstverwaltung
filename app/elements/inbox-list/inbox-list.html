@@ -1,0 +1,86 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/iron-selector/iron-selector.html">
+<link rel="import" href="../../bower_components/paper-styles/shadow.html">
+
+<dom-module id="inbox-list">
+  <style>
+
+    :host {
+      display: block;
+    }
+
+    /* We need to propagate styles if first child is not an inbox-list-item */
+    :host ::content .iron-selected inbox-list-item,
+    :host ::content inbox-list-item.iron-selected  {
+      width: 100%;
+      margin: 15px auto 15px auto;
+    @apply(--shadow-elevation-16dp);
+    }
+
+    :host ::content .iron-selected paper-item,
+    :host ::content .iron-selected paper-icon-item {
+      font-weight: bold;
+      cursor: default;
+    }
+
+  </style>
+
+  <template>
+    <iron-selector id="selector" on-iron-select="_onIronSelect" on-iron-deselect="_onIronDeselect">
+      <content></content>
+    </iron-selector>
+  </template>
+
+  <script>
+    (function() {
+      'use strict';
+
+      Polymer({
+        is: 'inbox-list',
+
+        _onIronSelect: function(event) {
+          var inboxItem = this._getInboxItem(event.detail.item);
+          if (inboxItem) {
+            inboxItem.open(true);
+          }
+        },
+
+        _onIronDeselect: function(event) {
+          var inboxItem = this._getInboxItem(event.detail.item);
+          if (inboxItem) {
+            inboxItem.open(false);
+          }
+        },
+
+        _getInboxItem: function(node) {
+          if (node.nodeName === 'INBOX-LIST-ITEM') {
+            /* We clicked on an inbox-list-item element */
+            return node;
+          } else if (node.$$) {
+            /* We clicked on a polymer element that may contain an inbox-list-item */
+            return node.$$('inbox-list-item');
+          } else {
+            /* We clicked on a standard HTML container that may contain an inbox-list-item */
+            return Polymer.dom(node).querySelector('inbox-list-item');
+          }
+        },
+
+        ready: function() {
+          var elem = this;
+          document.addEventListener('click', function(event) {
+            /* Callback to close the list if we clicked outside of it */
+            var node = event.target;
+            while (node) {
+              if (node === elem) {
+                return;
+              }
+              node = node.parentNode;
+            }
+            elem.$.selector.select(null);
+          });
+        }
+
+      });
+    })();
+  </script>
+</dom-module>
