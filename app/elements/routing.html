@@ -10,7 +10,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <script src="../bower_components/page/page.js"></script>
 <script>
-  window.addEventListener('WebComponentsReady', function() {
+  window.addEventListener('WebComponentsReady', function () {
 
     // We use Page.js for routing. This is a Micro
     // client-side router inspired by the Express router
@@ -18,22 +18,22 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     // Middleware
     function scrollToTop(ctx, next) {
-     // app.scrollPageToTop();
+      // app.scrollPageToTop();
       next();
     }
 
     // Routes
-    page('/', scrollToTop, function() {
+    page('/', scrollToTop, function () {
       app.route = 'home';
     });
 
-    page('/orders/:id', scrollToTop, function(data) {
-      app.route = 'order-info';
-        app.params = data.params;
+    page('/:id', scrollToTop, function (data) {
+      app.route = 'home';
+      app.params = data.params;
     });
 
-    page('*', function() {
-      app.$.toast.text = 'Can\'t find: ' + window.location.href  + '. Redirected you to Home Page';
+    page('*', function () {
+      app.$.toast.text = 'Die Adresse ' + window.location.href + ' existiert nicht. Sie wurden auf die Startseite weitergeleitet';
       app.$.toast.show();
       page.redirect('/');
     });

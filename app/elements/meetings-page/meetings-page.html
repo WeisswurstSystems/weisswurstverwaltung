@@ -23,8 +23,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <meeting-input user="{{user}}" on-add-meeting="addMeeting"></meeting-input>
 
-    <meeting-list user="{{user}}" on-delete-meeting="deleteMeeting" on-select-meeting="selectMeeting"
-                  meetings="{{meetings}}"></meeting-list>
+    <meeting-list user="{{user}}" meetings="{{meetings}}" selectedmeeting="{{id}}" on-delete-meeting="deleteMeeting" on-select-meeting="selectMeeting"
+                  ></meeting-list>
   </template>
   <script>
     (function () {
@@ -36,10 +36,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         behaviors: [Polymer.NeonSharedElementAnimatableBehavior],
 
         selectMeeting: function (e) {
-          this.sharedElements = {
-            'hero': e.detail.target
-          };
-          page.show('/orders/' + e.detail.meeting.__firebaseKey__);
+          page.show('/' + e.detail.meeting.__firebaseKey__);
         },
 
         addMeeting: function (e) {
@@ -52,6 +49,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         properties: {
           user: Object,
+          id: Object,
 
           animationConfig: {
             type: Object,

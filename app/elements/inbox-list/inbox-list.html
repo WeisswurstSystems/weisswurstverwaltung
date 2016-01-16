@@ -64,6 +64,10 @@
           }
         },
 
+        select: function(index){
+          this.$.selector.select(index);
+        },
+
         ready: function() {
           var elem = this;
           document.addEventListener('click', function(event) {

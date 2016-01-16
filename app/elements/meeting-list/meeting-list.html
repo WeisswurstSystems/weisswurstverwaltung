@@ -27,7 +27,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         display: block;
       }
 
-      .collapsedcontent{
+      .collapsedcontent {
         padding: 16px 0px;
       }
 
@@ -53,7 +53,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </style>
 
     <div class="seperator"></div>
-    <inbox-list>
+    <inbox-list id="meetinglist">
       <template is="dom-repeat" items="{{meetings}}" as="meeting" sort="_compareMeeting">
         <inbox-list-item>
           <meeting-element on-tap="_navigate" meeting="{{meeting}}"></meeting-element>
@@ -73,7 +73,30 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         properties: {
           meetings: Array,
-          user: Object
+          user: Object,
+          selectedmeeting: Object
+        },
+
+        _selectByParam: function () {
+          var index = null;
+          var meetcopy = this.meetings;
+
+          if (this.selectedmeeting !== null && this.meetings.length !== 0) {
+            meetcopy.sort(function (a, b) {
+              return b.date - a.date;
+            });
+
+            for (var i = 0; i < meetcopy.length; i++) {
+              if (this.selectedmeeting === meetcopy[i].__firebaseKey__) {
+                index = i;
+              }
+            }
+          }
+          else {
+            index = null;
+          }
+          this.$.meetinglist.select(index);
+
         },
 
         _onAnimationFinish: function () {
@@ -84,6 +107,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         },
 
         _compareMeeting: function (a, b) {
+          this._selectByParam();
           return b.date - a.date;
         },
 
