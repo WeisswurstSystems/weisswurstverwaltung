@@ -58,8 +58,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <style is="custom-style" include="shared-styles"></style>
 
   <style>
-    .content {
-      padding: 64px;
+    @media screen and (min-width: 720px) {
+      .content {
+        padding: 64px;
+      }
+    }
+
+    @media screen and (max-width: 720px) {
+      .content {
+        padding: -12px;
+      }
     }
   </style>
 
