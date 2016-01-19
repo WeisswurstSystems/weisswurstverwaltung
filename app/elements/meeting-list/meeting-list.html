@@ -27,6 +27,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         display: block;
       }
 
+      .collapsedcontent {
+        padding: 16px 0px;
+      }
+
       .seperator {
         margin: 8px
       }
@@ -49,10 +53,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </style>
 
     <div class="seperator"></div>
-
-    <template is="dom-repeat" items="{{meetings}}" as="meeting" sort="_compareMeeting">
-        <meeting-element on-tap="_navigate" meeting="{{meeting}}"></meeting-element>
-    </template>
+    <inbox-list id="meetinglist">
+      <template is="dom-repeat" items="{{meetings}}" as="meeting" sort="_compareMeeting">
+        <inbox-list-item>
+          <meeting-element on-tap="_navigate" meeting="{{meeting}}"></meeting-element>
+          <div collapse class="collapsedcontent">
+            <meeting-detail-page user="{{user}}" meeting="{{meeting}}"></meeting-detail-page>
+          </div>
+        </inbox-list-item>
+      </template>
+    </inbox-list>
   </template>
   <script>
     (function () {
@@ -62,7 +72,31 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         is: 'meeting-list',
 
         properties: {
-          meetings: Array
+          meetings: Array,
+          user: Object,
+          selectedmeeting: Object
+        },
+
+        _selectByParam: function () {
+          var index = null;
+          var meetcopy = this.meetings;
+
+          if (this.selectedmeeting !== null && this.meetings.length !== 0) {
+            meetcopy.sort(function (a, b) {
+              return b.date - a.date;
+            });
+
+            for (var i = 0; i < meetcopy.length; i++) {
+              if (this.selectedmeeting === meetcopy[i].__firebaseKey__) {
+                index = i;
+              }
+            }
+          }
+          else {
+            index = null;
+          }
+          this.$.meetinglist.select(index);
+
         },
 
         _onAnimationFinish: function () {
@@ -73,6 +107,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         },
 
         _compareMeeting: function (a, b) {
+          this._selectByParam();
           return b.date - a.date;
         },
 

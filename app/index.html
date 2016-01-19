@@ -15,7 +15,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <meta charset="utf-8">
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="generator" content="Polymer Starter Kit" />
+  <meta name="generator" content="Polymer Starter Kit"/>
   <title>WWM</title>
   <!-- Place favicon.ico in the `app/` directory -->
 
@@ -57,61 +57,70 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <!-- For shared styles, shared-styles.html import in elements.html -->
   <style is="custom-style" include="shared-styles"></style>
 
+  <style>
+    @media screen and (min-width: 720px) {
+      .content {
+        padding: 64px;
+      }
+    }
+
+    @media screen and (max-width: 720px) {
+      .content {
+        padding: -12px;
+      }
+    }
+  </style>
+
 </head>
 
 <body unresolved class="fullbleed layout vertical">
-  <span id="browser-sync-binding"></span>
-  <template is="dom-bind" id="app">
+<span id="browser-sync-binding"></span>
+<template is="dom-bind" id="app">
 
-      <!-- Main Area -->
-      <paper-header-panel id="headerPanelMain">
+  <!-- Main Area -->
+  <paper-header-panel id="headerPanelMain">
 
-        <!-- Main Toolbar -->
-        <paper-toolbar >
-          <toolbar-heart></toolbar-heart>
-          <div class="bottom title">WWM</div>
-          <span class="flex"></span>
-          <user-field user="{{user}}"></user-field>
-        </paper-toolbar>
+    <!-- Main Toolbar -->
+    <paper-toolbar>
+      <toolbar-heart></toolbar-heart>
+      <div class="bottom title">WWM</div>
+      <span class="flex"></span>
+      <user-field user="{{user}}"></user-field>
+    </paper-toolbar>
 
-        <!-- Main Content -->
-        <div class="content">
+    <!-- Main Content -->
+    <div class="content">
+      <neon-animated-pages attr-for-selected="data-route" selected="{{route}}">
 
-          <neon-animated-pages attr-for-selected="data-route" selected="{{route}}">
+        <meetings-page user="{{user}}" data-route="home" id="{{params.id}}"></meetings-page>
 
-              <meetings-page user="{{user}}" data-route="home"></meetings-page>
-              <meeting-detail-page user="{{user}}" data-route="order-info" id="{{params.id}}"></meeting-detail-page>
+      </neon-animated-pages>
+    </div>
+  </paper-header-panel>
 
-          </neon-animated-pages>
-        </div>
-      </paper-header-panel>
+  <paper-toast id="toast">
+    <span class="toast-hide-button" role="button" tabindex="0" onclick="app.$.toast.hide()">Ok</span>
+  </paper-toast>
 
-    <paper-toast id="toast">
-      <span class="toast-hide-button" role="button" tabindex="0" onclick="app.$.toast.hide()">Ok</span>
-    </paper-toast>
+  <paper-toast id="caching-complete"
+               duration="6000"
+               text="Caching complete! This app will work offline.">
+  </paper-toast>
 
-    <!-- Uncomment next block to enable Service Worker support (1/2) -->
-    <!--
-    <paper-toast id="caching-complete"
-                 duration="6000"
-                 text="Caching complete! This app will work offline.">
-    </paper-toast>
+  <platinum-sw-register auto-register
+                        clients-claim
+                        skip-waiting
+                        on-service-worker-installed="displayInstalledToast">
+    <platinum-sw-cache default-cache-strategy="fastest"
+                       cache-config-file="cache-config.json">
+    </platinum-sw-cache>
+  </platinum-sw-register>
 
-    <platinum-sw-register auto-register
-                          clients-claim
-                          skip-waiting
-                          on-service-worker-installed="displayInstalledToast">
-      <platinum-sw-cache default-cache-strategy="fastest"
-                         cache-config-file="cache-config.json">
-      </platinum-sw-cache>
-    </platinum-sw-register>
-    -->
+</template>
 
-  </template>
-
-  <!-- build:js scripts/app.js -->
-  <script src="scripts/app.js"></script>
-  <!-- endbuild-->
+<!-- build:js scripts/app.js -->
+<script src="scripts/app.js"></script>
+<!-- endbuild-->
 </body>
 
 </html>

@@ -24,7 +24,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         min-width: 0;
       }
 
-      .content {
+      .user-field-content {
         margin: 1px;
       }
 
@@ -55,7 +55,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <iron-icon icon="account-circle"></iron-icon>
         </div>
       </paper-button>
-      <div class="dropdown-content content">
+      <div class="dropdown-content user-field-content">
         <paper-button class="menu-button" on-tap="_logout" hidden="{{!user}}">Logout</paper-button>
         <paper-button class="menu-button" on-tap="_login" hidden="{{user}}">Login</paper-button>
       </div>
