@@ -8,6 +8,9 @@ Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 -->
 
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/paper-styles/typography.html">
+
 <style is="custom-style">
 
   /*
@@ -22,28 +25,40 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   /* Application theme */
 
   :root {
-    --dark-primary-color: #455A64;
-    --default-primary-color: #455A64;
+    --primary-text-color: #212121;
+    --primary-background-color: #f1f1f1;
+    --secondary-text-color: #737373;
+    --disabled-text-color: #9b9b9b;
+    --divider-color: #dbdbdb;
+    --primary-color: #455A64;
     --light-primary-color: #CFD8DC;
-     --text-primary-color: #ffffff;
-     --accent-color: #009688;
-     --primary-background-color: #f1f1f1;
-     --primary-text-color: #212121;
-     --secondary-text-color: #727272;
-     --disabled-text-color: #bdbdbd;
-     --divider-color: #b6b6b6;
-
+    --dark-primary-color: #455A64;
+    --accent-color: #009688;
+    --light-accent-color: #009688;
+    --dark-accent-color: #009688;
 
     /* Components */
+
+    /* paper-drawer-panel */
+    --drawer-menu-color: #ffffff;
+    --drawer-border-color: 1px solid #ccc;
+    --drawer-toolbar-border-color: 1px solid rgba(0, 0, 0, 0.22);
+
+    /* paper-menu */
+    --paper-menu-background-color: #fff;
+    --menu-link-color: #111111;
   }
 
   /* General styles */
-
-paper-header-panel {
-  --paper-header-panel-standard-container: {
-    background-color: var(--primary-background-color);
+  
+  body {
+    @apply(--layout-fullbleed);
+    @apply(--layout-vertical);
   }
-}
+
+  .space {
+    @apply(--layout-flex);
+  }
 
   paper-material {
     border-radius: 2px;
@@ -59,6 +74,9 @@ paper-header-panel {
     margin: 10px;
   }
 
+  /* Breakpoints */
+
+  /* Small */
   /* Breakpoints */
 
   /* Small */

@@ -10,11 +10,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <script src="../bower_components/page/page.js"></script>
 <script>
-  window.addEventListener('WebComponentsReady', function () {
+  window.addEventListener('WebComponentsReady', function() {
 
     // We use Page.js for routing. This is a Micro
     // client-side router inspired by the Express router
     // More info: https://visionmedia.github.io/page.js/
+
+    // Removes end / from app.baseUrl which page.base requires for production
+    if (window.location.port === '') {  // if production
+      page.base(app.baseUrl.replace(/\/$/, ''));
+    }
 
     // Middleware
     function scrollToTop(ctx, next) {
@@ -23,19 +28,28 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     }
 
     // Routes
-    page('/', scrollToTop, function () {
-      app.route = 'home';
+    page('*', scrollToTop, function(ctx, next) {
+      next();
     });
 
-    page('/:id', scrollToTop, function (data) {
+    page('/', function() {
+      app.route = 'home';
+    });
+    
+     page('/:id', scrollToTop, function (data) {
       app.route = 'home';
       app.params = data.params;
     });
 
-    page('*', function () {
-      app.$.toast.text = 'Die Adresse ' + window.location.href + ' existiert nicht. Sie wurden auf die Startseite weitergeleitet';
+    page(app.baseUrl, function() {
+      app.route = 'home';
+    });
+
+    // 404
+    page('*', function() {
+      app.$.toast.text = 'Can\'t find: ' + window.location.href  + '. Redirected you to Home Page';
       app.$.toast.show();
-      page.redirect('/');
+      page.redirect(app.baseUrl);
     });
 
     // add #! before urls
