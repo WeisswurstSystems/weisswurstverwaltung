@@ -45,7 +45,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     </style>
 
-    <wwm-auth id="auth" user="{{user}}"></wwm-auth>
+    <wwm-auth id="wwmauth" user="{{user}}"></wwm-auth>
 
     <paper-menu-button id="menu" horizontal-align="left" vertical-offset="56">
       <paper-button class="dropdown-trigger">
@@ -78,17 +78,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         },
 
         _logout: function () {
-          this.$.auth.signOut();
+          this.$.wwmauth.signOut();
           this.$.menu.close();
         },
 
         _login: function () {
-          this.$.auth.openLoginWindow();
+          this.$.wwmauth.openLoginWindow();
           this.$.menu.close();
         },
 
-        _gotoUser: function() {
+        _gotoUser: function () {
           page.show('/user');
+        },
+
+        changePassword: function (a, b, c) {
+          console.log(a + b + c);
         }
 
       });

@@ -27,7 +27,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       app.route = 'home';
     });
 
-    page('/:id', scrollToTop, function (data) {
+    page('/meeting/:id', scrollToTop, function (data) {
       app.route = 'home';
       app.params = data.params;
     });

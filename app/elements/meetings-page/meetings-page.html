@@ -34,7 +34,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         is: 'meetings-page',
 
         selectMeeting: function (e) {
-          page.show('/' + e.detail.meeting.__firebaseKey__);
+          page.show('/meeting/' + e.detail.meeting.__firebaseKey__);
         },
 
         addMeeting: function (e) {

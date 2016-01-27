@@ -17,31 +17,63 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         display: block;
       }
     </style>
-    <div>Hello from <span>{{foo}}</span></div>
+
+    <div class='layout'>
+      <paper-input
+        label='Alte Mail-Adresse'
+        value='{{mailold}}'
+        ></paper-input>
+      <paper-input
+        label='Neue Mail-Adresse'
+        value='{{mailnew}}'
+        ></paper-input>
+      <paper-input
+        label='Altes Passwort'
+        type='password'
+        value='{{pwold}}'
+        ></paper-input>
+      <paper-input
+        label='Neues Passwort'
+        type='password'
+        value='{{pwnew}}'
+        ></paper-input>
+      <div align='right'>
+        <paper-button class='default' on-tap='changePass'>
+          <p id='changePWBtn'>Passwort Ändern</p>
+        </paper-button>
+        <paper-button class='default' on-tap='changeMail'>
+          <p id='changeMailBtn'>Mail Ändern</p>
+        </paper-button>
+      </div>
+    </div>
+
   </template>
   <script>
-  (function() {
-    'use strict';
+    (function () {
+      'use strict';
 
-    Polymer({
-      is: 'user-page',
+      Polymer({
+        is: 'user-page',
 
-      properties: {
-        foo: {
-          type: String,
-          value: 'user-page',
-          notify: true
+        properties: {
+          user: Object,
+          pwold: String,
+          pwnew: String,
+          mailold: {
+            type: String,
+            value: 'hans@test.de'
+          },
+          mailnew: String
+        },
+
+        changeMail: function () {
+          document.$.auth.changeEmail(this.mailold, this.mailnew, this.pwold);
+        },
+
+        changePass: function () {
+          Polymer.dom(this.root).querySelectorAll('wwmauth').changePassword(this.mailold, this.pwold, this.pwnew);
         }
-      },
-
-      changeMail: function () {
-        this.$.auth.changeEmail('hans@test.de', 'hans@test.com', 'test');
-      },
-
-      changePass: function(){
-        this.$.auth.changePassword('hans@test.de', 'test', 'testtest');
-      }
-    });
-  })();
+      });
+    })();
   </script>
 </dom-module>
