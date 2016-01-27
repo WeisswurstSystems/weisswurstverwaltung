@@ -70,7 +70,7 @@
 
         ready: function() {
           var elem = this;
-          document.addEventListener('click', function(event) {
+          this.addEventListener('click', function(event) {
             /* Callback to close the list if we clicked outside of it */
             var node = event.target;
             while (node) {

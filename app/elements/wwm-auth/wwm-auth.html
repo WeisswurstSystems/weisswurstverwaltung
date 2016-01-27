@@ -24,10 +24,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <style>
 
       paper-tabs {
-        width: 450px;
         background: var(--default-primary-color);
         color: var(--text-primary-color);
         --paper-tabs-selection-bar-color: var(--accent-color);
+      }
+
+      @media screen and (min-width: 500px) {
+        paper-tabs {
+          width: 450px;
+        }
       }
 
       paper-tabs paper-tab::shadow #ink {
@@ -224,6 +229,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           this.user = null;
         },
 
+        changeEmail: function (oldEmail, newEmail, password) {
+          this.$.authentication.changeEmail(oldEmail, newEmail, password);
+        },
+
+        changePassword: function (email, oldPassword, newPassword) {
+          this.$.authentication.changePassword(email, oldPassword, newPassword);
+        },
+
         _errorHandler: function (error) {
           this.$.loginProg.hidden = true;
           this.$.loginBtn.hidden = false;
@@ -238,32 +251,36 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             case 'INVALID_USER':
               this.$.loginMail.errorMessage = message;
               this.$.loginMail.invalid = true;
+              this.$.authToast.text = message;
+              this.$.authToast.show();
               break;
             case 'INVALID_PASSWORD':
               this.$.loginPass.errorMessage = message;
               this.$.loginPass.invalid = true;
               this.$.forgotbtn.hidden = false;
+              this.$.authToast.text = message;
+              this.$.authToast.show();
               break;
 
             // Registration related Errors
             case 'EMAIL_TAKEN':
               this.$.registerMail.errorMessage = message;
               this.$.registerMail.invalid = true;
+              this.$.authToast.text = message;
+              this.$.authToast.show();
               break;
             case 'INVALID_EMAIL':
               this.$.registerMail.errorMessage = message;
               this.$.registerMail.invalid = true;
-              break;
-
-
-            // Default Handler
-            case 'NETWORK_ERROR':
               this.$.authToast.text = message;
               this.$.authToast.show();
               break;
 
+
+            // Default Handler
             default :
-              window.alert(message);
+              this.$.authToast.text = message;
+              this.$.authToast.show();
               break;
 
           }

@@ -32,6 +32,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       app.params = data.params;
     });
 
+    page('/user', scrollToTop, function () {
+      app.route = 'user';
+    });
+
     page('*', function () {
       app.$.toast.text = 'Die Adresse ' + window.location.href + ' existiert nicht. Sie wurden auf die Startseite weitergeleitet';
       app.$.toast.show();

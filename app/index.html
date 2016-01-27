@@ -85,7 +85,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <toolbar-heart></toolbar-heart>
       <div class="bottom title">WWM</div>
       <span class="flex"></span>
-      <user-field user="{{user}}"></user-field>
+      <user-field id="user-auth-field" user="{{user}}"></user-field>
     </paper-toolbar>
 
     <!-- Main Content -->
@@ -93,6 +93,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <neon-animated-pages attr-for-selected="data-route" selected="{{route}}">
 
         <meetings-page user="{{user}}" data-route="home" id="{{params.id}}"></meetings-page>
+        <user-page data-route="user"></user-page>
 
       </neon-animated-pages>
     </div>
