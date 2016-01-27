@@ -33,8 +33,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       Polymer({
         is: 'meetings-page',
 
-        behaviors: [Polymer.NeonSharedElementAnimatableBehavior],
-
         selectMeeting: function (e) {
           page.show('/' + e.detail.meeting.__firebaseKey__);
         },
@@ -49,29 +47,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         properties: {
           user: Object,
-          id: Object,
-
-          animationConfig: {
-            type: Object,
-            value: function () {
-              return {
-                'entry': {
-                  name: 'transform-animation',
-                  transformFrom: 'translate(0px, -100vh)',
-                  transformTo: 'none',
-                  node: this
-                },
-                'exit': [{
-                  name: 'hero-animation',
-                  id: 'hero',
-                  fromPage: this
-                }, {
-                  name: 'fade-out-animation',
-                  node: this
-                }]
-              };
-            }
-          }
+          id: Object
         }
       });
     })();

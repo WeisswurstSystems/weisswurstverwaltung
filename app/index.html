@@ -90,12 +90,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <!-- Main Content -->
     <div class="content">
-      <neon-animated-pages attr-for-selected="data-route" selected="{{route}}">
+      <iron-pages attr-for-selected="data-route" selected="{{route}}">
 
         <meetings-page user="{{user}}" data-route="home" id="{{params.id}}"></meetings-page>
         <user-page data-route="user"></user-page>
 
-      </neon-animated-pages>
+      </iron-pages>
     </div>
   </paper-header-panel>
 

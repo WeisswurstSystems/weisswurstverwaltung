@@ -70,7 +70,7 @@
 
         ready: function() {
           var elem = this;
-          this.addEventListener('click', function(event) {
+          document.addEventListener('click', function(event) {
             /* Callback to close the list if we clicked outside of it */
             var node = event.target;
             while (node) {
@@ -80,7 +80,6 @@
               node = node.parentNode;
             }
             elem.$.selector.select(null);
-            page.show('/');
           });
         }
 
