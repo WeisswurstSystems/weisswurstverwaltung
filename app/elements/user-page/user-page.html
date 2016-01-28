@@ -66,12 +66,26 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           mailnew: String
         },
 
+        ready: function() {
+          this.addEventListener('error', function(e){
+            console.log(e);
+          });
+          this.addEventListener('email-changed', function(e){
+            console.log(e);
+          });
+          this.addEventListener('password-changed', function(e){
+            console.log(e);
+          });
+        },
+
         changeMail: function () {
-          document.$.auth.changeEmail(this.mailold, this.mailnew, this.pwold);
+          var wwmAuth = document.querySelector('#wwmauth');
+          wwmAuth.changeEmail(this.mailold, this.mailnew, this.pwold);
         },
 
         changePass: function () {
-          Polymer.dom(this.root).querySelectorAll('wwmauth').changePassword(this.mailold, this.pwold, this.pwnew);
+          var wwmAuth = document.querySelector('#wwmauth');
+          wwmAuth.changePassword(this.mailold, this.pwold, this.pwnew);
         }
       });
     })();
