@@ -9,48 +9,65 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 -->
 
 <link rel='import' href='..\..\bower_components/polymer/polymer.html'>
+<link rel="import" href="..\..\bower_components/paper-radio-group/paper-radio-group.html">
+<link rel="import" href="..\..\bower_components/paper-radio-button/paper-radio-button.html">
 
 <dom-module id='user-page'>
   <template>
     <style>
       :host {
         display: block;
+        --paper-card-header-color: white;
+        --paper-radio-button-checked-color: var(--accent-color);
+        --paper-radio-button-checked-ink-color: var(--accent-color);
       }
     </style>
 
     <div class="layout vertical center">
 
-      <div class='layout' hidden="{{!user}}">
-        <paper-input
-          label='Alte Mail-Adresse'
-          value='{{mailold}}'
-          ></paper-input>
-        <paper-input
-          label='Neue Mail-Adresse'
-          value='{{mailnew}}'
-          ></paper-input>
-        <paper-input
-          label='Altes Passwort'
-          type='password'
-          value='{{pwold}}'
-          ></paper-input>
-        <paper-input
-          label='Neues Passwort'
-          type='password'
-          value='{{pwnew}}'
-          ></paper-input>
-        <div align='right'>
-          <paper-button class='default' on-tap='changePass'>
-            <p id='changePWBtn'>Passwort Ändern</p>
-          </paper-button>
-          <paper-button class='default' on-tap='changeMail'>
-            <p id='changeMailBtn'>Mail Ändern</p>
-          </paper-button>
+      <paper-card
+        heading="{{user.password.email}}"
+        image="{{user.password.profileImageURL}}"
+        hidden="{{!user}}"
+        preload-image
+        fade-mage>
+        <div class='card-content' hidden="{{!user}}">
+          <paper-input
+            label='E-Mail'
+            value='{{mailold}}'
+            ></paper-input>
+          <paper-input
+            label='Neue E-Mail'
+            value='{{mailnew}}'
+            hidden='{{pweditmode}}'
+            ></paper-input>
+          <paper-input
+            label='Passwort'
+            type='password'
+            value='{{pwold}}'
+            ></paper-input>
+          <paper-input
+            label='Neues Passwort'
+            type='password'
+            value='{{pwnew}}'
+            hidden='{{!pweditmode}}'
+            ></paper-input>
+          <div class="card-actions">
+            <paper-radio-group selected="{{selected}}">
+              <paper-radio-button name="password">Passwort Ändern</paper-radio-button>
+              <paper-radio-button name="email">E-Mail Ändern</paper-radio-button>
+            </paper-radio-group>
+          </div>
+          <div class="card-actions">
+            <paper-button class='default' on-tap='change'>
+              <p id='changePWBtn'>Ändern</p>
+            </paper-button>
+          </div>
         </div>
-      </div>
 
-      <h3 hidden="{{user}}">Sie müssen sich anmelden um Ihr Profil bearbeiten zu können.</h3>
+      </paper-card>
 
+      <h3 hidden="{{user}}">Sie müssen sich anmelden um Ihr Profil sehen zu können.</h3>
     </div>
   </template>
   <script>
@@ -65,18 +82,35 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             type: Object,
             observer: '_resetFields'
           },
+          selected: {
+            type: Object,
+            value: 'password',
+            observer: '_selectedChanged'
+          },
+          pweditmode: {
+            type: Boolean,
+            value: true
+          },
           pwold: String,
           pwnew: String,
           mailold: String,
           mailnew: String
         },
 
-        changeMail: function () {
+        change: function () {
+          if (this.pweditmode) {
+            this._changePass();
+          } else {
+            this._changeMail();
+          }
+        },
+
+        _changeMail: function () {
           var wwmAuth = document.querySelector('#wwmauth');
           wwmAuth.changeEmail(this.mailold, this.mailnew, this.pwold);
         },
 
-        changePass: function () {
+        _changePass: function () {
           var wwmAuth = document.querySelector('#wwmauth');
           wwmAuth.changePassword(this.mailold, this.pwold, this.pwnew);
         },
@@ -88,6 +122,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             this.pwold = '';
             this.pwnew = '';
           }
+        },
+
+        _selectedChanged: function () {
+          this.pweditmode = this.selected === 'password';
         },
 
         mailChanged: function () {
