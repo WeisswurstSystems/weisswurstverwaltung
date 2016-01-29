@@ -18,35 +18,40 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
     </style>
 
-    <div class='layout'>
-      <paper-input
-        label='Alte Mail-Adresse'
-        value='{{mailold}}'
-        ></paper-input>
-      <paper-input
-        label='Neue Mail-Adresse'
-        value='{{mailnew}}'
-        ></paper-input>
-      <paper-input
-        label='Altes Passwort'
-        type='password'
-        value='{{pwold}}'
-        ></paper-input>
-      <paper-input
-        label='Neues Passwort'
-        type='password'
-        value='{{pwnew}}'
-        ></paper-input>
-      <div align='right'>
-        <paper-button class='default' on-tap='changePass'>
-          <p id='changePWBtn'>Passwort Ändern</p>
-        </paper-button>
-        <paper-button class='default' on-tap='changeMail'>
-          <p id='changeMailBtn'>Mail Ändern</p>
-        </paper-button>
-      </div>
-    </div>
+    <div class="layout vertical center">
 
+      <div class='layout' hidden="{{!user}}">
+        <paper-input
+          label='Alte Mail-Adresse'
+          value='{{mailold}}'
+          ></paper-input>
+        <paper-input
+          label='Neue Mail-Adresse'
+          value='{{mailnew}}'
+          ></paper-input>
+        <paper-input
+          label='Altes Passwort'
+          type='password'
+          value='{{pwold}}'
+          ></paper-input>
+        <paper-input
+          label='Neues Passwort'
+          type='password'
+          value='{{pwnew}}'
+          ></paper-input>
+        <div align='right'>
+          <paper-button class='default' on-tap='changePass'>
+            <p id='changePWBtn'>Passwort Ändern</p>
+          </paper-button>
+          <paper-button class='default' on-tap='changeMail'>
+            <p id='changeMailBtn'>Mail Ändern</p>
+          </paper-button>
+        </div>
+      </div>
+
+      <h3 hidden="{{user}}">Sie müssen sich anmelden um Ihr Profil bearbeiten zu können.</h3>
+
+    </div>
   </template>
   <script>
     (function () {
@@ -56,26 +61,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         is: 'user-page',
 
         properties: {
-          user: Object,
+          user: {
+            type: Object,
+            observer: '_resetFields'
+          },
           pwold: String,
           pwnew: String,
-          mailold: {
-            type: String,
-            value: 'hans@test.de'
-          },
+          mailold: String,
           mailnew: String
-        },
-
-        ready: function() {
-          this.addEventListener('error', function(e){
-            console.log(e);
-          });
-          this.addEventListener('email-changed', function(e){
-            console.log(e);
-          });
-          this.addEventListener('password-changed', function(e){
-            console.log(e);
-          });
         },
 
         changeMail: function () {
@@ -86,6 +79,26 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         changePass: function () {
           var wwmAuth = document.querySelector('#wwmauth');
           wwmAuth.changePassword(this.mailold, this.pwold, this.pwnew);
+        },
+
+        _resetFields: function () {
+          if (this.user) {
+            this.mailold = this.user.password.email;
+            this.mailnew = '';
+            this.pwold = '';
+            this.pwnew = '';
+          }
+        },
+
+        mailChanged: function () {
+          var newmail = this.mailnew;
+          this._resetFields();
+          this.user.password.email = newmail;
+          this.mailold = newmail;
+        },
+
+        pwChanged: function () {
+          this._resetFields();
         }
       });
     })();

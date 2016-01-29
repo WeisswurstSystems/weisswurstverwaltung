@@ -69,14 +69,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       provider="password"
       on-error="_errorHandler"
       on-login="_loginHandler"
-      on-user-created="_registerHandler">
+      on-user-created="_registerHandler"
+      on-email-changed="_mailChangedHandler"
+      on-password-changed="_passwordChangedHandler">
     </firebase-auth>
 
     <paper-dialog
       id="loginWindow"
       modal
       noCancelOnEscKey="true"
-      opened="{{!user}}"
       entry-animation="scale-up-animation"
       exit-animation="fade-out-animation">
       <div class="content">
@@ -154,7 +155,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       </div>
     </paper-dialog>
 
-    <paper-toast id="authToast"></paper-toast>
   </template>
   <script>
     (function () {
@@ -252,36 +252,36 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             case 'INVALID_USER':
               this.$.loginMail.errorMessage = message;
               this.$.loginMail.invalid = true;
-              this.$.authToast.text = message;
-              this.$.authToast.show();
+              app.$.toast.text = message;
+              app.$.toast.show();
               break;
             case 'INVALID_PASSWORD':
               this.$.loginPass.errorMessage = message;
               this.$.loginPass.invalid = true;
               this.$.forgotbtn.hidden = false;
-              this.$.authToast.text = message;
-              this.$.authToast.show();
+              app.$.toast.text = message;
+              app.$.toast.show();
               break;
 
             // Registration related Errors
             case 'EMAIL_TAKEN':
               this.$.registerMail.errorMessage = message;
               this.$.registerMail.invalid = true;
-              this.$.authToast.text = message;
-              this.$.authToast.show();
+              app.$.toast.text = message;
+              app.$.toast.show();
               break;
             case 'INVALID_EMAIL':
               this.$.registerMail.errorMessage = message;
               this.$.registerMail.invalid = true;
-              this.$.authToast.text = message;
-              this.$.authToast.show();
+              app.$.toast.text = message;
+              app.$.toast.show();
               break;
 
 
             // Default Handler
             default :
-              this.$.authToast.text = message;
-              this.$.authToast.show();
+              app.$.toast.text = message;
+              app.$.toast.show();
               break;
 
           }
@@ -294,17 +294,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           this.$.loginPass.invalid = false;
           this.$.forgotbtn.hidden = false;
 
+          this._cancel();
           var mail = user.detail.user.password.email;
 
-          this.$.authToast.text = 'Login erfolgreich. Herzlich Willkommen ' + mail;
-          this.$.authToast.show();
+          app.$.toast.text = 'Login erfolgreich. Herzlich Willkommen ' + mail;
+          app.$.toast.show();
         },
 
         _registerHandler: function () {
           this.$.registerProg.hidden = true;
           this.$.registerBtn.hidden = false;
-          this.$.authToast.text = 'Erfolgreich Registriert';
-          this.$.authToast.show();
+          app.$.toast.text = 'Erfolgreich Registriert';
+          app.$.toast.show();
           this.$.tabselector.selected = 0;
           this.$.loginMail.value = this.$.registerMail.value;
           this.$.loginMail.validate();
@@ -328,8 +329,24 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           this.$.loginPass.invalid = false;
           this.$.forgotbtn.hidden = true;
 
-          this.$.authToast.text = 'Ein temporäres Passwort wurde Ihnen zugesendet.';
-          this.$.authToast.show();
+          app.$.toast.text = 'Ein temporäres Passwort wurde Ihnen zugesendet.';
+          app.$.toast.show();
+        },
+
+        _mailChangedHandler: function() {
+          var userPage = document.querySelector('user-page');
+          userPage.mailChanged();
+
+          app.$.toast.text = 'E-Mail wurde erfolgreich geändert';
+          app.$.toast.show();
+        },
+
+        _passwordChangedHandler: function() {
+          var userPage = document.querySelector('user-page');
+          userPage.pwChanged();
+
+          app.$.toast.text = 'Passwort wurde erfolgreich geändert';
+          app.$.toast.show();
         }
       });
     })();
