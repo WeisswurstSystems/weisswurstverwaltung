@@ -35,10 +35,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     page('/', function() {
       app.route = 'home';
     });
-    
-     page('/:id', scrollToTop, function (data) {
+
+     page('/meeting/:id', scrollToTop, function (data) {
       app.route = 'home';
       app.params = data.params;
+    });
+
+    page('/user', scrollToTop, function () {
+      app.route = 'user';
     });
 
     page(app.baseUrl, function() {
