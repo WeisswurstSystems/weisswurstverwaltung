@@ -45,7 +45,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     </style>
 
-    <wwm-auth id="auth" user="{{user}}"></wwm-auth>
+    <wwm-auth id="wwmauth" user="{{user}}"></wwm-auth>
 
     <paper-menu-button id="menu" horizontal-align="left" vertical-offset="56">
       <paper-button class="dropdown-trigger">
@@ -55,7 +55,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <iron-icon icon="account-circle"></iron-icon>
         </div>
       </paper-button>
-      <div class="dropdown-content user-field-content">
+      <div class="dropdown-content user-field-content layout vertical">
+        <paper-button class="menu-button" on-tap="_gotoUser" hidden="{{!user}}">Profil</paper-button>
         <paper-button class="menu-button" on-tap="_logout" hidden="{{!user}}">Logout</paper-button>
         <paper-button class="menu-button" on-tap="_login" hidden="{{user}}">Login</paper-button>
       </div>
@@ -77,13 +78,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         },
 
         _logout: function () {
-          this.$.auth.signOut();
+          this.$.wwmauth.signOut();
           this.$.menu.close();
         },
 
         _login: function () {
-          this.$.auth.openLoginWindow();
+          this.$.wwmauth.openLoginWindow();
           this.$.menu.close();
+        },
+
+        _gotoUser: function () {
+          page.show('/user');
+        },
+
+        changePassword: function (a, b, c) {
+          console.log(a + b + c);
         }
 
       });

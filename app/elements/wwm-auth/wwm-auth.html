@@ -24,10 +24,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <style>
 
       paper-tabs {
-        width: 450px;
         background: var(--default-primary-color);
         color: var(--text-primary-color);
         --paper-tabs-selection-bar-color: var(--accent-color);
+      }
+
+      @media screen and (min-width: 500px) {
+        paper-tabs {
+          width: 450px;
+        }
       }
 
       paper-tabs paper-tab::shadow #ink {
@@ -64,14 +69,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       provider="password"
       on-error="_errorHandler"
       on-login="_loginHandler"
-      on-user-created="_registerHandler">
+      on-user-created="_registerHandler"
+      on-email-changed="_mailChangedHandler"
+      on-password-changed="_passwordChangedHandler">
     </firebase-auth>
 
     <paper-dialog
       id="loginWindow"
       modal
       noCancelOnEscKey="true"
-      opened="{{!user}}"
       entry-animation="scale-up-animation"
       exit-animation="fade-out-animation">
       <div class="content">
@@ -149,7 +155,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       </div>
     </paper-dialog>
 
-    <paper-toast id="authToast"></paper-toast>
   </template>
   <script>
     (function () {
@@ -224,6 +229,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           this.user = null;
         },
 
+        changeEmail: function (oldEmail, newEmail, password) {
+          this.$.authentication.changeEmail(oldEmail, newEmail, password);
+        },
+
+        changePassword: function (email, oldPassword, newPassword) {
+          this.$.authentication.changePassword(email, oldPassword, newPassword);
+        },
+
         _errorHandler: function (error) {
           this.$.loginProg.hidden = true;
           this.$.loginBtn.hidden = false;
@@ -232,38 +245,43 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
           var codestring = error.detail.code.toString();
           var message = error.detail.message;
+          console.log(message);
 
           switch (codestring) {
             // Login related Errors
             case 'INVALID_USER':
               this.$.loginMail.errorMessage = message;
               this.$.loginMail.invalid = true;
+              app.$.toast.text = message;
+              app.$.toast.show();
               break;
             case 'INVALID_PASSWORD':
               this.$.loginPass.errorMessage = message;
               this.$.loginPass.invalid = true;
               this.$.forgotbtn.hidden = false;
+              app.$.toast.text = message;
+              app.$.toast.show();
               break;
 
             // Registration related Errors
             case 'EMAIL_TAKEN':
               this.$.registerMail.errorMessage = message;
               this.$.registerMail.invalid = true;
+              app.$.toast.text = message;
+              app.$.toast.show();
               break;
             case 'INVALID_EMAIL':
               this.$.registerMail.errorMessage = message;
               this.$.registerMail.invalid = true;
+              app.$.toast.text = message;
+              app.$.toast.show();
               break;
 
 
             // Default Handler
-            case 'NETWORK_ERROR':
-              this.$.authToast.text = message;
-              this.$.authToast.show();
-              break;
-
             default :
-              window.alert(message);
+              app.$.toast.text = message;
+              app.$.toast.show();
               break;
 
           }
@@ -276,17 +294,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           this.$.loginPass.invalid = false;
           this.$.forgotbtn.hidden = false;
 
+          this._cancel();
           var mail = user.detail.user.password.email;
 
-          this.$.authToast.text = 'Login erfolgreich. Herzlich Willkommen ' + mail;
-          this.$.authToast.show();
+          app.$.toast.text = 'Login erfolgreich. Herzlich Willkommen ' + mail;
+          app.$.toast.show();
         },
 
         _registerHandler: function () {
           this.$.registerProg.hidden = true;
           this.$.registerBtn.hidden = false;
-          this.$.authToast.text = 'Erfolgreich Registriert';
-          this.$.authToast.show();
+          app.$.toast.text = 'Erfolgreich Registriert';
+          app.$.toast.show();
           this.$.tabselector.selected = 0;
           this.$.loginMail.value = this.$.registerMail.value;
           this.$.loginMail.validate();
@@ -310,8 +329,24 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           this.$.loginPass.invalid = false;
           this.$.forgotbtn.hidden = true;
 
-          this.$.authToast.text = 'Ein temporäres Passwort wurde Ihnen zugesendet.';
-          this.$.authToast.show();
+          app.$.toast.text = 'Ein temporäres Passwort wurde Ihnen zugesendet.';
+          app.$.toast.show();
+        },
+
+        _mailChangedHandler: function() {
+          var userPage = document.querySelector('user-page');
+          userPage.mailChanged();
+
+          app.$.toast.text = 'E-Mail wurde erfolgreich geändert';
+          app.$.toast.show();
+        },
+
+        _passwordChangedHandler: function() {
+          var userPage = document.querySelector('user-page');
+          userPage.pwChanged();
+
+          app.$.toast.text = 'Passwort wurde erfolgreich geändert';
+          app.$.toast.show();
         }
       });
     })();
