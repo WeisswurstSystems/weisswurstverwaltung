@@ -1,15 +1,47 @@
-/meetings/$meeting is Meeting
-/meetings/$meeting/orders/$order is Order
+/meetings/{meeting} is Meeting {
+  read() { true; }
+  create() { isAuthenticated(); }
+  update() { isUser(meeting.uid); }
+  delete() { isAdmin() }
+}
+
+/meetings/{meeting}/orders/{order} is Order {
+  read() {true}
+  create() {isUser(order.uid) || isUser(meeting.uid)}
+  update() {isUser(order.uid)}
+  delete() {isUser(order.uid)}
+}
+
+/meetings/{meeting}/orders/{order}/paid {
+  read() {true}
+  create() {isUser(meeting.uid) || isUser(order.uid)}
+  update() {isAdmin() || isUser(meeting.uid)}
+  delete() {isAdmin() || isUser(order.uid)}
+}
 
 type Meeting {
+  "uid": String,
   "name": String,
   "date": Number,
-  "orders": Object
+  "orders": Order
 }
 
 type Order {
+  "name": String,
+  "uid": String,
   "brezen": String,
   "weisswurst": String,
-  "name": String,
-  "creator": String
+  "paid": Boolean
+}
+
+isAuthenticated() {
+   auth != null
+}
+
+isUser(uid) {
+  auth != null && auth.uid == uid || uid == 'external';
+}
+
+isAdmin() {
+   auth.uid == '8af8ee91-f696-4a6a-99d7-0a43699e834a' || auth.uid == '8a0f1c00-ac25-4feb-903c-664c10d2617e';
 }
