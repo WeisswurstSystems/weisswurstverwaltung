@@ -109,7 +109,7 @@ gulp.task('elements', function() {
 // "dot" files are specifically tricky due to them being hidden on
 // some systems.
 gulp.task('ensureFiles', function(cb) {
-  var requiredFiles = ['.jscsrc', '.jshintrc', '.bowerrc'];
+  var requiredFiles = ['.bowerrc'];
 
   ensureFiles(requiredFiles.map(function(p) {
     return path.join(__dirname, p);
@@ -238,9 +238,10 @@ gulp.task('serve', ['styles', 'elements'], function() {
     }
   });
 
-  gulp.watch(['app/**/*.html'], reload);
+  gulp.watch(['app/**/*.html', '!app/bower_components/**/*.html'], reload);
   gulp.watch(['app/styles/**/*.css'], ['styles', reload]);
   gulp.watch(['app/elements/**/*.css'], ['elements', reload]);
+  gulp.watch(['app/scripts/**/*.js'], reload);
   gulp.watch(['app/images/**/*'], reload);
 });
 
@@ -271,7 +272,7 @@ gulp.task('serve:dist', ['default'], function() {
 gulp.task('default', ['clean'], function(cb) {
   // Uncomment 'cache-config' if you are going to use service workers.
   runSequence(
-    ['copy', 'styles'],
+    ['ensureFiles', 'copy', 'styles'],
     'elements',
     ['images', 'fonts', 'html'],
     'vulcanize', // 'cache-config',
