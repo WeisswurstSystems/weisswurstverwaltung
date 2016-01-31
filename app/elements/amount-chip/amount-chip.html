@@ -1,0 +1,101 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-styles/classes/typography.html">
+
+
+<dom-module id="amount-chip">
+  <template>
+    <style>
+      :host {
+        display: inline-block;
+      }
+
+      .chip {
+        height: 32px;
+        background-color: #dfdfdf;
+        border-radius: 16px;
+        cursor: pointer;
+
+        @apply(--layout-horizontal);
+        @apply(--layout-center);
+      }
+
+      .chip:hover {
+        background-color: #6f6f6f;
+        color: white;
+      }
+
+      .highlight {
+        height: 32px;
+        min-width: 32px;
+        border-radius: 16px;
+        background-color: var(--default-primary-color);
+
+        @apply(--layout-horizontal);
+        @apply(--layout-center);
+        @apply(--layout-center-justified);
+      }
+
+      .amount {
+        color: white;
+        padding: 8px;
+        @apply(--paper-font-subhead);
+      }
+
+      .label {
+        @apply(--paper-font-body1);
+        font-weight: 700;
+        padding-left: 8px;
+      }
+
+      .remove {
+        height: 24px;
+        width: 24px;
+        color: #757575;
+        margin: 4px;
+      }
+
+      .chip:hover .remove {
+        color: white;
+      }
+
+    </style>
+
+      <div class="chip">
+        <span class="highlight"><span class="amount">{{amount}}</span></span>
+        <span class="label">{{label}}</span>
+        <iron-icon class="remove" icon="cancel"></iron-icon>
+      </div>
+  </template>
+  <script>
+    (function () {
+      'use strict';
+
+      Polymer({
+        is: 'amount-chip',
+
+        properties: {
+          amount: {
+            type: Number,
+            value: 0,
+            notify: true
+          },
+          label: {
+            type: String,
+            value: '',
+            notify: true
+          }
+        }
+      });
+    })();
+  </script>
+</dom-module>
