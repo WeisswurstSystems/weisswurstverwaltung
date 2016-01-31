@@ -21,6 +21,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <template>
     <meeting-data meetings="{{meetings}}"></meeting-data>
 
+    <amount-input></amount-input>
+
     <meeting-input user="{{user}}" on-add-meeting="addMeeting"></meeting-input>
 
     <meeting-list user="{{user}}" meetings="{{meetings}}" selectedmeeting="{{id}}" on-delete-meeting="deleteMeeting" on-select-meeting="selectMeeting"
