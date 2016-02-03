@@ -10,35 +10,37 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <link rel="import" href="..\..\bower_components/polymer/polymer.html">
 <link rel="import" href="../../bower_components/paper-styles/classes/typography.html">
-
+<link rel="import" href="../../bower_components/paper-material/paper-material-shared-styles.html">
+<link rel="import" href="../../bower_components/paper-material/paper-material.html">
+<link rel="import" href="../../bower_components/iron-dropdown/iron-dropdown.html">
 
 <dom-module id="amount-chip">
   <template>
     <style>
       :host {
         display: inline-block;
+        cursor: default;
       }
 
       .chip {
         height: 32px;
         background-color: #dfdfdf;
         border-radius: 16px;
-        cursor: pointer;
-
         @apply(--layout-horizontal);
         @apply(--layout-center);
+        position: relative;
       }
 
-      .chip:hover {
-        background-color: #6f6f6f;
-        color: white;
+      .chip:focus {
+        @apply(--shadow-elevation-2dp);
+        outline: 0;
       }
 
       .highlight {
         height: 32px;
         min-width: 32px;
         border-radius: 16px;
-        background-color: var(--default-primary-color);
+        background-color: var(--accent-color);
 
         @apply(--layout-horizontal);
         @apply(--layout-center);
@@ -62,19 +64,43 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         width: 24px;
         color: #757575;
         margin: 4px;
+        cursor: pointer;
       }
 
-      .chip:hover .remove {
+      .remove:hover {
         color: white;
+      }
+
+      paper-material {
+        background-color: var(--accent-color);
+        padding: 16px;
+        border-radius: 2px;
+      }
+
+      #dropdown {
+        color: white;
+      }
+
+      #dropdown iron-icon {
+        padding-left: 24px;
       }
 
     </style>
 
-      <div class="chip">
-        <span class="highlight"><span class="amount">{{amount}}</span></span>
-        <span class="label">{{label}}</span>
-        <iron-icon class="remove" icon="cancel"></iron-icon>
-      </div>
+    <div class="chip" tabindex="0" on-tap="open">
+      <span class="highlight"><span class="amount">{{amount}}</span></span>
+      <span class="label">{{type}}</span>
+      <iron-icon class="remove" icon="cancel" on-tap="remove"></iron-icon>
+    </div>
+    <iron-dropdown id="dropdown">
+      <paper-material class="dropdown-content layout horizontal center" elevation="4">
+        <div class="layout vertical">
+          <div class="paper-font-subhead">Preis Gesamt: <span>{{_toLocale(price)}}</span></div>
+          <div class="paper-font-body1">Preis pro Stück: <span>{{_toLocale(ppu)}}</span></div>
+        </div>
+        <iron-icon icon="cancel" on-tap="remove"></iron-icon>
+      </paper-material>
+    </iron-dropdown>
   </template>
   <script>
     (function () {
@@ -84,16 +110,26 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         is: 'amount-chip',
 
         properties: {
-          amount: {
+          amount: Number,
+          type: String,
+          ppu: Number,
+          price: {
             type: Number,
-            value: 0,
-            notify: true
-          },
-          label: {
-            type: String,
-            value: '',
-            notify: true
+            computed: 'total(ppu,amount)'
           }
+        },
+        open: function () {
+          this.$.dropdown.open();
+        },
+        total: function (ppu, amount) {
+          return ppu * amount;
+        },
+        remove: function (e) {
+          this.fire('remove', e);
+          e.stopPropagation()
+        },
+        _toLocale: function (value) {
+          return value.toLocaleString() + ' €';
         }
       });
     })();

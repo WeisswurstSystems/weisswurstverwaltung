@@ -21,8 +21,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <template>
     <meeting-data meetings="{{meetings}}"></meeting-data>
 
-    <amount-input types='["Weisswurst", "Brezen"]' order='[]'></amount-input>
-    <amount-input types='["Krapfen", "Schokokrapfen", "Schokolade"]'  order='[]'></amount-input>
+
+    <div class="layout horizontal wrap">
+    <amount-list order="{{order}}"
+    ppulist='[{"type": "Weisswurst", "ppu": 2.99}, {"type": "Brezen", "ppu": 2.99}]'></amount-list>
+    </div>
 
     <meeting-input user="{{user}}" on-add-meeting="addMeeting"></meeting-input>
 

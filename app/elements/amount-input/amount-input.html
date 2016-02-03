@@ -13,52 +13,49 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../../bower_components/paper-menu/paper-menu.html">
 <link rel="import" href="../../bower_components/paper-item/paper-item.html">
 <link rel="import" href="../../bower_components/paper-material/paper-material.html">
+<link rel="import" href="../../bower_components/iron-dropdown/iron-dropdown.html">
 
 <dom-module id="amount-input">
   <template>
     <style>
       :host {
         display: block;
-        margin: 16px;
       }
 
-      .suggestions {
-        position: absolute;
+      paper-item {
+        padding-left: 16px;
       }
 
-      .input {
-        position: relative;
-        left: 0px;
-        bottom: 0px;
-        overflow: visible;
-        z-index: 100000;
-      }
+      paper-menu {
+        --paper-menu-selected-item: {
+          background-color: var(--accent-color);
+          color: white;
+        };
 
-      amount-chip {
-        padding-right: 8px;
+        --paper-menu: {
+          padding: 0;
+        };
       }
     </style>
 
 
-    <div class="layout horizontal center">
-      <template is="dom-repeat" items="{{order}}">
-        <amount-chip label="{{item.label}}" amount="{{item.amount}}" on-tap="_remove"></amount-chip>
-      </template>
+    <div class="input">
+      <paper-input focused="{{focused}}" no-label-float value="{{input}}" on-keydown="_submit" id="input"></paper-input>
 
+      <iron-dropdown vertical-align="top" opened="{{focused}}" vertical-offset="36" no-cancel-on-outside-click id="dropdown">
+        <paper-material elevation="3" class="dropdown-content">
+          <paper-menu selected="{{selected}}" id="menu">
+            <template is="dom-repeat" items="{{suggestions}}">
+              <paper-item on-tap="add">
+                  <div>{{item.amount}} {{item.type}} {{_total(ppulist, item.type, item.amount)}}</div>
+              </paper-item>
+            </template>
+          </paper-menu>
+        </paper-material>
+      </iron-dropdown>
 
-      <div class="input">
-        <paper-input focused="{{focused}}" no-label-float value="{{input}}" on-keydown="_submit"></paper-input>
-        <template is="dom-if" if="{{focused}}">
-          <paper-material elevation="3" class="suggestions">
-            <paper-menu selected="0">
-              <template is="dom-repeat" items="{{_suggestions(types, input)}}">
-                <paper-item>{{item}}</paper-item>
-              </template>
-            </paper-menu>
-          </paper-material>
-        </template>
-      </div>
-    </div>
+  </template>
+  </div>
   </template>
   <script>
     (function () {
@@ -66,42 +63,57 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       Polymer({
         is: 'amount-input',
-
+        ready: function() {
+          this.$.menu.selected = 0;
+        },
         properties: {
           types: {
+            type: Array,
+            value: []
+          },
+          order: {
             type: Array,
             value: [],
             notify: true
           },
-          order: {
-            type: Object,
-            value: []
-          }
+          suggestions: {
+            type: Array,
+            notify: true,
+            computed: '_suggestions(types,input)'
+          },
+          ppulist: Array
+        },
+        add: function (e) {
+          console.log(e.model);
         },
 
         _submit: function (e) {
+          if (e.keyCode === 38) {
+            this.$.menu.selectNext();
+            return;
+          }
+          if (e.keyCode === 40) {
+            this.$.menu.selectPrevious();
+            return;
+          }
           if (e.keyCode === 13) {
-            var amount = this._amount(this.input);
-            var types = this._types(this.input);
-
-            if (isNaN(amount) || types.length == 0) {
+            if (!this.suggestions || this.suggestions.length === 0) {
               return;
             }
-
-            var old = this.order
-              .map(function(o) {return o.label;} )
-              .indexOf(types[0]);
-
-            if (old > -1) {
-              this.splice('order', old, 1);
-            }
-
-            this.push('order', {label: types[0], amount: amount});
+            this.push('order', this.suggestions[this.selected]);
             this.input = '';
+            this.$.dropdown.close();
+            this.$.dropdown.open();
+            return;
           }
           if (!this.input && e.keyCode === 8) {
             this.pop('order');
+            this.$.dropdown.close();
+            this.$.dropdown.open();
+            return;
           }
+
+          this.$.menu.selected = 0;
         },
 
         _suggestions: function (types, input) {
@@ -111,7 +123,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             return [];
           }
           return this._types(input).map(function (type) {
-            return amount + ' ' + type
+            return {amount: amount, type: type};
           });
         },
 
@@ -137,6 +149,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         _remove: function (e) {
           this.splice('order', e.model.index, 1);
+        },
+        _total: function (ppulist, type, amount) {
+          var ppuentry = ppulist.find(function (e) {
+            return e.type === type
+          });
+
+          if (ppuentry) {
+            return '(+' + (ppuentry.ppu * amount).toLocaleString() + ' €)';
+          }
+          return '';
         }
       });
     })();
