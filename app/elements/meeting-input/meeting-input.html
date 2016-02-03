@@ -41,6 +41,26 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <paper-input class="flex" value="{{_formatDate(date)}}" label="Datum" readonly
                    on-tap="_openDatePicker"></paper-input>
 
+
+      <div class="layout vertical">
+        <template is="dom-repeat" items="{{types}}" as="type">
+          <div class="layout horizontal center">
+            <paper-input label="Typ" value="{{type.type}}"></paper-input>
+            <paper-input label="Preis" value="{{type.ppu}}">
+              <div prefix>€</div>
+            </paper-input>
+            <paper-icon-button icon="close" on-tap="_removeType" indexOfElement="{{index}}"></paper-icon-button>
+          </div>
+        </template>
+        <div class="layout horizontal center">
+          <paper-input id="typinput" label="Typ" on-keydown="_pressEnter"></paper-input>
+          <paper-input id="priceinput" label="Preis" on-keydown="_pressEnter">
+            <div prefix>€</div>
+          </paper-input>
+          <paper-icon-button icon="add" on-tap="_addType"></paper-icon-button>
+        </div>
+      </div>
+
       <span class="flex"></span>
 
       <div class="layout vertical">
@@ -78,15 +98,48 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             notify: true
           },
           user: Object,
-          pickedDate: Object
+          pickedDate: Object,
+          types: {
+            type: Array,
+            notify: true,
+            value: []
+          }
+        },
+
+        _pressEnter: function (e) {
+          if (e.keyCode === 13) {
+            this._addType();
+          }
+        },
+
+        _addType: function () {
+          var typinput = this.$.typinput;
+          var priceinput = this.$.priceinput;
+
+          var typ = typinput.value;
+          var price = priceinput.value;
+          this.push('types', {"type": typ, "ppu": parseFloat(price)});
+          typinput.value = '';
+          typinput.focus();
+          priceinput.value = '';
+        },
+
+        _removeType: function (e) {
+          var index = e.model.index;
+          if (index > -1) {
+            this.splice('types', index, 1);
+          }
         },
 
         _add: function () {
           if (this.$.nameInput.value) {
+            var copyArray = this.types.slice();
+
             this.fire('add-meeting', {
               name: this.$.nameInput.value,
               date: this.date.getTime(),
               uid: this.user.uid,
+              types: copyArray,
               orders: [
                 {
                   brezen: 0,
@@ -97,22 +150,26 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 }
               ]
             });
-            this.$.toastCreateSuccess.show();
-            this.$.nameInput.value = null;
           }
+          this.$.toastCreateSuccess.show();
+          this.splice('types', 0, this.types.length);
+          this.$.nameInput.value = null;
         },
 
         _formatDate: function (date) {
           return date.toLocaleDateString();
-        },
+        }
+        ,
         _updateDate: function () {
           this.date = this.pickedDate;
-        },
+        }
+        ,
         _openDatePicker: function () {
           this.pickedDate = this.date;
           this.$.dateDialog.toggle();
         }
-      });
+      })
+      ;
     })();
   </script>
 </dom-module>
