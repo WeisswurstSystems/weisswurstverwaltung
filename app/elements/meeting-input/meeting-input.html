@@ -41,6 +41,25 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <paper-input class="flex" value="{{_formatDate(date)}}" label="Datum" readonly
                    on-tap="_openDatePicker"></paper-input>
 
+
+      <div class="layout vertical">
+        <template id="typesrepeate" is="dom-repeat" items="{{types}}" as="type">
+          <div class="layout horizontal">
+            <paper-input label="Typ" value="{{type.typ}}"></paper-input>
+            <paper-input label="Preis" value="{{type.price}}">
+              <div prefix>€</div>
+            </paper-input>
+            <paper-icon-button icon="close" on-tap="_removeType" indexOfElement="{{index}}"></paper-icon-button>
+          </div>
+        </template>
+        <div class="layout horizontal">
+          <paper-input id="typinput" label="Typ"></paper-input>
+          <paper-input id="priceinput" label="Preis">
+            <div prefix>€</div></paper-input>
+          <paper-icon-button icon="add" on-tap="_addType"></paper-icon-button>
+        </div>
+      </div>
+
       <span class="flex"></span>
 
       <div class="layout vertical">
@@ -78,7 +97,33 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             notify: true
           },
           user: Object,
-          pickedDate: Object
+          pickedDate: Object,
+          types: {
+            type: Array,
+            notify: true,
+            value: [
+              {"typ": "Weisswurst", "price": "1,00"},
+              {"typ": "Wiener", "price": "1,20"},
+              {"typ": "Brezen", "price": "0,60"},
+              {"typ": "Laugenstange", "price": "0,70"}
+            ]
+          }
+        },
+
+        _addType: function() {
+          var typ = this.$.typinput.value;
+          var price = this.$.priceinput.value;
+          this.types.push({"typ": typ, "price": price});
+          console.log(this.types);
+          this.$.typesrepeate.render();
+        },
+
+        _removeType: function(e) {
+          var index = e.model.index;
+          if (index > -1) {
+            this.types.splice(index, 1);
+          }
+          this.$.typesrepeate.render();
         },
 
         _add: function () {
