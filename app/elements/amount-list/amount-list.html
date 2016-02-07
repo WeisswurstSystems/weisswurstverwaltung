@@ -19,11 +19,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
     </style>
     <div class="layout horizontal wrap center">
-      <template is="dom-repeat" items="{{order}}">
+      <template is="dom-repeat" items="{{list}}">
         <amount-chip type="{{item.type}}" amount="{{item.amount}}" ppu="{{_pick(item.type,ppulist)}}"
                      on-remove="_remove"></amount-chip>
       </template>
-      <amount-input types='["Weisswurst", "Brezen"]' order="{{order}}" ppulist='[{"type": "Weisswurst", "ppu": 2.99}]'></amount-input>
+      <amount-input ppulist={{ppulist}} on-add="_add" on-remove-last="_removeLast"></amount-input>
     </div>
   </template>
   <script>
@@ -34,15 +34,26 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         is: 'amount-list',
 
         properties: {
-          order: {
+          list: {
             type: Array,
             notify: true
           },
           ppulist: Array
         },
+        _add: function(e) {
+          if (!this.list) {
+            this.set('list', []);
+          }
+          this.push('list', e.detail);
+        },
+        _removeLast: function(e) {
+          if (this.list) {
+            this.pop('list');
+          }
+        },
         _remove: function (e) {
           var index = e.model.index;
-          this.splice('order', index, 1);
+          this.splice('list', index, 1);
         }
         ,
         _pick: function (type, ppulist) {

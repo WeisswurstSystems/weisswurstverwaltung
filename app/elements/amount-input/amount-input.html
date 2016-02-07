@@ -67,19 +67,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           this.$.menu.selected = 0;
         },
         properties: {
-          types: {
-            type: Array,
-            value: []
-          },
-          order: {
-            type: Array,
-            value: [],
-            notify: true
-          },
           suggestions: {
             type: Array,
             notify: true,
-            computed: '_suggestions(types,input)'
+            computed: '_suggestions(input)'
           },
           ppulist: Array
         },
@@ -100,14 +91,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             if (!this.suggestions || this.suggestions.length === 0) {
               return;
             }
-            this.push('order', this.suggestions[this.selected]);
+            this.fire('add', this.suggestions[this.selected]);
             this.input = '';
             this.$.dropdown.close();
             this.$.dropdown.open();
             return;
           }
           if (!this.input && e.keyCode === 8) {
-            this.pop('order');
+            this.fire('remove-last');
             this.$.dropdown.close();
             this.$.dropdown.open();
             return;
@@ -116,7 +107,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           this.$.menu.selected = 0;
         },
 
-        _suggestions: function (types, input) {
+        _suggestions: function (input) {
 
           var amount = this._amount(input);
           if (isNaN(amount)) {
@@ -137,18 +128,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         _types: function (input) {
           var type = input.split(' ')[1];
+          var possibleTypes = this.ppulist.map(function (type) {return type.type});
           if (!type) {
-            return this.types;
+            return possibleTypes;
           }
 
-          return this.types
+          return possibleTypes
             .filter(function (t) {
               return t.toLowerCase().startsWith(type.toLowerCase())
             });
-        },
-
-        _remove: function (e) {
-          this.splice('order', e.model.index, 1);
         },
         _total: function (ppulist, type, amount) {
           var ppuentry = ppulist.find(function (e) {
