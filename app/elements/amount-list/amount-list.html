@@ -45,18 +45,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             this.set('list', []);
           }
           this.push('list', e.detail);
-          e.stopPropagation();
         },
         _removeLast: function(e) {
           if (this.list) {
             this.pop('list');
           }
-          e.stopPropagation();
         },
         _remove: function (e) {
           var index = e.model.index;
           this.splice('list', index, 1);
-          e.stopPropagation();
         }
         ,
         _pick: function (type, ppulist) {
