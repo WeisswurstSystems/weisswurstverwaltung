@@ -14,63 +14,107 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="..\..\bower_components/paper-input/paper-input.html">
 <link rel="import" href="..\..\bower_components/paper-button/paper-button.html">
 <link rel="import" href="..\..\bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="..\..\bower_components/paper-dialog-scrollable/paper-dialog-scrollable.html">
 <link rel="import" href="..\..\bower_components/paper-date-picker/paper-date-picker.html">
+<link rel="import" href="..\..\bower_components/paper-time-picker/paper-time-picker.html">
 <link rel="import" href="..\..\bower_components/paper-toast/paper-toast.html">
+<link rel="import" href="..\..\bower_components/iron-icons/device-icons.html">
+<link rel="import" href="..\..\bower_components/iron-icons/editor-icons.html">
 
 <dom-module id="meeting-input">
   <template>
     <style include="shared-styles"></style>
     <style>
 
-      paper-material {
-        padding: 16px;
-      }
-
-      paper-input {
-        margin: 0px 16px;
-        max-width: 200px;
-      }
-
       paper-button {
         color: var(--accent-color);
       }
+
+      .prefixIcon{
+        padding: 2px;
+        margin-right: 8px;
+        color: var(--secondary-text-color);
+      }
+
+      paper-icon-button {
+        color: var(--secondary-text-color);
+      }
+
+      .suffixIcon {
+        color: var(--secondary-text-color);
+      }
+
+      .priceInput {
+        margin-left: 8px;
+        max-width: 100px;
+      }
+
     </style>
 
-    <paper-material elevation="1" class="layout horizontal">
-      <paper-input class="flex" label="Name" id="nameInput"></paper-input>
-      <paper-input class="flex" value="{{_formatDate(date)}}" label="Datum" readonly
-                   on-tap="_openDatePicker"></paper-input>
+    <paper-button on-tap="_openMeetingDialog">Meeting Erstellen</paper-button>
+
+    <paper-dialog
+      id="createMeetingDialog"
+      modal
+      entry-animation="scale-up-animation"
+      exit-animation="fade-out-animation"
+      class="layout vertical">
+
+      <h2>Meeting Erstellen</h2>
+      <paper-dialog-scrollable>
+        <paper-input class="field" label="Name" id="nameInput">
+          <iron-icon class="prefixIcon" icon="icons:chrome-reader-mode" prefix></iron-icon>
+        </paper-input>
+        <paper-input class="field" label="Ort" id="ortInput">
+          <iron-icon class="prefixIcon" icon="maps:place" prefix></iron-icon>
+        </paper-input>
+        <paper-input class="field" value="{{_formatDate(date)}}" label="Datum" readonly
+                     on-tap="_openDatePicker">
+          <iron-icon class="prefixIcon" icon="icons:event" prefix></iron-icon>
+        </paper-input>
+        <paper-input class="field" value="{{time}}" label="Uhrzeit" readonly
+                     on-tap="_openTimePicker">
+          <iron-icon class="prefixIcon" icon="device:access-time" prefix></iron-icon>
+        </paper-input>
 
 
-      <div class="layout vertical">
-        <template is="dom-repeat" items="{{types}}" as="type">
-          <div class="layout horizontal center">
-            <paper-input no-label-float="{{index}}" label="Typ" value="{{type.type}}"></paper-input>
-            <paper-input no-label-float="{{index}}" label="Preis" value="{{type.ppu}}">
-              <div prefix>€</div>
+        <div class="layout vertical">
+          <template is="dom-repeat" items="{{types}}" as="type">
+            <div class="layout horizontal center field">
+              <paper-input no-label-float="{{index}}" label="Typ" value="{{type.type}}"></paper-input>
+              <paper-input class="priceInput" no-label-float="{{index}}" label="Preis" value="{{type.ppu}}">
+                <iron-icon class="suffixIcon" icon="editor:attach-money" suffix></iron-icon>
+              </paper-input>
+              <paper-icon-button icon="close" on-tap="_removeType" indexOfElement="{{index}}"></paper-icon-button>
+            </div>
+          </template>
+          <div class="layout horizontal center field">
+            <paper-input no-label-float="{{types.length}}" id="typinput" label="Typ"
+                         on-keydown="_pressEnter"></paper-input>
+            <paper-input class="priceInput" no-label-float="{{types.length}}" id="priceinput" label="Preis" on-keydown="_pressEnter">
+              <iron-icon class="suffixIcon" icon="editor:attach-money" suffix></iron-icon>
             </paper-input>
-            <paper-icon-button icon="close" on-tap="_removeType" indexOfElement="{{index}}"></paper-icon-button>
+            <paper-icon-button icon="add" on-tap="_addType"></paper-icon-button>
           </div>
-        </template>
-        <div class="layout horizontal center">
-          <paper-input no-label-float="{{types.length}}" id="typinput" label="Typ" on-keydown="_pressEnter"></paper-input>
-          <paper-input no-label-float="{{types.length}}"id="priceinput" label="Preis" on-keydown="_pressEnter">
-            <div prefix>€</div>
-          </paper-input>
-          <paper-icon-button icon="add" on-tap="_addType"></paper-icon-button>
         </div>
-      </div>
+      </paper-dialog-scrollable>
 
-      <span class="flex"></span>
-
-      <div class="layout vertical">
-        <span class="flex"></span>
+      <div class="buttons">
         <paper-button disabled="{{!user}}" on-tap="_add">HINZUFÜGEN</paper-button>
-        <paper-tooltip hidden="{{user}}">Sie müssen angemeldet sein um ein Treffen erstellen zu können.</paper-tooltip>
+        <paper-tooltip hidden="{{user}}">Sie müssen angemeldet sein um ein Treffen erstellen zu können.
+        </paper-tooltip>
       </div>
-    </paper-material>
+    </paper-dialog>
 
     <paper-toast id="toastCreateSuccess" text="Meeting gepeichert. An Guadn!"></paper-toast>
+
+    <paper-dialog modal id="timeDialog" class="paper-time-picker-dialog">
+      <paper-time-picker time="4:30" hour="{{pickedHour}}" minute="{{pickedMinute}}"></paper-time-picker>
+      <div class="buttons">
+        <paper-button dialog-dismiss>Cancel</paper-button>
+        <paper-button dialog-confirm on-tap="_updateTime">OK</paper-button>
+      </div>
+    </paper-dialog>
 
     <paper-dialog modal id="dateDialog" class="paper-date-picker-dialog">
       <paper-date-picker date="{{pickedDate}}"></paper-date-picker>
@@ -97,13 +141,24 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             },
             notify: true
           },
+          time: {
+            type: Object,
+            value: '11:00',
+            notify: true
+          },
           user: Object,
           pickedDate: Object,
+          pickedHour: Object,
+          pickedMinute: Object,
           types: {
             type: Array,
             notify: true,
             value: []
           }
+        },
+
+        _openMeetingDialog: function () {
+          this.$.createMeetingDialog.opened = true;
         },
 
         _pressEnter: function (e) {
@@ -122,6 +177,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           typinput.value = '';
           typinput.focus();
           priceinput.value = '';
+
+          this.$.createMeetingDialog.$.scrollable.scrollTop = 9999;
         },
 
         _removeType: function (e) {
@@ -137,7 +194,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
             this.fire('add-meeting', {
               name: this.$.nameInput.value,
+              place: this.$.ortInput.value,
               date: this.date.getTime(),
+              time: this.time,
               uid: this.user.uid,
               types: copyArray,
               orders: [
@@ -154,19 +213,28 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           this.$.toastCreateSuccess.show();
           this.splice('types', 0, this.types.length);
           this.$.nameInput.value = null;
+          this.$.ortInput.value = null;
+          this.$.createMeetingDialog.opened = false;
+        },
+
+        _updateTime: function () {
+          this.time = this.pickedHour + ":" + this.pickedMinute;
         },
 
         _formatDate: function (date) {
           return date.toLocaleDateString();
-        }
-        ,
+        },
         _updateDate: function () {
           this.date = this.pickedDate;
-        }
-        ,
+        },
         _openDatePicker: function () {
           this.pickedDate = this.date;
           this.$.dateDialog.toggle();
+        },
+        _openTimePicker: function () {
+          this.pickedHour = this.time.split(':')[0];
+          this.pickedMinute = this.time.split(':')[1];
+          this.$.timeDialog.toggle();
         }
       })
       ;
