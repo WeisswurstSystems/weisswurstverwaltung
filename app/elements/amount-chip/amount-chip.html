@@ -133,6 +133,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         },
         _toLocale: function (value) {
           return value.toLocaleString() + ' €';
+        },
+        remove: function (e) {
+          this.fire('remove', e);
+          e.stopPropagation()
         }
       });
     })();
