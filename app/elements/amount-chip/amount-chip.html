@@ -28,11 +28,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         border-radius: 16px;
         @apply(--layout-horizontal);
         @apply(--layout-center);
-        position: relative;
       }
 
       .chip:focus {
-        @apply(--shadow-elevation-2dp);
         outline: 0;
       }
 
@@ -57,6 +55,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         @apply(--paper-font-body1);
         font-weight: 700;
         padding-left: 8px;
+        padding-right: 16px;
       }
 
       .remove {
@@ -64,6 +63,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         width: 24px;
         color: #757575;
         margin: 4px;
+        margin-left: -12px;
         cursor: pointer;
       }
 
@@ -90,7 +90,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <div class="chip" tabindex="0" on-tap="open">
       <span class="highlight"><span class="amount">{{amount}}</span></span>
       <span class="label">{{type}}</span>
-      <iron-icon class="remove" icon="cancel" on-tap="remove"></iron-icon>
+
+      <template is="dom-if" if="{{enableDelete}}" restamp>
+        <iron-icon class="remove" icon="cancel" on-tap="remove"></iron-icon>
+      </template>
     </div>
     <iron-dropdown id="dropdown">
       <paper-material class="dropdown-content layout horizontal center" elevation="4">
@@ -98,7 +101,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <div class="paper-font-subhead">Preis Gesamt: <span>{{_toLocale(price)}}</span></div>
           <div class="paper-font-body1">Preis pro Stück: <span>{{_toLocale(ppu)}}</span></div>
         </div>
-        <iron-icon icon="cancel" on-tap="remove"></iron-icon>
       </paper-material>
     </iron-dropdown>
   </template>
@@ -113,6 +115,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           amount: Number,
           type: String,
           ppu: Number,
+          enableDelete: Number,
           price: {
             type: Number,
             computed: 'total(ppu,amount)'
@@ -123,10 +126,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         },
         total: function (ppu, amount) {
           return ppu * amount;
-        },
-        remove: function (e) {
-          this.fire('remove', e);
-          e.stopPropagation()
         },
         _toLocale: function (value) {
           return value.toLocaleString() + ' €';

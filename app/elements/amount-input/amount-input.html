@@ -36,11 +36,22 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           padding: 0;
         };
       }
+
+      paper-input {
+        min-width: 128px;
+        --paper-input-container-underline: {
+          display: none;
+        };
+
+        --paper-input-container-underline-focus: {
+          display: none;
+        };
+      }
     </style>
 
 
     <div class="input">
-      <paper-input focused="{{focused}}" no-label-float value="{{input}}" on-keydown="_submit" id="input"></paper-input>
+      <paper-input label="Bestellung hinzufügen" focused="{{focused}}" no-label-float value="{{input}}" on-keydown="_submit" id="input"></paper-input>
 
       <iron-dropdown vertical-align="top" opened="{{focused}}" vertical-offset="36" no-cancel-on-outside-click id="dropdown">
         <paper-material elevation="3" class="dropdown-content">

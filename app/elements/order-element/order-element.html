@@ -47,7 +47,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </style>
     <div class="layout horizontal center box">
       <div class="username">{{order.name}}</div>
-      <amount-list class="flex" list="{{order.list}}" ppulist="{{ppulist}}"></amount-list>
+      <amount-list class="flex" list="{{order.list}}" ppulist="{{ppulist}}" enable-input="{{isCreator(user,order)}}"></amount-list>
       <div class="total">{{total(order.list, ppulist)}}€</div>
       <paper-checkbox checked="{{order.paid}}"></paper-checkbox>
     </div>
@@ -72,6 +72,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             type: String,
             value: '8a0f1c00-ac25-4feb-903c-664c10d2617e'
           }
+        },
+
+        isCreator: function (user, order) {
+          if (!user) {
+            return 0;
+          }
+          return user.uid === order.uid ? 1 : 0;
         },
 
         /**new*/

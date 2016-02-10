@@ -17,13 +17,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       amount-chip {
         padding: 4px;
       }
+      amount-input {
+        padding-left: 4px;
+      }
     </style>
     <div class="layout horizontal wrap center">
       <template is="dom-repeat" items="{{list}}">
         <amount-chip type="{{item.type}}" amount="{{item.amount}}" ppu="{{_pick(item.type,ppulist)}}"
-                     on-remove="_remove"></amount-chip>
+                     on-remove="_remove" enable-delete="{{enableInput}}"></amount-chip>
       </template>
-      <amount-input ppulist={{ppulist}} on-add="_add" on-remove-last="_removeLast"></amount-input>
+      <template is="dom-if" if="{{enableInput}}" restamp>
+        <amount-input ppulist={{ppulist}} on-add="_add" on-remove-last="_removeLast" class="flex"></amount-input>
+      </template>
     </div>
   </template>
   <script>
@@ -38,15 +43,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             type: Array,
             notify: true
           },
-          ppulist: Array
+          ppulist: Array,
+          enableInput: Number
         },
-        _add: function(e) {
+        _add: function (e) {
           if (!this.list) {
             this.set('list', []);
           }
           this.push('list', e.detail);
         },
-        _removeLast: function(e) {
+        _removeLast: function (e) {
           if (this.list) {
             this.pop('list');
           }
@@ -57,7 +63,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         }
         ,
         _pick: function (type, ppulist) {
-          var ppu = ppulist.find(function (e) { return e.type === type}).ppu;
+          var ppu = ppulist.find(function (e) {
+            return e.type === type
+          }).ppu;
           return ppu;
         }
       })
