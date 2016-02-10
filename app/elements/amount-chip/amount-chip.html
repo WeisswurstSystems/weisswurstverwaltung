@@ -1,0 +1,144 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-styles/classes/typography.html">
+<link rel="import" href="../../bower_components/paper-material/paper-material-shared-styles.html">
+<link rel="import" href="../../bower_components/paper-material/paper-material.html">
+<link rel="import" href="../../bower_components/iron-dropdown/iron-dropdown.html">
+
+<dom-module id="amount-chip">
+  <template>
+    <style>
+      :host {
+        display: inline-block;
+        cursor: default;
+      }
+
+      .chip {
+        height: 32px;
+        background-color: #dfdfdf;
+        border-radius: 16px;
+        @apply(--layout-horizontal);
+        @apply(--layout-center);
+      }
+
+      .chip:focus {
+        outline: 0;
+      }
+
+      .chip:hover {
+        @apply(--shadow-elevation-2dp);
+      }
+
+      .highlight {
+        height: 32px;
+        min-width: 32px;
+        border-radius: 16px;
+        background-color: var(--accent-color);
+
+        @apply(--layout-horizontal);
+        @apply(--layout-center);
+        @apply(--layout-center-justified);
+      }
+
+      .amount {
+        color: white;
+        padding: 8px;
+        @apply(--paper-font-subhead);
+      }
+
+      .label {
+        @apply(--paper-font-body1);
+        font-weight: 700;
+        padding-left: 8px;
+        padding-right: 16px;
+      }
+
+      .remove {
+        height: 24px;
+        width: 24px;
+        color: #757575;
+        margin: 4px;
+        margin-left: -12px;
+        cursor: pointer;
+      }
+
+      .remove:hover {
+        color: white;
+      }
+
+      paper-material {
+        background-color: var(--accent-color);
+        padding: 16px;
+        border-radius: 2px;
+      }
+
+      #dropdown {
+        color: white;
+      }
+
+      #dropdown iron-icon {
+        padding-left: 24px;
+      }
+
+    </style>
+
+    <div class="chip" tabindex="0" on-tap="open">
+      <span class="highlight"><span class="amount">{{amount}}</span></span>
+      <span class="label">{{type}}</span>
+
+      <template is="dom-if" if="{{enableDelete}}" restamp>
+        <iron-icon class="remove" icon="cancel" on-tap="remove"></iron-icon>
+      </template>
+    </div>
+    <iron-dropdown id="dropdown">
+      <paper-material class="dropdown-content layout horizontal center" elevation="4">
+        <div class="layout vertical">
+          <div class="paper-font-subhead">Preis Gesamt: <span>{{_toLocale(price)}}</span></div>
+          <div class="paper-font-body1">Preis pro Stück: <span>{{_toLocale(ppu)}}</span></div>
+        </div>
+      </paper-material>
+    </iron-dropdown>
+  </template>
+  <script>
+    (function () {
+      'use strict';
+
+      Polymer({
+        is: 'amount-chip',
+
+        properties: {
+          amount: Number,
+          type: String,
+          ppu: Number,
+          enableDelete: Number,
+          price: {
+            type: Number,
+            computed: 'total(ppu,amount)'
+          }
+        },
+        open: function () {
+          this.$.dropdown.open();
+        },
+        total: function (ppu, amount) {
+          return ppu * amount;
+        },
+        _toLocale: function (value) {
+          return value.toLocaleString() + ' €';
+        },
+        remove: function (e) {
+          this.fire('remove', e);
+          e.stopPropagation()
+        }
+      });
+    })();
+  </script>
+</dom-module>

@@ -19,33 +19,47 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       paper-icon-button {
         transition: all 0.3s ease, background-position 1ms;
+        color: #fff;
       }
     </style>
     <paper-icon-button id="paperToggle" icon="favorite" on-tap="_randomize"></paper-icon-button>
   </template>
   <script>
-  (function() {
-    'use strict';
+    (function () {
+      'use strict';
 
-    Polymer({
-      is: 'toolbar-heart',
+      Polymer({
+        is: 'toolbar-heart',
 
-      properties: {
-        clicks: {
-          type: Number,
-          value: 0
+        properties: {
+          clicks: {
+            type: Number,
+            value: 0
+          },
+          rainbowMode: Boolean
+        },
+
+        _randomize: function () {
+          var color = '#' + Math.floor(Math.random() * 16777215).toString(16);
+          this.$.paperToggle.style.color = color;
+          this.clicks++;
+
+          if(this.rainbowMode && this.clicks === 30){
+            this.rainbowMode = false;
+            this.clicks = 0;
+            document.body.style.background="#fafafa";
+          }
+
+          if (!this.rainbowMode && this.clicks === 30) {
+            this.rainbowMode = true;
+            this.clicks = 0;
+            document.body.style.background = "red";
+            document.body.style.background = "-moz-linear-gradient( top , rgba(255, 0, 0, 1) 0%, rgba(255, 255, 0, 1) 15%, rgba(0, 255, 0, 1) 30%, rgba(0, 255, 255, 1) 50%, rgba(0, 0, 255, 1) 65%, rgba(255, 0, 255, 1) 80%, rgba(255, 0, 0, 1) 100%)";
+            document.body.style.background = "-webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(255, 0, 0, 1)), color-stop(15%, rgba(255, 255, 0, 1)), color-stop(30%, rgba(0, 255, 0, 1)), color-stop(50%, rgba(0, 255, 255, 1)), color-stop(65%, rgba(0, 0, 255, 1)), color-stop(80%, rgba(255, 0, 255, 1)), color-stop(100%, rgba(255, 0, 0, 1)))";
+          }
         }
-      },
-
-      _randomize: function() {
-        var color = '#'+Math.floor(Math.random()*16777215).toString(16);
-        this.$.paperToggle.style.color = color;
-        this.clicks++;
-        if(this.clicks===100){
-          //TODO Fireworks http://creativejs.com/tutorials/creating-fireworks/
-        }
-      }
-    });
-  })();
+      })
+      ;
+    })();
   </script>
 </dom-module>

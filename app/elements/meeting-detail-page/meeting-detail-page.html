@@ -47,30 +47,32 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     }
 
     .secondary {
-      color: var(--secondary-text-color);
+      @apply(--paper-font-body1);
+      color: var(--accent-color);
     }
 
     h2 {
       text-align: center;
     }
+    hr {
+      border: none;
+      height: 1px;
+      width: 100%;
+      margin: 0;
+      background-color: #e5e5e5; /* Modern Browsers */
+    }
   </style>
   <template>
     <div id="main">
 
-      <div id="content" class="layout vertical center" elevation="0">
+      <div id="content" class="layout vertical" elevation="0">
 
-        <div class="layout horizontal center">
-          <statistic-badge amount="{{_ordersWeisswurst(meeting.orders)}}" title="Weisswurst"
-                           color="#455A64"></statistic-badge>
-          <statistic-badge amount="{{_ordersBrezen(meeting.orders)}}" title="Brezen"
-                           color="#455A64"></statistic-badge>
-          <statistic-badge amount="{{_price(meeting.orders)}}" title="Preis" color="#009688"></statistic-badge>
-        </div>
+        <div class="layout vertical">
 
-        <div class="layout horizontal wrap center-justified">
-
+          <hr>
           <template is="dom-repeat" items="{{meeting.orders}}" as="order">
-            <order-element meeting="{{meeting}}" user="{{user}}" order="{{order}}"></order-element>
+            <order-element order="{{order}}" ppulist="{{meeting.types}}" user="{{user}}"></order-element>
+            <hr>
           </template>
 
         </div>

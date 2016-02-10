@@ -10,7 +10,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <link rel="import" href="..\..\bower_components/polymer/polymer.html">
 
-<link rel="import" href="..\..\bower_components/paper-checkbox/paper-checkbox.html">
+<link rel="import" href="../../bower_components/paper-checkbox/paper-checkbox.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../../bower_components/paper-styles/paper-styles.html">
 
 <dom-module id="order-element">
   <template>
@@ -18,99 +20,37 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       :host {
         display: block;
 
-      -
-      -paper-input-container-disabled: {
-        /* TODO Hier kann man jetzt das design im disabled-state anpassen. habe das richtige flag aber noch nicht gefunden */
-        /* background: green; */
+        --paper-input-container-disabled: {
+          /* TODO Hier kann man jetzt das design im disabled-state anpassen. habe das richtige flag aber noch nicht gefunden */
+          /* background: green; */
+        };
       }
 
-      ;
+      .box {
+        padding: 0px 16px;
       }
 
-      .field {
-        margin-left: 16px;
-        width: 75px;
-        text-align: right;
+      .total {
+        @apply(--paper-font-code1);
+        padding-right: 8px;
       }
 
-      .fieldUser {
-        width: 128px;
-        overflow: hidden;
+      .username {
+        @apply(--paper-font-body2);
         text-overflow: ellipsis;
+        overflow: hidden;
+        padding-right: 8px;
+        width: 162px;
       }
 
-      paper-material {
-        margin: 6px;
-        background: white;
-        border-radius: 2px;
-      }
 
-      .order-color {
-        height: 80px;
-        width: 8px;
-        border-bottom-left-radius: 2px;
-        border-top-left-radius: 2px;
-      }
-
-      .secondary {
-        color: var(--secondary-text-color);
-      }
-
-      .svgicon {
-        fill: var(--secondary-text-color);
-      }
-
-      paper-material.ordercard {
-        background: #ECEFF1;
-      }
     </style>
-
-    <paper-material elevation="0" id="ordermaterial" class="layout horizontal ordercard">
-      </paper-badge>
-      <div id="ordcolor" class="order-color">&nbsp;</div>
-      <paper-item>
-        <div class="layout vertical">
-          <div class="layout horizontal">
-            <span class="fieldUser flex">{{_setContent(order.name, user, meeting)}}</span>
-            <span id="fieldrole" class="secondary"></span>
-          </div>
-          <div class="layout horizontal center">
-            <paper-checkbox
-              id="checkboxPaid"
-              disabled="true"
-              checked="{{order.paid}}">{{_userTotal(order, user, meeting)}}
-            </paper-checkbox>
-            <paper-tooltip for="checkboxPaid">Bezahlstatus</paper-tooltip>
-            <paper-input id="weisswurstinput" max="20" min="0" class="field" no-label-float type="number"
-                         value="{{order.weisswurst}}">
-              <svg prefix suffix width="24px" height="24px" viewbox="0 0 340 340">
-                <path class="svgicon" d="M5.702,24.471c-3.234,0.644-4.242,3.3-2.255,5.931L20.303,52.7
-			c6.2-4.553,13.306-8.103,21.272-10.293c3.025-0.829,6.158-1.36,9.344-1.718l2.798-20.079c0.453-3.264-1.796-5.388-5.024-4.738
-			L5.702,24.471z"></path>
-                <path class="svgicon" d="M323.503,258.778l-13.229,2.088l-3.013,0.477l-3.025,0.477
-			c2.47-31.416-16.654-66.196-57.258-68.607c-56.822-3.371-117.977-43.302-130.418-103.376C111.035,63.16,84.196,46.19,58.115,46.19
-			c-2.697,0-5.382,0.215-8.037,0.585c-2.333,0.328-4.648,0.764-6.91,1.39c-7.309,2.011-13.706,5.239-19.243,9.314
-			C4.598,71.704-3.631,96.831,1.489,121.564C24.76,233.938,137.844,306.077,246.984,312.551c1.444,0.084,2.858,0.125,4.242,0.125
-			c18.879,0,32.681-7.811,41.517-19.392l2.482,1.808l2.226,1.617l17.173,12.507c2.661,1.939,5.299,0.883,5.889-2.357l7.823-43.14
-			C328.921,260.472,326.761,258.259,323.503,258.778z M225.097,236.969c-44.441-1.062-81.519-20.359-111.986-52.103
-			c-13.318-13.879,7.751-35.002,21.099-21.099c25.025,26.075,54.179,42.49,90.887,43.367
-			C244.305,207.594,244.347,237.428,225.097,236.969z"></path>
-              </svg>
-
-            </paper-input>
-            <paper-input id="brezeninput" max="20" min="0" class="field" no-label-float type="number"
-                         value="{{order.brezen}}">
-              <svg prefix class="svgicon" suffix width="22px" height="22px" viewbox="0 0 100 100">
-                <path class="svgicon"
-                      d="M96.523,49.048c0-7.743-2.76-15.61-7.571-21.583c-2.499-3.101-5.418-5.565-8.676-7.323  c-3.588-1.937-7.404-2.918-11.345-2.918c-8.14,0-14.486,3.934-19.17,8.645c-4.684-4.711-11.03-8.645-19.169-8.645  c-3.94,0-7.756,0.981-11.345,2.918c-3.258,1.758-6.176,4.222-8.675,7.323C5.761,33.438,3,41.305,3,49.048  c0,9.417,3.963,17.937,11.168,24.035c-0.519,1.914-0.129,4.042,1.231,5.684c2.223,2.687,6.204,3.059,8.891,0.835l0.316-0.263  c6.779,2.8,14.945,4.261,24.406,4.371c0.12,0.005,0.238,0.01,0.357,0.01c0.13,0,0.26-0.003,0.392-0.005  c0.133,0.002,0.262,0.005,0.393,0.005c0.119,0,0.239-0.005,0.357-0.01c9.46-0.11,17.628-1.571,24.404-4.371l0.318,0.263  c2.686,2.224,6.666,1.852,8.892-0.835c1.359-1.642,1.749-3.77,1.23-5.684C92.562,66.984,96.523,58.465,96.523,49.048z   M23.175,64.127c-0.231-0.177-0.458-0.359-0.678-0.539c-5.677-4.705-6.867-10.503-6.867-14.54c0-10.046,7.132-19.196,14.962-19.196  c4.039,0,7.915,2.127,11.535,6.324c-1.656,2.967-2.518,5.165-2.629,5.456c-1.035,2.703-0.673,5.843,0.793,8.318L23.175,64.127z   M49.762,71.089c-4.982-0.023-9.523-0.482-13.547-1.362l13.547-11.225l13.549,11.225C59.284,70.606,54.745,71.065,49.762,71.089z   M77.027,63.588c-0.222,0.18-0.447,0.362-0.679,0.539L59.233,49.95c1.464-2.475,1.828-5.616,0.792-8.318  c-0.111-0.291-0.975-2.492-2.634-5.461c2.915-3.381,6.807-6.318,11.54-6.318c7.831,0,14.964,9.15,14.964,19.196  C83.896,53.085,82.703,58.883,77.027,63.588z"></path>
-              </svg>
-            </paper-input>
-          </div>
-
-
-        </div>
-      </paper-item>
-    </paper-material>
+    <div class="layout horizontal center box">
+      <div class="username">{{order.name}}</div>
+      <amount-list class="flex" list="{{order.list}}" ppulist="{{ppulist}}" enable-input="{{isCreator(user,order)}}"></amount-list>
+      <div class="total">{{total(order.list, ppulist)}}€</div>
+      <paper-checkbox checked="{{order.paid}}"></paper-checkbox>
+    </div>
   </template>
   <script>
     (function () {
@@ -121,6 +61,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         properties: {
           order: Object,
+          ppulist: Array,
           user: Object,
           meeting: Object,
           uidFabi: {
@@ -132,6 +73,32 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             value: '8a0f1c00-ac25-4feb-903c-664c10d2617e'
           }
         },
+
+        isCreator: function (user, order) {
+          if (!user) {
+            return 0;
+          }
+          return user.uid === order.uid ? 1 : 0;
+        },
+
+        /**new*/
+
+        total: function (list, ppulist) {
+          var total = list.map(function (o) {
+            var ppu = ppulist
+              .find(function (type) {
+                return o.type === type.type;
+              })
+              .ppu;
+            return o.amount * ppu;
+          }).reduce(function (pv, cv) {
+            return pv + cv;
+          }, 0);
+
+          return total.toFixed(2);
+        },
+
+        /**old*/
 
         _hasAccess: function (user, meeting) {
           var uidMeeting = meeting.uid;
