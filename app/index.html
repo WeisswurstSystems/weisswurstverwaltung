@@ -54,7 +54,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <!-- Because this project uses vulcanize this should be your only html import
        in this file. All other imports should go in elements.html -->
   <link rel="import" href="elements/elements.html">
-  <link rel="import" href="../../bower_components/emoji-rain/emoji-rain.html">
 
   <!-- For shared styles, shared-styles.html import in elements.html -->
   <style is="custom-style" include="shared-styles"></style>
@@ -78,6 +77,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       left: 0;
       width: 100%;
       height: 100%;
+      z-index: -1;
+      pointer-events: none;
     }
 
     .title {
