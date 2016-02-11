@@ -71,7 +71,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
           <hr>
           <template is="dom-repeat" items="{{meeting.orders}}" as="order">
-            <order-element order="{{order}}" ppulist="{{meeting.types}}" user="{{user}}"></order-element>
+            <order-element order="{{order}}" ppulist="{{meeting.types}}" user="{{user}}" meeting="{{meeting}}"></order-element>
             <hr>
           </template>
 

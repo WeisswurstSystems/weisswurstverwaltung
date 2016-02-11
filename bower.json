@@ -9,6 +9,7 @@
     "platinum-elements": "PolymerElements/platinum-elements#^1.1.0",
     "paper-date-picker": "https://github.com/bendavis78/paper-date-picker.git#~1.0.3",
     "paper-time-picker": "https://github.com/bendavis78/paper-time-picker.git#~1.1.1",
+    "emoji-rain": "https://github.com/notwaldorf/emoji-rain.git#~1.0.0",
     "firebase-element": "GoogleWebComponents/firebase-element#~1.0.8",
     "polymer": "Polymer/polymer#^1.2.0"
   },

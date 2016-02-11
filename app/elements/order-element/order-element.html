@@ -47,9 +47,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </style>
     <div class="layout horizontal center box">
       <div class="username">{{order.name}}</div>
-      <amount-list class="flex" list="{{order.list}}" ppulist="{{ppulist}}" enable-input="{{isCreator(user,order)}}"></amount-list>
-      <div class="total">{{total(order.list, ppulist)}}€</div>
-      <paper-checkbox checked="{{order.paid}}"></paper-checkbox>
+      <amount-list class="flex" list="{{order.list}}" ppulist="{{ppulist}}" enable-input="{{isCreator(user,order, meeting)}}"></amount-list>
+      <div class="total">{{total(order.list, ppulist, user, meeting)}}€</div>
+      <paper-checkbox disabled="true" id="checkboxPaid" checked="{{order.paid}}"></paper-checkbox>
     </div>
   </template>
   <script>
@@ -74,16 +74,58 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           }
         },
 
-        isCreator: function (user, order) {
+        ready: function() {
+          if (!Array.prototype.find) {
+            console.log("Polyfilling Array.prototype.find...");
+            Array.prototype.find = function(predicate) {
+              if (this == null) {
+                throw new TypeError('Array.prototype.find called on null or undefined');
+              }
+              if (typeof predicate !== 'function') {
+                throw new TypeError('predicate must be a function');
+              }
+              var list = Object(this);
+              var length = list.length >>> 0;
+              var thisArg = arguments[1];
+              var value;
+
+              for (var i = 0; i < length; i++) {
+                value = list[i];
+                if (predicate.call(thisArg, value, i, list)) {
+                  return value;
+                }
+              }
+              return undefined;
+            };
+          }
+        },
+
+        isCreator: function (user, order, meeting) {
           if (!user) {
             return 0;
           }
-          return user.uid === order.uid ? 1 : 0;
+          var isOwner;
+          if (!user) {
+            isOwner = false;
+          } else {
+            if (this.order.uid === 'external') {
+              isOwner = this._hasAccess(user, meeting);
+            } else {
+              isOwner = this.order.uid === user.uid;
+            }
+          }
+          return isOwner;
         },
 
         /**new*/
 
-        total: function (list, ppulist) {
+        total: function (list, ppulist, user, meeting) {
+          if (user) {
+            this.$.checkboxPaid.disabled = !this._hasAccess(user, meeting);
+          } else {
+            this.$.checkboxPaid.disabled = true;
+          }
+
           var total = list.map(function (o) {
             var ppu = ppulist
               .find(function (type) {
@@ -143,16 +185,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           this.$.weisswurstinput.disabled = !isOwner;
           this.$.brezeninput.disabled = !isOwner;
           return username.split('@')[0];
-        },
-
-        _userTotal: function (order, user, meeting) {
-          if (user) {
-            this.$.checkboxPaid.disabled = !this._hasAccess(user, meeting);
-          } else {
-            this.$.checkboxPaid.disabled = true;
-          }
-          var total = order.brezen * 0.6 + order.weisswurst * 1;
-          return total.toFixed(2) + '€';
         },
 
         _getRandomColor: function (username) {

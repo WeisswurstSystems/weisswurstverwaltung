@@ -44,18 +44,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           this.$.paperToggle.style.color = color;
           this.clicks++;
 
-          if(this.rainbowMode && this.clicks === 30){
+
+          if(this.rainbowMode && this.clicks === 10){
             this.rainbowMode = false;
             this.clicks = 0;
-            document.body.style.background="#fafafa";
+            document.querySelector('emoji-rain').stop();
           }
 
-          if (!this.rainbowMode && this.clicks === 30) {
+          if (!this.rainbowMode && this.clicks === 10) {
             this.rainbowMode = true;
             this.clicks = 0;
-            document.body.style.background = "red";
-            document.body.style.background = "-moz-linear-gradient( top , rgba(255, 0, 0, 1) 0%, rgba(255, 255, 0, 1) 15%, rgba(0, 255, 0, 1) 30%, rgba(0, 255, 255, 1) 50%, rgba(0, 0, 255, 1) 65%, rgba(255, 0, 255, 1) 80%, rgba(255, 0, 0, 1) 100%)";
-            document.body.style.background = "-webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(255, 0, 0, 1)), color-stop(15%, rgba(255, 255, 0, 1)), color-stop(30%, rgba(0, 255, 0, 1)), color-stop(50%, rgba(0, 255, 255, 1)), color-stop(65%, rgba(0, 0, 255, 1)), color-stop(80%, rgba(255, 0, 255, 1)), color-stop(100%, rgba(255, 0, 0, 1)))";
+            document.querySelector('emoji-rain').start();
           }
         }
       })
