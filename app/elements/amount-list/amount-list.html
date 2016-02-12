@@ -63,9 +63,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         }
         ,
         _pick: function (type, ppulist) {
-          var ppu = ppulist.find(function (e) {
-            return e.type === type
-          }).ppu;
+          var ppu;
+          ppulist.forEach(function(e) {
+            if(e.type === type){
+              ppu = e.ppu;
+            }
+          });
           return ppu;
         }
       })

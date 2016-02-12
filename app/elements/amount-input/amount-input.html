@@ -150,8 +150,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             });
         },
         _total: function (ppulist, type, amount) {
-          var ppuentry = ppulist.find(function (e) {
-            return e.type === type
+          var ppuentry;
+          ppulist.forEach(function(e) {
+            if(e.type === type){
+              ppuentry = e;
+            }
           });
 
           if (ppuentry) {
