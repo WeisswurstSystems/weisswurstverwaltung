@@ -37,20 +37,39 @@
         color: var(--secondary-text-color);
       }
 
+      iron-icon {
+        padding: 4px;
+        padding-right: 6px;
+      }
+
+      .testclass{
+        display: inline-block;
+        vertical-align: middle;
+        line-height: 1em; /*set line height back to normal*/
+      }
+
       user-avatar {
         margin: 0px 2px;
       }
     </style>
-      <paper-item>
-        <span class="flex">{{meeting.name}}</span>
+    <paper-item>
+      <div class="layout vertical flex">
+        <div class="flex horizontal layout center"><iron-icon icon="icons:chrome-reader-mode" class="secondary"></iron-icon>{{meeting.name}}</div>
+        <span class="flex horizontal layout center"><iron-icon icon="maps:place" class="secondary"></iron-icon>{{meeting.place}}</span>
+      </div>
 
-        <div class="avatars layout horizontal center">
-          <template is="dom-repeat" items="{{meeting.orders}}" as="order">
-            <user-avatar username="{{order.name}}"></user-avatar>
-          </template>
-        </div>
-        <span id="meetingDate" class="secondary">{{_createContent(meeting.date)}}</span>
-      </paper-item>
+      <div class="avatars layout horizontal center">
+        <template is="dom-repeat" items="{{meeting.orders}}" as="order">
+          <user-avatar username="{{order.name}}"></user-avatar>
+        </template>
+      </div>
+
+
+      <div class="layout vertical">
+        <span class="flex horizontal layout center secondary"><iron-icon icon="icons:event" class="secondary"></iron-icon>{{_formatDate(meeting.date)}}</span>
+        <span class="flex horizontal layout center secondary"><iron-icon icon="device:access-time" class="secondary"></iron-icon>{{meeting.time}}</span>
+      </div>
+    </paper-item>
   </template>
   <script>
     (function () {
@@ -61,12 +80,6 @@
 
         properties: {
           meeting: Object
-        },
-
-        _createContent: function (millis) {
-          var datestring = this._formatDate(millis);
-
-          return datestring;
         },
 
         _formatDate: function (millis) {

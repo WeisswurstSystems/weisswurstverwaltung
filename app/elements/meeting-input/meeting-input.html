@@ -44,6 +44,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         color: var(--secondary-text-color);
       }
 
+      paper-dialog {
+        background: white;
+      }
+
       .priceInput {
         margin-left: 8px;
         max-width: 100px;
@@ -51,11 +55,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     </style>
 
-    <paper-button on-tap="_openMeetingDialog">Meeting Erstellen</paper-button>
+    <paper-button hidden="{{!user}}" on-tap="_openMeetingDialog">Meeting Erstellen</paper-button>
 
     <paper-dialog
       id="createMeetingDialog"
-      modal
+
       entry-animation="scale-up-animation"
       exit-animation="fade-out-animation"
       class="layout vertical">
