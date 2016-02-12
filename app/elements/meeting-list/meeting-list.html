@@ -27,16 +27,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         display: block;
       }
 
-      .collapsedcontent {
-        padding: 16px 0px;
-      }
-
       .seperator {
         margin: 8px
       }
 
       .secondary {
         color: var(--secondary-text-color);
+      }
+
+
+      @media screen and (max-width: 720px){
+        inbox-list {
+          padding-bottom: 86px;
+        }
       }
 
       paper-fab {

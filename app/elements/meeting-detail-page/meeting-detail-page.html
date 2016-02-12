@@ -27,6 +27,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="..\..\bower_components/neon-animation/animations/transform-animation.html">
 
 <link rel="import" href="..\meeting-element/meeting-element.html">
+<link rel="import" href="..\shopping-list/shopping-list.html">
 
 <dom-module id="meeting-detail-page">
   <style include="shared-styles"></style>
@@ -48,12 +49,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     .secondary {
       @apply(--paper-font-body1);
+      padding-top: 16px;
       color: var(--accent-color);
     }
 
     h2 {
       text-align: center;
     }
+
+    shopping-list {
+      padding-top: 16px;
+    }
+
     hr {
       border: none;
       height: 1px;
@@ -71,11 +78,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
           <hr>
           <template is="dom-repeat" items="{{meeting.orders}}" as="order">
-            <order-element order="{{order}}" ppulist="{{meeting.types}}" user="{{user}}" meeting="{{meeting}}"></order-element>
+            <order-element order="{{order}}" ppulist="{{meeting.types}}" user="{{user}}"
+                           meeting="{{meeting}}"></order-element>
             <hr>
           </template>
 
         </div>
+
+        <shopping-list style="width: 100%"
+                       list="{{_ordersTotal(meeting.orders)}}"></shopping-list>
 
         <h2 class="secondary" hidden="{{user}}">Sie müssen angemeldet sein um sich eintragen zu können.</h2>
 
@@ -164,32 +175,28 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           }
         },
 
-        _ordersWeisswurst: function (orders) {
-          if (!orders) {
-            return 0;
-          }
-          var counter = 0;
-          orders.forEach(function (entry) {
-            var num = parseInt(entry.weisswurst);
-            if (!isNaN(num)) {
-              counter += num;
-            }
-          });
-          return counter;
-        },
+        _ordersTotal: function (orders) {
+          var map = new Object();
+          var resultList = new Array;
 
-        _ordersBrezen: function (orders) {
-          if (!orders) {
-            return 0;
-          }
-          var counter = 0;
-          orders.forEach(function (entry) {
-            var num = parseInt(entry.brezen);
-            if (!isNaN(num)) {
-              counter += num;
+          orders.forEach(function (orderElement) {
+            if (orderElement.list) {
+              orderElement.list.forEach(function (bestellung) {
+                if (map.hasOwnProperty(bestellung.type)) {
+                  map[bestellung.type] = parseInt(map[bestellung.type]) + parseInt(bestellung.amount);
+                } else {
+                  map[bestellung.type] = bestellung.amount;
+                }
+              })
             }
           });
-          return counter;
+
+          for (var key in map) {
+            if (map.hasOwnProperty(key)) {
+              resultList.push({type: key, amount: map[key]});
+            }
+          }
+          return resultList;
         },
 
         _price: function (orders) {

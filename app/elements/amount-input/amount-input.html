@@ -51,7 +51,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 
     <div class="input">
-      <paper-input label="Bestellung hinzufügen" focused="{{focused}}" no-label-float value="{{input}}" on-keydown="_submit" id="input"></paper-input>
+      <paper-input label="Bestellung hinzufügen" focused="{{focused}}" no-label-float value="{{input}}" on-keydown="_submit" id="inputfield"></paper-input>
 
       <iron-dropdown vertical-align="top" opened="{{focused}}" vertical-offset="36" no-cancel-on-outside-click id="dropdown">
         <paper-material elevation="3" class="dropdown-content">
@@ -90,11 +90,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         },
 
         _submit: function (e) {
-          if (e.keyCode === 38) {
+          if (e.keyCode === 40) {
             this.$.menu.selectNext();
             return;
           }
-          if (e.keyCode === 40) {
+          if (e.keyCode === 38) {
             this.$.menu.selectPrevious();
             return;
           }
@@ -104,6 +104,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             }
             this.fire('add', this.suggestions[this.selected]);
             this.input = '';
+            this.$.inputfield.focus();
             this.$.dropdown.close();
             this.$.dropdown.open();
             return;
