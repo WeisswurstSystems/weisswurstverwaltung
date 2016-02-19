@@ -59,7 +59,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <paper-dialog
       id="createMeetingDialog"
-
+      on-iron-overlay-canceled="_clearForm"
       entry-animation="scale-up-animation"
       exit-animation="fade-out-animation"
       class="layout vertical">
@@ -182,7 +182,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           typinput.focus();
           priceinput.value = '';
 
-          this.$.createMeetingDialog.$.scrollable.scrollTop = 9999;
+          this.$.createMeetingDialog.fit();
         },
 
         _removeType: function (e) {
@@ -215,10 +215,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             });
           }
           this.$.toastCreateSuccess.show();
+          this._clearForm;
+          this.$.createMeetingDialog.opened = false;
+        },
+
+        _clearForm: function() {
           this.splice('types', 0, this.types.length);
           this.$.nameInput.value = null;
           this.$.ortInput.value = null;
-          this.$.createMeetingDialog.opened = false;
         },
 
         _updateTime: function () {

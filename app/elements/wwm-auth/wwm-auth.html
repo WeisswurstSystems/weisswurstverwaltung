@@ -71,12 +71,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       on-login="_loginHandler"
       on-user-created="_registerHandler"
       on-email-changed="_mailChangedHandler"
-      on-password-changed="_passwordChangedHandler">
+      on-password-changed="_passwordChangedHandler"
+      on-password-reset="_passwordResetHandler">
     </firebase-auth>
 
     <paper-dialog
       id="loginWindow"
       modal
+      on-iron-overlay-opened="_dialogOpened"
       noCancelOnEscKey="true"
       entry-animation="scale-up-animation"
       exit-animation="fade-out-animation">
@@ -96,7 +98,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               onfocusout="validate()"
               error-message="Keine gültige Mail"
               on-keydown="_shortcutActionLogin"
-              ></paper-input>
+              tabindex="0"></paper-input>
 
             <paper-input
               id="loginPass"
@@ -107,7 +109,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               type="password"
               on-keydown="_shortcutActionLogin"></paper-input>
             <div align="right">
-              <paper-button class="redbtn" on-tap="_forgotPW" hidden id="forgotbtn">Passwort vergessen?</paper-button>
+              <paper-button class="redbtn" on-tap="_forgotPW" id="forgotbtn">Passwort vergessen?</paper-button>
               <paper-button class="default" on-tap="_cancel">Cancel</paper-button>
               <paper-button class="default" on-tap="signIn">
                 <paper-spinner active hidden id="loginProg"></paper-spinner>
@@ -124,7 +126,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               onfocusout="validate()"
               error-message="Keine gültige Mail"
               on-keydown="_shortcutActionRegister"
-              ></paper-input>
+              tabindex="0"></paper-input>
 
             <paper-input
               id="registerPass"
@@ -134,7 +136,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               error-message="Bitte Passwort eingeben"
               type="password"
               on-keydown="_shortcutActionRegister"
-              ></paper-input>
+            ></paper-input>
             <paper-input
               id="registerPassAck"
               label="Passwort bestätigen"
@@ -143,7 +145,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               error-message="Passwörter stimmen nicht überein"
               type="password"
               on-keydown="_shortcutActionRegister"
-              ></paper-input>
+            ></paper-input>
             <div align="right">
               <paper-button class="default" on-tap="register">
                 <paper-spinner active hidden id="registerProg"></paper-spinner>
@@ -177,6 +179,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         openLoginWindow: function () {
           this.$.loginWindow.opened = true;
+        },
+
+        _dialogOpened: function() {
+          console.log("test");
+          this.$.loginMail.focus();
         },
 
         _cancel: function () {
@@ -225,7 +232,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         signOut: function () {
           this.$.authentication.logout();
           this.$.loginPass.invalid = false;
-          this.$.forgotbtn.hidden = false;
+
           this.user = null;
         },
 
@@ -258,7 +265,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             case 'INVALID_PASSWORD':
               this.$.loginPass.errorMessage = message;
               this.$.loginPass.invalid = true;
-              this.$.forgotbtn.hidden = false;
               app.$.toast.text = message;
               app.$.toast.show();
               break;
@@ -292,7 +298,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           this.$.loginBtn.hidden = false;
           this.$.loginPass.value = '';
           this.$.loginPass.invalid = false;
-          this.$.forgotbtn.hidden = false;
 
           this._cancel();
           var mail = user.detail.user.password.email;
@@ -327,13 +332,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           this.$.authentication.sendPasswordResetEmail(this.$.loginMail.value);
           this.$.loginPass.value = '';
           this.$.loginPass.invalid = false;
-          this.$.forgotbtn.hidden = true;
-
-          app.$.toast.text = 'Ein temporäres Passwort wurde Ihnen zugesendet.';
-          app.$.toast.show();
         },
 
-        _mailChangedHandler: function() {
+        _mailChangedHandler: function () {
           var userPage = document.querySelector('user-page');
           userPage.mailChanged();
 
@@ -341,11 +342,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           app.$.toast.show();
         },
 
-        _passwordChangedHandler: function() {
+        _passwordChangedHandler: function () {
           var userPage = document.querySelector('user-page');
           userPage.pwChanged();
 
           app.$.toast.text = 'Passwort wurde erfolgreich geändert';
+          app.$.toast.show();
+        },
+
+        _passwordResetHandler: function () {
+          app.$.toast.text = 'Ihnen wurde ein temporäres Passwort zugesendet.';
           app.$.toast.show();
         }
       });
