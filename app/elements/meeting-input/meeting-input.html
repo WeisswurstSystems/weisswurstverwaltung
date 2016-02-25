@@ -205,10 +205,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               types: copyArray,
               orders: [
                 {
-                  brezen: 0,
-                  weisswurst: 0,
                   paid: false,
-                  name: this.user.password.email,
+                  name: document.querySelector('#wwmauth')._getUsername(this.user),
                   uid: this.user.uid
                 }
               ]

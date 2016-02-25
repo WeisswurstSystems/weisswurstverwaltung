@@ -113,7 +113,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           var extfab = this.$.extfab;
 
           //TODO Wenn Nutzerendpunkt besteht, sollte zusätzlich zu einem optionalen Nutzernamen eine admin-rolle gespeichert werden.
-          var uidFabi = '8af8ee91-f696-4a6a-99d7-0a43699e834a';
+          var uidFabi = 'github:10800158';
           var uidPeter = '8a0f1c00-ac25-4feb-903c-664c10d2617e';
 
           if (this.user) {
@@ -153,10 +153,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           var index = this._getIndexOfUser();
           if (index === -1) {
             this.push('meeting.orders', {
-              name: this.user.password.email,
+              name: document.querySelector('#wwmauth')._getUsername(this.user),
               uid: this.user.uid,
-              brezen: 0,
-              weisswurst: 0,
               paid: false
             });
           } else {

@@ -30,32 +30,32 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <div class="layout vertical center">
 
       <paper-card
-        heading="{{user.password.email}}"
-        image="{{user.password.profileImageURL}}&s=400"
+        heading="{{_getUsername(user)}}"
+        image="{{_getUserImage(user)}}"
         hidden="{{!user}}"
         preload-image
         fade-mage>
-        <div class='card-content' hidden="{{!user}}">
+        <div class='card-content' hidden="{{!_canEditProfile(user)}}">
           <paper-input
             label='E-Mail'
             value='{{mailold}}'
-            ></paper-input>
+          ></paper-input>
           <paper-input
             label='Neue E-Mail'
             value='{{mailnew}}'
             hidden='{{pweditmode}}'
-            ></paper-input>
+          ></paper-input>
           <paper-input
             label='Passwort'
             type='password'
             value='{{pwold}}'
-            ></paper-input>
+          ></paper-input>
           <paper-input
             label='Neues Passwort'
             type='password'
             value='{{pwnew}}'
             hidden='{{!pweditmode}}'
-            ></paper-input>
+          ></paper-input>
           <div class="card-actions">
             <paper-radio-group selected="{{selected}}">
               <paper-radio-button name="password">Passwort Ändern</paper-radio-button>
@@ -101,6 +101,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           mailnew: String
         },
 
+        _canEditProfile: function (user) {
+          if (user) {
+            return user.auth.provider === 'password';
+          }
+        },
+
         change: function () {
           if (this.pweditmode) {
             this._changePass();
@@ -120,7 +126,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         },
 
         _resetFields: function () {
-          if (this.user) {
+          if (this.user && this.user.auth.provider === 'password') {
             this.mailold = this.user.password.email;
             this.mailnew = '';
             this.pwold = '';
@@ -128,15 +134,31 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           }
         },
 
+        _getUserImage: function (user) {
+          if (user) {
+            if (user.auth.provider === 'password') {
+              return user.password.profileImageURL + '&s=400'
+            } else if (user.auth.provider === 'github') {
+              return user.github.profileImageURL;
+            }
+          }
+        },
+
+        _getUsername: function (user) {
+          return document.querySelector('#wwmauth')._getUsername(user);
+        },
+
         _selectedChanged: function () {
           this.pweditmode = this.selected === 'password';
         },
 
         mailChanged: function () {
-          var newmail = this.mailnew;
-          this._resetFields();
-          this.user.password.email = newmail;
-          this.mailold = newmail;
+          if (this.user && this.user.auth.provider === 'password') {
+            var newmail = this.mailnew;
+            this._resetFields();
+            this.user.password.email = newmail;
+            this.mailold = newmail;
+          }
         },
 
         pwChanged: function () {

@@ -52,7 +52,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <paper-menu-button id="menu" horizontal-align="left" vertical-offset="56">
       <paper-button class="dropdown-trigger">
         <div class="layout horizontal center">
-          <span class="hide-on-mobile username">{{user.password.email}}</span>
+          <span class="hide-on-mobile username">{{_getUsername(user)}}</span>
           <span class="hide-on-mobile username" hidden="{{user}}">Login Now</span>
           <iron-icon icon="account-circle"></iron-icon>
         </div>
@@ -91,6 +91,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         _gotoUser: function () {
           page.show('/user');
+        },
+
+        _getUsername: function(user){
+          return document.querySelector('#wwmauth')._getUsername(user);
         },
 
         changePassword: function (a, b, c) {

@@ -57,16 +57,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
     </style>
 
-    <!-- TODO Dieser Button muss mitsamt Funktionalität in die Toolbar wandern
-    <paper-button on-tap="signOut">Logout</paper-button> -->
-
     <firebase-auth
       id="authentication"
-      autologin="true"
       user="{{user}}"
-      location="https://wwm-itm.firebaseio.com"
+      location="https://wwm-itm.firebaseio.com/"
       ref="{{refauth}}"
-      provider="password"
+      redirect
+
       on-error="_errorHandler"
       on-login="_loginHandler"
       on-user-created="_registerHandler"
@@ -108,14 +105,36 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               error-message="Bitte Passwort eingeben"
               type="password"
               on-keydown="_shortcutActionLogin"></paper-input>
+
             <div align="right">
               <paper-button class="redbtn" on-tap="_forgotPW" id="forgotbtn">Passwort vergessen?</paper-button>
               <paper-button class="default" on-tap="_cancel">Cancel</paper-button>
-              <paper-button class="default" on-tap="signIn">
+              <paper-button class="default" on-tap="signInWithPassword">
                 <paper-spinner active hidden id="loginProg"></paper-spinner>
                 <p id="loginBtn">Sign In</p>
               </paper-button>
             </div>
+
+            <span>Or sign in with another provider:</span>
+
+            <paper-icon-button
+              src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Octicons-mark-github.svg/2000px-Octicons-mark-github.svg.png"
+              id="login-github"
+              on-tap="signInWithGithub">
+            </paper-icon-button>
+
+            <paper-icon-button
+              src="https://pixabay.com/static/uploads/photo/2015/10/31/12/56/google-1015752_960_720.png"
+              id="login-google"
+              hidden="true">
+            </paper-icon-button>
+
+            <paper-icon-button
+              src="https://www.facebookbrand.com/img/fb-art.jpg"
+              id="login-facebook"
+              hidden="true">
+            </paper-icon-button>
+
           </div>
           <div class="layout">
             <paper-input
@@ -181,8 +200,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           this.$.loginWindow.opened = true;
         },
 
-        _dialogOpened: function() {
-          console.log("test");
+        _dialogOpened: function () {
           this.$.loginMail.focus();
         },
 
@@ -190,7 +208,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           this.$.loginWindow.opened = false;
         },
 
-        signIn: function () {
+        signInWithGithub: function () {
+          this.$.authentication.provider = "github";
+          var params = {nothing: "nothing"};
+          this.$.authentication.login(params);
+        },
+
+        signInWithPassword: function () {
+          this.$.authentication.provider = "password";
           this.$.loginProg.hidden = false;
           this.$.loginBtn.hidden = true;
           var mail = this.$.loginMail;
@@ -293,14 +318,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           }
         },
 
-        _loginHandler: function (user) {
+        _loginHandler: function (userEvent) {
           this.$.loginProg.hidden = true;
           this.$.loginBtn.hidden = false;
           this.$.loginPass.value = '';
           this.$.loginPass.invalid = false;
 
           this._cancel();
-          var mail = user.detail.user.password.email;
+
+          var mail = 'asdf';
+          if (userEvent.detail.user.auth.provider === 'password') {
+            mail = userEvent.detail.user.password.email;
+          } else if (userEvent.detail.user.auth.provider === 'github') {
+            mail = userEvent.detail.user.github.username;
+          }
 
           app.$.toast.text = 'Login erfolgreich. Herzlich Willkommen ' + mail;
           app.$.toast.show();
@@ -318,7 +349,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         _shortcutActionLogin: function (action) {
           if (action.keyCode === 13) {
-            this.signIn();
+            this.signInWithPassword();
           }
         },
 
@@ -353,8 +384,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         _passwordResetHandler: function () {
           app.$.toast.text = 'Ihnen wurde ein temporäres Passwort zugesendet.';
           app.$.toast.show();
-        }
+        },
+
+        _getUsername: function (user) {
+          if (user) {
+            if (user.auth.provider === 'password') {
+              return user.password.email;
+            } else if (user.auth.provider === 'github') {
+              return user.github.username;
+            } else {
+              return 'not logged in'
+            }
+          }
+        },
       });
-    })();
+    })
+    ();
   </script>
 </dom-module>
