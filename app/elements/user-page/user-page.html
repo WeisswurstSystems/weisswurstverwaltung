@@ -25,6 +25,25 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       paper-card {
         background: white;
       }
+
+      .detail-info {
+        max-width: 400px;
+      }
+
+      .info {
+        width: 350px; /* set to whatever width you need */
+        overflow: auto;
+        white-space: -moz-pre-wrap; /* Mozilla */
+        white-space: -hp-pre-wrap; /* HP printers */
+        white-space: -o-pre-wrap; /* Opera 7 */
+        white-space: -pre-wrap; /* Opera 4-6 */
+        white-space: pre-wrap; /* CSS 2.1 */
+        white-space: pre-line; /* CSS 3 (and 2.1 as well, actually) */
+        word-wrap: break-word; /* IE */
+        -moz-binding: url('xbl.xml#wordwrap'); /* Firefox (using XBL) */
+
+      }
+
     </style>
 
     <div class="layout vertical center">
@@ -35,40 +54,51 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         hidden="{{!user}}"
         preload-image
         fade-mage>
-        <div class='card-content' hidden="{{!_canEditProfile(user)}}">
-          <paper-input
-            label='E-Mail'
-            value='{{mailold}}'
-          ></paper-input>
-          <paper-input
-            label='Neue E-Mail'
-            value='{{mailnew}}'
-            hidden='{{pweditmode}}'
-          ></paper-input>
-          <paper-input
-            label='Passwort'
-            type='password'
-            value='{{pwold}}'
-          ></paper-input>
-          <paper-input
-            label='Neues Passwort'
-            type='password'
-            value='{{pwnew}}'
-            hidden='{{!pweditmode}}'
-          ></paper-input>
-          <div class="card-actions">
-            <paper-radio-group selected="{{selected}}">
-              <paper-radio-button name="password">Passwort Ändern</paper-radio-button>
-              <paper-radio-button name="email">E-Mail Ändern</paper-radio-button>
-            </paper-radio-group>
+
+
+        <div class='card-content'>
+
+          <div class="detail-info">
+            <template is="dom-repeat" items="{{_toArray(user)}}">
+              <b>{{item.name}}:</b> <span class="info">{{item.value}}</span>
+              <br>
+            </template>
           </div>
-          <div class="card-actions">
-            <paper-button class='default' on-tap='change'>
-              <p id='changePWBtn'>Ändern</p>
-            </paper-button>
+
+          <div hidden="{{!_canEditProfile(user)}}">
+            <paper-input
+              label='E-Mail'
+              value='{{mailold}}'
+            ></paper-input>
+            <paper-input
+              label='Neue E-Mail'
+              value='{{mailnew}}'
+              hidden='{{pweditmode}}'
+            ></paper-input>
+            <paper-input
+              label='Passwort'
+              type='password'
+              value='{{pwold}}'
+            ></paper-input>
+            <paper-input
+              label='Neues Passwort'
+              type='password'
+              value='{{pwnew}}'
+              hidden='{{!pweditmode}}'
+            ></paper-input>
+            <div class="card-actions">
+              <paper-radio-group selected="{{selected}}">
+                <paper-radio-button name="password">Passwort Ändern</paper-radio-button>
+                <paper-radio-button name="email">E-Mail Ändern</paper-radio-button>
+              </paper-radio-group>
+            </div>
+            <div class="card-actions">
+              <paper-button class='default' on-tap='change'>
+                <p id='changePWBtn'>Ändern</p>
+              </paper-button>
+            </div>
           </div>
         </div>
-
       </paper-card>
 
       <h3 hidden="{{user}}">Sie müssen sich anmelden um Ihr Profil sehen zu können.</h3>
@@ -101,11 +131,35 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           mailnew: String
         },
 
+        _toArray: function (user) {
+          if (user) {
+
+            var obj;
+
+            if (user.auth.provider === 'password') {
+              return null;
+            } else if (user.auth.provider === 'github') {
+              obj = user.github.cachedUserProfile;
+            } else if (user.auth.provider === 'google') {
+              obj = user.google.cachedUserProfile;
+            }
+
+            return Object.keys(obj).map(function (key) {
+              return {
+                name: key,
+                value: obj[key]
+              };
+            });
+          }
+        },
+
         _canEditProfile: function (user) {
           if (user) {
             return user.auth.provider === 'password';
           }
-        },
+        }
+
+        ,
 
         change: function () {
           if (this.pweditmode) {
@@ -113,17 +167,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           } else {
             this._changeMail();
           }
-        },
+        }
+        ,
 
         _changeMail: function () {
           var wwmAuth = document.querySelector('#wwmauth');
           wwmAuth.changeEmail(this.mailold, this.mailnew, this.pwold);
-        },
+        }
+        ,
 
         _changePass: function () {
           var wwmAuth = document.querySelector('#wwmauth');
           wwmAuth.changePassword(this.mailold, this.pwold, this.pwnew);
-        },
+        }
+        ,
 
         _resetFields: function () {
           if (this.user && this.user.auth.provider === 'password') {
@@ -132,7 +189,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             this.pwold = '';
             this.pwnew = '';
           }
-        },
+        }
+        ,
 
         _getUserImage: function (user) {
           if (user) {
@@ -140,17 +198,22 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               return user.password.profileImageURL + '&s=400'
             } else if (user.auth.provider === 'github') {
               return user.github.profileImageURL;
+            } else if (user.auth.provider === 'google') {
+              return user.google.profileImageURL;
             }
           }
-        },
+        }
+        ,
 
         _getUsername: function (user) {
           return document.querySelector('#wwmauth')._getUsername(user);
-        },
+        }
+        ,
 
         _selectedChanged: function () {
           this.pweditmode = this.selected === 'password';
-        },
+        }
+        ,
 
         mailChanged: function () {
           if (this.user && this.user.auth.provider === 'password') {
@@ -159,12 +222,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             this.user.password.email = newmail;
             this.mailold = newmail;
           }
-        },
+        }
+        ,
 
         pwChanged: function () {
           this._resetFields();
         }
       });
-    })();
+    })
+    ();
   </script>
 </dom-module>

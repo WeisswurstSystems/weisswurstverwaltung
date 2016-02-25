@@ -126,7 +126,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <paper-icon-button
               src="https://pixabay.com/static/uploads/photo/2015/10/31/12/56/google-1015752_960_720.png"
               id="login-google"
-              hidden="true">
+              on-tap="signInWithGoogle">
             </paper-icon-button>
 
             <paper-icon-button
@@ -210,6 +210,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         signInWithGithub: function () {
           this.$.authentication.provider = "github";
+          var params = {nothing: "nothing"};
+          this.$.authentication.login(params);
+        },
+
+        signInWithGoogle: function () {
+          this.$.authentication.provider = "google";
           var params = {nothing: "nothing"};
           this.$.authentication.login(params);
         },
@@ -319,6 +325,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         },
 
         _loginHandler: function (userEvent) {
+          console.log(userEvent.detail.user);
+
           this.$.loginProg.hidden = true;
           this.$.loginBtn.hidden = false;
           this.$.loginPass.value = '';
@@ -392,6 +400,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               return user.password.email;
             } else if (user.auth.provider === 'github') {
               return user.github.username;
+            } else if (user.auth.provider === 'google') {
+              return user.google.displayName;
             } else {
               return 'not logged in'
             }
