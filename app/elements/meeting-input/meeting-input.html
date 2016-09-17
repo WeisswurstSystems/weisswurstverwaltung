@@ -53,6 +53,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         max-width: 100px;
       }
 
+      .additem {
+        padding-left: 16px;
+        background: var(--primary-background-color);
+        border-radius: 5px;
+      }
+
     </style>
 
     <paper-button hidden="{{!user}}" on-tap="_openMeetingDialog">Meeting Erstellen</paper-button>
@@ -85,14 +91,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <div class="layout vertical">
           <template is="dom-repeat" items="{{types}}" as="type">
             <div class="layout horizontal center field">
-              <paper-input no-label-float="{{index}}" label="Typ" value="{{type.type}}"></paper-input>
-              <paper-input class="priceInput" no-label-float="{{index}}" label="Preis" value="{{type.ppu}}">
+              <paper-input disabled no-label-float="{{index}}" label="Typ" value="{{type.type}}"></paper-input>
+              <paper-input disabled class="priceInput" no-label-float="{{index}}" label="Preis" value="{{type.ppu}}">
                 <iron-icon class="suffixIcon" icon="editor:attach-money" suffix></iron-icon>
               </paper-input>
               <paper-icon-button icon="close" on-tap="_removeType" indexOfElement="{{index}}"></paper-icon-button>
             </div>
           </template>
-          <div class="layout horizontal center field">
+          <div class="layout horizontal center field additem">
             <paper-input no-label-float="{{types.length}}" id="typinput" label="Typ"
                          on-keydown="_pressEnter"></paper-input>
             <paper-input class="priceInput" no-label-float="{{types.length}}" id="priceinput" label="Preis" on-keydown="_pressEnter">
