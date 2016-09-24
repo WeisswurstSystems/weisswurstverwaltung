@@ -3,6 +3,7 @@
 <link rel="import" href="..\..\bower_components/paper-item/paper-icon-item.html">
 <link rel="import" href="..\..\bower_components/paper-material/paper-material.html">
 <link rel="import" href="..\..\bower_components/paper-ripple/paper-ripple.html">
+<link rel="import" href="../../bower_components/iron-icons/notification-icons.html">
 
 
 <dom-module id="meeting-element">
@@ -55,7 +56,7 @@
     </style>
     <paper-item>
       <div class="layout vertical flex">
-        <div class="flex horizontal layout center"><iron-icon icon="icons:chrome-reader-mode" class="secondary"></iron-icon>{{meeting.name}}</div>
+        <div class="flex horizontal layout center"><iron-icon icon="notifications:notification:event-note" class="secondary"></iron-icon>{{meeting.name}}</div>
         <span class="flex horizontal layout center"><iron-icon icon="maps:place" class="secondary"></iron-icon>{{meeting.place}}</span>
       </div>
 

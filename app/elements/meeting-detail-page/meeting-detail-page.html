@@ -37,10 +37,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       margin-top: 8px;
     }
 
-    .fablayout {
-      position: fixed;
-      bottom: 32px;
-      right: 32px;
+    .fablayout-wrapper {
+      position: relative;
+    }
+
+    .fablayout-wrapper > .fablayout {
+      position: absolute;
+      bottom: -20px;
+      right: -20px;
       z-index: 1;
     }
 
@@ -94,11 +98,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       </div>
     </div>
 
-    <div class="layout horizontal fablayout">
-      <paper-fab id="fab" icon="social:person-add" on-tap="_togglePerson" hidden="{{!user}}"></paper-fab>
-      <paper-tooltip for="fab" position="top">Meeting beitreten/verlasssen</paper-tooltip>
-      <paper-fab id="extfab" icon="social:person-add" on-tap="_addExternalPerson" hidden="true"></paper-fab>
-      <paper-tooltip for="extfab" position="top">Gast hinzufügen</paper-tooltip>
+    <div class="fablayout-wrapper">
+      <div class="layout horizontal fablayout">
+        <paper-fab id="fab" icon="social:person-add" on-tap="_togglePerson" hidden="{{!user}}"></paper-fab>
+        <paper-tooltip for="fab" position="top">[[tooltiptext]]</paper-tooltip>
+        <paper-fab id="extfab" icon="social:person-add" on-tap="_addExternalPerson" hidden="true"></paper-fab>
+        <paper-tooltip for="extfab" position="top">Gast hinzufügen</paper-tooltip>
+      </div>
     </div>
   </template>
   <script>
@@ -130,8 +136,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
           if (index === -1) {
             fab.icon = 'social:person-add';
+            this.tooltiptext = "Meeting beitreten."
           } else {
             fab.icon = 'social:person-outline';
+            this.tooltiptext = "Meeting verlassen."
           }
         },
 
@@ -161,6 +169,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           } else {
             this.splice('meeting.orders', index, 1);
           }
+          this._setupFab();
         },
 
         _getIndexOfUser: function () {
