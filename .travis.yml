@@ -10,16 +10,12 @@ addons:
       - google-chrome-stable
       - g++-4.8
 node_js:
-  - '4.2'
   - '5.1'
-before_script:
-  - 'export DISPLAY=:99.0'
-  - sh -e /etc/init.d/xvfb start
-  - sleep 3
-  - npm i -g bower@1.7.1 gulp@3.9.0 firebase-tools@2.2.0
-  - bower i
 script:
-  - ./travis-runner.sh
+  - npm install -g gulp bower
+  - npm install
+  - bower install
+  - gulp
 env:
   global:
     - "CXX='g++-4.8'"
