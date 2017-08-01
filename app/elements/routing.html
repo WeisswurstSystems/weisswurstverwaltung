@@ -32,16 +32,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       next();
     });
 
-    page('/weisswurstverwaltung', function() {
+    page('/', function() {
       app.route = 'home';
     });
 
-     page('/weisswurstverwaltung/meeting/:id', scrollToTop, function (data) {
+     page('/meeting/:id', scrollToTop, function (data) {
       app.route = 'home';
       app.params = data.params;
     });
 
-    page('/weisswurstverwaltung/user', scrollToTop, function () {
+    page('/user', scrollToTop, function () {
       app.route = 'user';
     });
 
