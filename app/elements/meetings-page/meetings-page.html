@@ -22,10 +22,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <custom-style>
     <style is="custom-style">
+        @media screen and (min-width: 720px){
+          .card {
+            width: 50%;
+          }
+        }
         .card {
             background-color: var(--paper-red-300);
             margin: 0 auto;
-            width: 50%;
             display: table;
         }
         .card-header { @apply --paper-font-headline; }
@@ -33,8 +37,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </custom-style>
     <paper-card class="card">
         <div class="card-content">
-            <div class="card-header">Achtung - bitte beachten</div>
-            <div>Aufgrund der Schließung des Metzgers in der Borstei müssen Bestellungen bis zum Abend des Vortages aufgegeben werden. Spätere Bestellungen können nicht berücksichtigt werden!</div>
+            <div class="card-header">
+              <img src="http://mp-su.com/u/26edc.gif" width="18px"></img> Achtung
+            </div>
+            <div>
+              Aufgrund der Schließung des Metzgers in der Borstei müssen Bestellungen bis zum Abend des Vortages aufgegeben werden. Spätere Bestellungen können nicht berücksichtigt werden!
+            </div>
         </div>
     </paper-card>
 
