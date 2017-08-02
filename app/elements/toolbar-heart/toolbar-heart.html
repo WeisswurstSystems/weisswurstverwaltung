@@ -48,13 +48,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           if(this.rainbowMode && this.clicks === 10){
             this.rainbowMode = false;
             this.clicks = 0;
-            //document.querySelector('emoji-rain').stop();
+            document.querySelector('emoji-rain').stop();
           }
 
           if (!this.rainbowMode && this.clicks === 10) {
             this.rainbowMode = true;
             this.clicks = 0;
-            //document.querySelector('emoji-rain').start();
+            document.querySelector('emoji-rain').start();
           }
         }
       })

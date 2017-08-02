@@ -19,6 +19,25 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <dom-module id="meetings-page">
   <style include="shared-styles"></style>
   <template>
+
+    <custom-style>
+    <style is="custom-style">
+        .card {
+            background-color: var(--paper-red-300);
+            margin: 0 auto;
+            width: 50%;
+            display: table;
+        }
+        .card-header { @apply --paper-font-headline; }
+    </style>
+    </custom-style>
+    <paper-card class="card">
+        <div class="card-content">
+            <div class="card-header">Achtung - bitte beachten</div>
+            <div>Aufgrund der Schließung des Metzgers in der Borstei müssen Bestellungen bis zum Abend des Vortages aufgegeben werden. Spätere Bestellungen können nicht berücksichtigt werden!</div>
+        </div>
+    </paper-card>
+
     <meeting-data meetings="{{meetings}}"></meeting-data>
 
     <meeting-input user="{{user}}" on-add-meeting="addMeeting"></meeting-input>

@@ -36,6 +36,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <template is="dom-repeat" items="{{list}}">
           <div class="handwritten"> {{item.amount}} {{item.type}}&nbsp;&nbsp;&nbsp;</div>
         </template>
+        <div class="handwritten">{{costs}}€</div>
       </div>
     </paper-material>
 
@@ -48,7 +49,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         is: 'shopping-list',
 
         properties: {
-          list: Array
+          list: Array,
+          costs: Number
         }
       });
     })();

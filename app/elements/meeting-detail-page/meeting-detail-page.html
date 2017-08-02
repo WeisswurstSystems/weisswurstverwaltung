@@ -91,7 +91,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </div>
 
         <shopping-list style="width: 100%"
-                       list="{{_ordersTotal(meeting.orders)}}"></shopping-list>
+                       list="{{_ordersTotal(meeting.orders)}}"
+                       costs="{{_ordersPriceTotal(meeting.orders, meeting.types)}}"></shopping-list>
 
         <h2 class="secondary" hidden="{{user}}">Sie müssen angemeldet sein um sich eintragen zu können.</h2>
 
@@ -205,6 +206,27 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             }
           }
           return resultList;
+        },
+
+        _ordersPriceTotal: function(orders, ppulist) {
+            var totalCosts = 0;
+            orders.forEach(function (singleOrder) {
+                if(singleOrder.hasOwnProperty("list")){
+                    var total = singleOrder.list.map(function (o) {
+                        var ppu;
+                        ppulist.forEach(function(entry) {
+                        if(o.type === entry.type){
+                            ppu = entry.ppu;
+                        }
+                        });
+                        return o.amount * ppu;
+                    }).reduce(function (pv, cv) {
+                        return pv + cv;
+                    }, 0);
+                    totalCosts = totalCosts + total;
+                }
+            })
+            return totalCosts;
         },
 
         _price: function (orders) {
