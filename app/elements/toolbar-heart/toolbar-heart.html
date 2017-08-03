@@ -48,8 +48,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           if(this.rainbowMode && this.clicks === 10){
             this.rainbowMode = false;
             this.clicks = 0;
-            document.querySelector('emoji-rain').active=false;
             document.querySelector('emoji-rain').stop();
+            setTimeout(function(){document.querySelector('emoji-rain').stop();}, 100);
           }
 
           if (!this.rainbowMode && this.clicks === 10) {
