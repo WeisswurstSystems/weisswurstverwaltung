@@ -15,7 +15,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <template>
     <firebase-collection
             location="https://wwm-itm.firebaseio.com/meetings"
-            data="{{meetings}}"></firebase-collection>
+            data="{{meetings}}"
+            limit-to-last="5"></firebase-collection>
     </template>
   <script>
   (function() {
@@ -26,7 +27,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       properties: {
         meetings: {
-          notify: true
+          notify: true,
+          value: []
         }
       }
     });
