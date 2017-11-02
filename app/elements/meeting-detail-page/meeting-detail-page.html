@@ -226,17 +226,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     totalCosts = totalCosts + total;
                 }
             })
-            return totalCosts;
-        },
-
-        _price: function (orders) {
-          var ww = this._ordersWeisswurst(orders);
-          var brez = this._ordersBrezen(orders);
-          var priceWW = 1.00;
-          var priceBrez = 0.60;
-          var result = (ww * priceWW + brez * priceBrez);
-          result = Math.ceil(result) + '€';
-          return result;
+            return totalCosts.toFixed(2);
         },
 
         _navigateBack: function () {
