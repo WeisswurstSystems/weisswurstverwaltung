@@ -80,7 +80,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 })(document);
 
-
+/**
 (function(){
 
   var msg = "Weisswurst";
@@ -168,3 +168,4 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   }
 
 })();
+**/
