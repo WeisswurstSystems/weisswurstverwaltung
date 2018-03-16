@@ -28,11 +28,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <link rel="import" href="..\meeting-element/meeting-element.html">
 <link rel="import" href="..\shopping-list/shopping-list.html">
+<link rel="import" href="..\shopping-list/total-profit.html">
 
 <dom-module id="meeting-detail-page">
   <style include="shared-styles"></style>
   <style>
-
     #content {
       margin-top: 8px;
     }
@@ -41,7 +41,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       position: relative;
     }
 
-    .fablayout-wrapper > .fablayout {
+    .fablayout-wrapper>.fablayout {
       position: absolute;
       bottom: -20px;
       right: -20px;
@@ -71,7 +71,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       height: 1px;
       width: 100%;
       margin: 0;
-      background-color: #e5e5e5; /* Modern Browsers */
+      background-color: #e5e5e5;
+      /* Modern Browsers */
     }
   </style>
   <template>
@@ -83,16 +84,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
           <hr>
           <template is="dom-repeat" items="{{meeting.orders}}" as="order">
-            <order-element order="{{order}}" ppulist="{{meeting.types}}" user="{{user}}"
-                           meeting="{{meeting}}"></order-element>
+            <order-element order="{{order}}" ppulist="{{meeting.types}}" user="{{user}}" meeting="{{meeting}}"></order-element>
             <hr>
           </template>
 
         </div>
 
-        <shopping-list style="width: 100%"
-                       list="{{_ordersTotal(meeting.orders)}}"
-                       costs="{{_ordersPriceTotal(meeting.orders, meeting.types)}}"></shopping-list>
+        <shopping-list style="width: 100%" list="{{_ordersTotal(meeting.orders)}}" costs="{{_ordersPriceTotal(meeting.orders, meeting.types)}}"></shopping-list>
+
+        <total-profit style="width: 100%" total-paid="{{_totalPayed(meeting.orders)}}" total-profit="{{_totalProfit(meeting.orders, meeting.types)}}" id="totalProfitsDiv" hidden="true"></total-profit>
 
         <h2 class="secondary" hidden="{{user}}">Sie müssen angemeldet sein um sich eintragen zu können.</h2>
 
@@ -119,6 +119,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           var index = this._getIndexOfUser();
           var fab = this.$.fab;
           var extfab = this.$.extfab;
+          var totalProfitsDiv = this.$.totalProfitsDiv;
 
           //TODO Wenn Nutzerendpunkt besteht, sollte zusätzlich zu einem optionalen Nutzernamen eine admin-rolle gespeichert werden.
           var uidFabi = 'github:10800158';
@@ -127,11 +128,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           if (this.user) {
             if (this.user.uid === uidFabi || this.user.uid === uidPeter) {
               extfab.hidden = false;
+              totalProfitsDiv.hidden = false;
             } else if (this.meeting.uid === this.user.uid) {
               fab.hidden = true;
               extfab.hidden = false;
+              totalProfitsDiv.hidden = false;
             } else {
               extfab.hidden = true;
+              totalProfitsDiv.hidden = true;
             }
           }
 
@@ -202,31 +206,48 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
           for (var key in map) {
             if (map.hasOwnProperty(key)) {
-              resultList.push({type: key, amount: map[key]});
+              resultList.push({ type: key, amount: map[key] });
             }
           }
           return resultList;
         },
 
-        _ordersPriceTotal: function(orders, ppulist) {
-            var totalCosts = 0;
-            orders.forEach(function (singleOrder) {
-                if(singleOrder.hasOwnProperty("list")){
-                    var total = singleOrder.list.map(function (o) {
-                        var ppu;
-                        ppulist.forEach(function(entry) {
-                        if(o.type === entry.type){
-                            ppu = entry.ppu;
-                        }
-                        });
-                        return o.amount * ppu;
-                    }).reduce(function (pv, cv) {
-                        return pv + cv;
-                    }, 0);
-                    totalCosts = totalCosts + total;
-                }
-            })
-            return totalCosts.toFixed(2);
+        _ordersPriceTotal: function (orders, ppulist) {
+          var totalCosts = 0;
+          orders.forEach(function (singleOrder) {
+            if (singleOrder.hasOwnProperty("list")) {
+              var total = singleOrder.list.map(function (o) {
+                var ppu;
+                ppulist.forEach(function (entry) {
+                  if (o.type === entry.type) {
+                    ppu = entry.ppu;
+                  }
+                });
+                return o.amount * ppu;
+              }).reduce(function (pv, cv) {
+                return pv + cv;
+              }, 0);
+              totalCosts = totalCosts + total;
+            }
+          })
+          return totalCosts.toFixed(2);
+        },
+
+        _totalPayed: function (orders) {
+          var totalPayed = 0.0;
+          orders.forEach(function (singleOrder) {
+            var parsed = parseFloat(singleOrder.paid);
+            if (!isNaN(parsed)) {
+              totalPayed = totalPayed + parseFloat(singleOrder.paid);
+            }
+          })
+          return totalPayed.toFixed(2);
+        },
+
+        _totalProfit: function (orders, types) {
+          const payed = this._totalPayed(orders);
+          const wanted = this._ordersPriceTotal(orders, types);
+          return payed - wanted;
         },
 
         _navigateBack: function () {
